@@ -97,7 +97,7 @@ export function Header() {
                             animate={{ y: 0 }}
                             exit={{ y: "-100%" }}
                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            className="fixed inset-0 z-50 w-full h-full bg-rich-black/95 backdrop-blur-xl border-b border-gold-500/20 p-6 lg:hidden flex flex-col"
+                            className="fixed inset-0 z-50 w-full h-full bg-rich-black border-b border-gold-500/20 p-6 lg:hidden flex flex-col"
                         >
                             <div className="flex items-center justify-between mb-12">
                                 <Link href="/" className="relative flex items-center gap-3 group">

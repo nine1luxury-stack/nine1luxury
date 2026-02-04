@@ -1,40 +1,39 @@
 
 import { useState, useEffect } from "react";
-import { Modal } from "@/components/ui/Modal"; // Assuming this exists based on previous file reads
-import { Search, Plus, Trash2, X, Package } from "lucide-react";
+import { Search, Trash2, X } from "lucide-react";
 import { productsApi, ordersApi, Product, ProductVariant } from "@/lib/api"; // Assuming these exist
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 
 // Duplicate of shipping rates for consistency. ideally shared.
 const SHIPPING_RATES: Record<string, number> = {
-    "القاهرة": 50,
-    "الجيزة": 50,
-    "الإسكندرية": 58,
-    "الدقهلية": 50,
-    "البحر الأحمر": 94,
-    "البحيرة": 50,
-    "الفيوم": 60,
-    "الغربية": 50,
-    "الإسماعيلية": 58,
-    "المنوفية": 50,
-    "المنيا": 74,
-    "القليوبية": 50,
-    "الوادي الجديد": 101,
-    "السويس": 60,
-    "أسوان": 101,
-    "أسيوط": 87,
-    "بني سويف": 60,
-    "بورسعيد": 58,
-    "دمياط": 58,
-    "الشرقية": 50,
-    "جنوب سيناء": 87,
-    "كفر الشيخ": 50,
-    "مطروح": 87,
-    "الأقصر": 101,
-    "قنا": 101,
-    "شمال سيناء": 74,
-    "سوهاج": 94
+    "القاهرة": 80,
+    "الجيزة": 80,
+    "الإسكندرية": 80,
+    "الدقهلية": 80,
+    "البحر الأحمر": 140,
+    "البحيرة": 80,
+    "الفيوم": 90,
+    "الغربية": 80,
+    "الإسماعيلية": 80,
+    "المنوفية": 80,
+    "المنيا": 110,
+    "القليوبية": 80,
+    "الوادي الجديد": 140,
+    "السويس": 80,
+    "أسوان": 140,
+    "أسيوط": 120,
+    "بني سويف": 90,
+    "بورسعيد": 80,
+    "دمياط": 80,
+    "الشرقية": 80,
+    "جنوب سيناء": 120,
+    "كفر الشيخ": 80,
+    "مطروح": 120,
+    "الأقصر": 140,
+    "قنا": 140,
+    "شمال سيناء": 120,
+    "سوهاج": 120
 };
 
 interface CreateOrderModalProps {
@@ -44,7 +43,7 @@ interface CreateOrderModalProps {
 }
 
 export function CreateOrderModal({ isOpen, onClose, onSuccess }: CreateOrderModalProps) {
-    const [step, setStep] = useState(1); // 1: Customer, 2: Products
+    // const [step, setStep] = useState(1); // 1: Customer, 2: Products
     const [customer, setCustomer] = useState({
         name: '',
         phone: '',
@@ -126,7 +125,7 @@ export function CreateOrderModal({ isOpen, onClose, onSuccess }: CreateOrderModa
                     color: selectedVariant?.color || '-',
                     price: Number(price),
                     quantity: Number(quantity),
-                    image: selectedProduct.images?.[0]?.url || selectedProduct.images?.[0]
+                    image: selectedProduct.images?.[0]?.url || ''
                 }
             ]);
         }

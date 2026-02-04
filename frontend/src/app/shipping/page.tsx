@@ -15,7 +15,7 @@ export default function ShippingPage() {
         {
             icon: Truck,
             title: "مصاريف الشحن",
-            description: "شحن مجاني للطلبات فوق 2000 جنيه مصري. مصاريف شحن ثابتة 50 ج.م للقاهرة و 75 ج.م للمحافظات."
+            description: "تبدأ مصاريف الشحن من 80 ج.م حسب المحافظة. التوصيل لجميع أنحاء الجمهورية."
         },
         {
             icon: MapPin,

@@ -4,7 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/layout/Hero";
 import { ProductCard } from "@/components/product/ProductCard";
-import { Testimonials } from "@/components/layout/Testimonials";
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useProducts } from "@/context/ProductContext";
@@ -61,8 +61,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      {/* Testimonials Section */}
-      <Testimonials />
+
 
       {/* CTA Section */}
       <section className="py-32 relative overflow-hidden">
