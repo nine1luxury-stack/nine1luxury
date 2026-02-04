@@ -61,7 +61,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
             icon: Facebook,
             name: "Facebook",
             handle: "nine1luxury",
-            link: "https://facebook.com/nine1luxury"
+            link: "https://www.facebook.com/profile.php?id=61566609135055&sk=reels_tab"
         },
         {
             icon: Music2,
