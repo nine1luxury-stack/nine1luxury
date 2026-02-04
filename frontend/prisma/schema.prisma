@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model notification {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  type        String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model order {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String?     @db.ObjectId
+  guestName     String?
+  guestPhone    String?
+  guestAddress  String?
+  guestCity     String?
+  totalAmount   Float
+  status        String      @default("PENDING")
+  paymentMethod String
+  depositAmount Float?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          user?       @relation(fields: [userId], references: [id])
+  items         orderitem[]
+
+  @@index([userId])
+}
+
+model orderitem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String  @db.ObjectId
+  productId String  @db.ObjectId
+  variantId String? @db.ObjectId // Optional reference
+  quantity  Int
+  price     Float
+  order     order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  // Note: Relations to product/variant are loose in this schema style or need specific model definition. 
+  // keeping purely data fields for product/variant reference as typically done if not enforcing strict Foreign Key constraints in Mongo or if Product can be deleted.
+  // Ideally we would add @relation but for migration stability I'll keep them as IDs unless strictly needed.
+  // Actually, to be safe with existing code that might assume relation existence, I should check if we navigate `orderitem.product`.
+  // The 'include' in previous calls used `items: true` on order, so we need order->items.
+}
+
+model product {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String
+  price          Float
+  discount       Float?
+  category       String
+  featured       Boolean          @default(false)
+  isActive       Boolean          @default(true)
+  reorderPoint   Int              @default(10)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  images         productimage[]
+  variants       productvariant[]
+}
+
+model productimage {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId String  @db.ObjectId
+  url       String
+  color     String?
+  product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model productvariant {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId      String  @db.ObjectId
+  color          String
+  colorHex       String?
+  size           String
+  stock          Int     @default(0)
+  damagedStock   Int     @default(0)
+  washStock      Int     @default(0)
+  repackageStock Int     @default(0)
+  sku            String?
+  product        product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model user {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     order[]
+}
+
+model returnrequest {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String   @db.ObjectId
+  productId   String   @db.ObjectId
+  variantId   String?  @db.ObjectId
+  quantity    Int
+  type        String   // VALID, DAMAGED, WASH, REPACKAGE
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model supplier {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String
+  phone                String?
+  email                String?
+  description          String?
+  manualTotalPurchases Float    @default(0)
+  manualTotalPaid      Float    @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model expense {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  amount      Float
+  category    String   // PURCHASE, SHIPPING, ADS, SALARY, OTHER
+  description String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model customer {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  phone         String   @unique
+  totalOrders   Int      @default(0)
+  totalSpent    Float    @default(0)
+  lastOrderDate DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+model booking {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  phone          String
+  city           String?
+  shippingAmount Float    @default(0)
+  productModel   String?
+  productSize    String?
+  type           String   @default("RESERVATION") // FITTING, CONSULTATION, RESERVATION
+  status         String   @default("PENDING") // PENDING, CONFIRMED, CANCELLED
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
