@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingBag, Menu, Phone, X, ChevronLeft, Instagram } from "lucide-react";
+import { ShoppingBag, Menu, Phone, X, ChevronLeft, Instagram, Facebook, Music2, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/CartContext";
 import { useState, useEffect } from "react";
@@ -101,7 +101,7 @@ export function Header() {
                         >
                             <div className="flex items-center justify-between mb-12">
                                 <Link href="/" className="relative flex items-center gap-3 group">
-                                    <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-gold-500/20 bg-black p-1 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+                                    <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gold-500/30 bg-gradient-to-br from-gold-500/20 to-rich-black p-1 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
                                         <Image
                                             src="/logo-main.png"
                                             alt="nine1luxury"
@@ -122,6 +122,15 @@ export function Header() {
 
                             <nav className="flex-1 flex flex-col gap-6">
                                 <Link
+                                    href="/"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase tracking-wider flex items-center justify-between group"
+                                >
+                                    الرئيسية
+                                    <ChevronLeft className="w-5 h-5 text-gold-500/50 group-hover:text-gold-500 transition-colors" />
+                                </Link>
+
+                                <Link
                                     href="/products"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase tracking-wider flex items-center justify-between group"
@@ -140,6 +149,15 @@ export function Header() {
                                 </Link>
 
                                 <Link
+                                    href="/about"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase tracking-wider flex items-center justify-between group"
+                                >
+                                    عن المتجر
+                                    <ChevronLeft className="w-5 h-5 text-gold-500/50 group-hover:text-gold-500 transition-colors" />
+                                </Link>
+
+                                <Link
                                     href="/contact"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase tracking-wider flex items-center justify-between group"
@@ -149,23 +167,52 @@ export function Header() {
                                 </Link>
                             </nav>
 
-                            <div className="mt-auto pt-8 border-t border-gold-500/10 space-y-4">
+                            <div className="mt-auto pt-8 border-t border-gold-500/10 space-y-3">
+                                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-4">تابعنا على</p>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <a
+                                        href="https://www.facebook.com/profile.php?id=61566609135055"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-lg p-3 hover:bg-gold-500/10"
+                                    >
+                                        <Facebook className="w-5 h-5" />
+                                        <span className="text-sm font-bold">فيسبوك</span>
+                                    </a>
+                                    <a
+                                        href="https://www.instagram.com/nine1luxury"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-lg p-3 hover:bg-gold-500/10"
+                                    >
+                                        <Instagram className="w-5 h-5" />
+                                        <span className="text-sm font-bold">انستجرام</span>
+                                    </a>
+                                    <a
+                                        href="https://www.tiktok.com/@nine1luxury"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-lg p-3 hover:bg-gold-500/10"
+                                    >
+                                        <Music2 className="w-5 h-5" />
+                                        <span className="text-sm font-bold">تيك توك</span>
+                                    </a>
+                                    <a
+                                        href="https://wa.me/201094372339"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-lg p-3 hover:bg-gold-500/10"
+                                    >
+                                        <MessageCircle className="w-5 h-5" />
+                                        <span className="text-sm font-bold">واتساب</span>
+                                    </a>
+                                </div>
                                 <a
-                                    href="https://instagram.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors"
-                                >
-                                    <Instagram className="w-5 h-5" />
-                                    <span className="text-sm font-bold uppercase tracking-wider">تابعنا انستجرام</span>
-                                </a>
-                                <a
-                                    href="https://wa.me/201005783576"
-                                    target="_blank"
-                                    className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors"
+                                    href="tel:01094372339"
+                                    className="flex items-center justify-center gap-3 text-rich-black bg-gold-500 hover:bg-gold-400 transition-colors rounded-lg p-3 mt-4 font-bold"
                                 >
                                     <Phone className="w-5 h-5" />
-                                    <span className="text-sm font-bold uppercase tracking-wider">مساعدة</span>
+                                    <span>اتصل الآن: 010 9437 2339</span>
                                 </a>
                             </div>
                         </motion.div>

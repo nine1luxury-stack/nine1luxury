@@ -186,9 +186,10 @@ export default function AdminProductsPage() {
             setEditingProduct(null);
             setNewProduct({ name: '', model: '', price: '', category: 'تيشرتات', description: '', image: '', sizes: [], colors: [] });
             setProductGallery([]);
-        } catch (error) {
-            console.error(error);
-            alert('حدث خطأ أثناء حفظ المنتج');
+        } catch (error: any) {
+            console.error('Product save error:', error);
+            const errorMessage = error?.message || 'حدث خطأ أثناء حفظ المنتج';
+            alert(errorMessage);
         } finally {
             setIsUploading(false);
         }
