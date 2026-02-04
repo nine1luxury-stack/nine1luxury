@@ -296,20 +296,20 @@ export default function ProductDetailsPage() {
                             )}
 
                             {/* Quantity & Add to Cart */}
-                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                                <div className="flex items-center border border-white/10 h-14">
+                            <div className="flex flex-col gap-4 pt-4">
+                                <div className="flex items-center justify-center border border-white/10 h-14 w-full sm:w-auto sm:max-w-[180px]">
                                     <button
                                         onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
                                         disabled={isSoldOut}
-                                        className="w-12 h-full flex items-center justify-center text-gray-400 hover:text-white transition-colors disabled:opacity-30"
+                                        className="flex-1 sm:w-14 h-full flex items-center justify-center text-gray-400 hover:text-white transition-colors disabled:opacity-30 text-xl font-bold"
                                     >
                                         -
                                     </button>
-                                    <span className="w-12 text-center text-white font-bold">{quantity}</span>
+                                    <span className="flex-1 sm:w-14 text-center text-white font-bold text-lg">{quantity}</span>
                                     <button
                                         onClick={() => setQuantity(prev => prev + 1)}
                                         disabled={isSoldOut}
-                                        className="w-12 h-full flex items-center justify-center text-gray-400 hover:text-white transition-colors disabled:opacity-30"
+                                        className="flex-1 sm:w-14 h-full flex items-center justify-center text-gray-400 hover:text-white transition-colors disabled:opacity-30 text-xl font-bold"
                                     >
                                         +
                                     </button>
@@ -318,7 +318,7 @@ export default function ProductDetailsPage() {
                                     onClick={handleBooking}
                                     disabled={!selectedSize || isSoldOut}
                                     className={cn(
-                                        "flex-1 h-14 flex items-center justify-center gap-3 font-bold uppercase tracking-widest transition-all",
+                                        "w-full h-14 flex items-center justify-center gap-3 font-bold uppercase tracking-widest transition-all rounded-lg text-sm",
                                         (selectedSize && !isSoldOut)
                                             ? "bg-gold-500 text-rich-black hover:bg-gold-300"
                                             : "bg-gray-800 text-gray-500 cursor-not-allowed"

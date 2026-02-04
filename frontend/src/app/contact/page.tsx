@@ -122,7 +122,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                             {/* Social Media */}
                             <div>
                                 <h2 className="text-2xl font-playfair font-bold text-white mb-6">تابعنا</h2>
-                                <div className="flex gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                     {socialMedia.map((social, idx) => (
                                         <motion.a
                                             key={idx}
@@ -132,10 +132,10 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                                             initial={{ opacity: 0, scale: 0.9 }}
                                             animate={{ opacity: 1, scale: 1 }}
                                             transition={{ delay: idx * 0.1 }}
-                                            className="flex items-center gap-3 px-6 py-4 bg-surface-dark/40 border border-gold-500/10 hover:border-gold-500/30 hover:bg-gold-500/5 transition-all group rounded-full"
+                                            className="flex items-center justify-center gap-3 px-4 py-3 bg-surface-dark/40 border border-gold-500/10 hover:border-gold-500/30 hover:bg-gold-500/5 transition-all group rounded-xl"
                                         >
                                             <social.icon className="w-5 h-5 text-gold-500" />
-                                            <div className="text-left">
+                                            <div className="text-right">
                                                 <p className="text-white text-sm font-bold">{social.name}</p>
                                                 <p className="text-gray-500 text-xs">{social.handle}</p>
                                             </div>

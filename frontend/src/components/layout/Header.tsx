@@ -21,7 +21,7 @@ export function Header() {
             animate={{ y: 0 }}
             className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gold-500/20"
         >
-            <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+            <div className="w-full px-4 h-20 flex items-center justify-between max-w-[1400px] mx-auto">
                 {/* Mobile Menu Button */}
                 <button
                     onClick={() => setIsMobileMenuOpen(true)}
@@ -101,7 +101,7 @@ export function Header() {
                         >
                             <div className="flex items-center justify-between mb-12">
                                 <Link href="/" className="relative flex items-center gap-3 group">
-                                    <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gold-500/30 bg-gradient-to-br from-gold-500/20 to-rich-black p-1 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
+                                    <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gold-500/30 bg-rich-black p-1 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
                                         <Image
                                             src="/logo-main.png"
                                             alt="nine1luxury"
@@ -167,52 +167,52 @@ export function Header() {
                                 </Link>
                             </nav>
 
-                            <div className="mt-auto pt-8 border-t border-gold-500/10 space-y-3">
-                                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-4">تابعنا على</p>
-                                <div className="grid grid-cols-2 gap-3">
+                            <div className="mt-auto pt-6 border-t border-gold-500/10 space-y-4">
+                                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-3">تابعنا على</p>
+                                <div className="grid grid-cols-2 gap-2">
                                     <a
                                         href="https://www.facebook.com/profile.php?id=61566609135055"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-lg p-3 hover:bg-gold-500/10"
+                                        className="flex items-center justify-center gap-2 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-xl p-2.5 hover:bg-gold-500/10"
                                     >
-                                        <Facebook className="w-5 h-5" />
-                                        <span className="text-sm font-bold">فيسبوك</span>
+                                        <Facebook className="w-4 h-4" />
+                                        <span className="text-xs font-bold">فيسبوك</span>
                                     </a>
                                     <a
                                         href="https://www.instagram.com/nine1luxury"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-lg p-3 hover:bg-gold-500/10"
+                                        className="flex items-center justify-center gap-2 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-xl p-2.5 hover:bg-gold-500/10"
                                     >
-                                        <Instagram className="w-5 h-5" />
-                                        <span className="text-sm font-bold">انستجرام</span>
+                                        <Instagram className="w-4 h-4" />
+                                        <span className="text-xs font-bold">انستجرام</span>
                                     </a>
                                     <a
                                         href="https://www.tiktok.com/@nine1luxury"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-lg p-3 hover:bg-gold-500/10"
+                                        className="flex items-center justify-center gap-2 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-xl p-2.5 hover:bg-gold-500/10"
                                     >
-                                        <Music2 className="w-5 h-5" />
-                                        <span className="text-sm font-bold">تيك توك</span>
+                                        <Music2 className="w-4 h-4" />
+                                        <span className="text-xs font-bold">تيك توك</span>
                                     </a>
                                     <a
                                         href="https://wa.me/201094372339"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-3 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-lg p-3 hover:bg-gold-500/10"
+                                        className="flex items-center justify-center gap-2 text-gray-400 hover:text-gold-300 transition-colors bg-white/5 rounded-xl p-2.5 hover:bg-gold-500/10"
                                     >
-                                        <MessageCircle className="w-5 h-5" />
-                                        <span className="text-sm font-bold">واتساب</span>
+                                        <MessageCircle className="w-4 h-4" />
+                                        <span className="text-xs font-bold">واتساب</span>
                                     </a>
                                 </div>
                                 <a
                                     href="tel:01094372339"
-                                    className="flex items-center justify-center gap-3 text-rich-black bg-gold-500 hover:bg-gold-400 transition-colors rounded-lg p-3 mt-4 font-bold"
+                                    className="flex items-center justify-center gap-2 text-rich-black bg-gold-500 hover:bg-gold-400 transition-colors rounded-xl p-3 mt-3 font-bold text-sm"
                                 >
-                                    <Phone className="w-5 h-5" />
-                                    <span>اتصل الآن: 010 9437 2339</span>
+                                    <Phone className="w-4 h-4" />
+                                    <span dir="ltr">اتصل الآن: 010 9437 2339</span>
                                 </a>
                             </div>
                         </motion.div>
