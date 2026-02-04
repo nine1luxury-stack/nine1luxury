@@ -17,7 +17,7 @@ const FILTERS = {
         { name: "أبيض", hex: "#FFFFFF" },
         { name: "رمادي", hex: "#4B5563" },
     ],
-    categories: ["جميع المنتجات", "تيشرتات", "هوديز", "جواكت", "بناطيل", "سويت شيرتات"],
+    categories: ["جميع المنتجات", "تيشرتات", "هوديز", "بناطيل", "سويت شيرتات"],
 };
 
 import { useProducts } from "@/context/ProductContext";

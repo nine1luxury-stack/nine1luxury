@@ -93,11 +93,11 @@ export function Header() {
                             className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm lg:hidden"
                         />
                         <motion.div
-                            initial={{ x: "-100%" }}
-                            animate={{ x: 0 }}
-                            exit={{ x: "-100%" }}
+                            initial={{ y: "-100%" }}
+                            animate={{ y: 0 }}
+                            exit={{ y: "-100%" }}
                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            className="fixed inset-y-0 left-0 z-50 w-[80%] max-w-sm bg-surface-dark border-r border-gold-500/20 p-6 shadow-2xl lg:hidden flex flex-col"
+                            className="fixed inset-0 z-50 w-full h-full bg-rich-black/95 backdrop-blur-xl border-b border-gold-500/20 p-6 lg:hidden flex flex-col"
                         >
                             <div className="flex items-center justify-between mb-12">
                                 <Link href="/" className="relative flex items-center gap-3 group">

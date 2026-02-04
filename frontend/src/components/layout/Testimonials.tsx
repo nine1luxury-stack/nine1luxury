@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote, Plus } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 
@@ -65,13 +65,7 @@ export function Testimonials() {
                     </h3>
                     <div className="h-0.5 w-24 bg-gradient-to-r from-transparent via-gold-500 to-transparent mb-8" />
                     
-                    <button 
-                        onClick={() => setIsModalOpen(true)}
-                        className="flex items-center gap-2 px-6 py-3 border border-gold-500/30 rounded-full text-gold-300 hover:bg-gold-500/10 hover:border-gold-500 transition-all group"
-                    >
-                        <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform" />
-                        <span className="font-bold">أضف رأيك</span>
-                    </button>
+
                 </div>
 
                 <div className="relative overflow-hidden -mx-4">

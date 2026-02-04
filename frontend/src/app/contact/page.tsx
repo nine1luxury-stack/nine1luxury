@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 } from "lucide-react";
 
-export default function ContactPage() {
+    export default function ContactPage() {
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
@@ -62,6 +62,12 @@ export default function ContactPage() {
             name: "Facebook",
             handle: "nine1luxury",
             link: "https://facebook.com/nine1luxury"
+        },
+        {
+            icon: Music2,
+            name: "TikTok",
+            handle: "@nine1luxury",
+            link: "https://www.tiktok.com/@nine1luxury"
         },
     ];
 

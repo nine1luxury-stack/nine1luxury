@@ -4,7 +4,7 @@ import { Facebook, Instagram, Music2, Phone, MessageCircle, MapPin, Mail } from 
 
 export function Footer() {
     const socialLinks = [
-        { icon: Facebook, href: "https://www.facebook.com/share/178QjvTPUZ/?mibextid=wwXIfr", name: "Facebook" },
+        { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61566609135055&sk=reels_tab", name: "Facebook" },
         { icon: Instagram, href: "https://www.instagram.com/nine1luxury", name: "Instagram" },
         { icon: Music2, href: "https://www.tiktok.com/@nine1luxury", name: "TikTok" },
         { icon: MessageCircle, href: "https://wa.me/201094372339", name: "WhatsApp" },
@@ -86,7 +86,7 @@ export function Footer() {
                                 <div className="w-10 h-10 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400">
                                     <MapPin className="w-5 h-5" />
                                 </div>
-                                <span className="text-gray-300">مصر، القاهرة</span>
+                                <span className="text-gray-300">المحلة، مصر</span>
                             </div>
                         </div>
                     </div>
