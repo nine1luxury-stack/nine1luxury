@@ -20,8 +20,14 @@ export default function CheckoutPage() {
         city: "القاهرة",
     });
 
+    const [errors, setErrors] = useState<{[key: string]: string}>({});
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        // Clear error when user types
+        if (errors[e.target.name]) {
+            setErrors({ ...errors, [e.target.name]: "" });
+        }
     };
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,6 +68,13 @@ export default function CheckoutPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // Name validation
+        if (formData.name.trim().split(/\s+/).length < 2) {
+            setErrors({ name: "يرجى إدخال الاسم ثنائياً على الأقل" });
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -73,6 +86,9 @@ export default function CheckoutPage() {
                 totalAmount: finalTotal,
                 items: cart.map(item => ({
                     productId: item.id,
+                    name: item.name,
+                    size: item.size,
+                    color: item.color,
                     variantId: item.variantId, 
                     quantity: item.quantity,
                     price: item.price,
@@ -183,16 +199,17 @@ export default function CheckoutPage() {
                                         <label className="text-xs text-gray-500 uppercase font-bold">الاسم بالكامل</label>
                                      <div className="relative">
                                          <User className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                                         <input
+                                          <input
                                              required
                                              name="name"
                                              value={formData.name}
                                              onChange={handleInputChange}
-                                             className="w-full bg-rich-black border border-white/10 px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none"
+                                             className={`w-full bg-rich-black border px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none ${errors.name ? 'border-red-500' : 'border-white/10'}`}
                                              placeholder="أدخل اسمك بالكامل"
-                                         />
-                                     </div>
-                                 </div>
+                                          />
+                                          {errors.name && <p className="text-red-500 text-xs mt-1 absolute right-0">{errors.name}</p>}
+                                      </div>
+                                  </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">

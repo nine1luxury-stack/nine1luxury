@@ -46,7 +46,10 @@ export async function sendOrderNotification(orderData: OrderData) {
     
     const itemsHtml = items.map((item: OrderItem) => `
         <tr style="background-color: #080808;">
-            <td style="padding: 25px 20px; border-bottom: 2px solid #1a1a1a; color: #fff; font-size: 24px; font-weight: 500;">${item.productId || 'منتج'}</td>
+            <td style="padding: 25px 20px; border-bottom: 2px solid #1a1a1a; color: #fff; font-size: 24px; font-weight: 500;">
+                ${item.productId || 'منتج'}
+                ${item.variantId ? `<br/><span style="font-size: 20px; color: #ae8439; font-weight: normal;">${item.variantId}</span>` : ''}
+            </td>
             <td style="padding: 25px 20px; border-bottom: 2px solid #1a1a1a; color: #fff; text-align: center; font-size: 24px;">${item.quantity}</td>
             <td style="padding: 25px 20px; border-bottom: 2px solid #1a1a1a; color: #ae8439; text-align: left; font-weight: bold; font-size: 26px;">${item.price} ج.م</td>
         </tr>

@@ -14,16 +14,10 @@ async function sendTestOrder() {
         totalAmount: 1550,
         items: [
             {
-                productId: "T-Shirt Luxury Gold",
-                variantId: "Large / Black",
-                quantity: 2,
-                price: 750
-            },
-            {
-                productId: "Luxury Cap",
-                variantId: "One Size",
+                productId: "سويت بانس",
+                variantId: "L / رمادي",
                 quantity: 1,
-                price: 50
+                price: 800
             }
         ]
     };

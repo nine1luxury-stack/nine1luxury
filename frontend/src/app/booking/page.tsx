@@ -65,8 +65,8 @@ export default function BookingPage() {
     const validateForm = () => {
         const newErrors: {[key: string]: string} = {};
         
-        if (!formData.name || formData.name.length < 3) {
-            newErrors.name = "الاسم يجب أن يكون 3 أحرف على الأقل";
+        if (!formData.name || formData.name.trim().split(/\s+/).length < 2) {
+            newErrors.name = "يرجى إدخال الاسم ثنائياً على الأقل (الأول واللقب)";
         }
 
         const phoneRegex = /^01[0125][0-9]{8}$/;
