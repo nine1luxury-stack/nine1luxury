@@ -52,8 +52,8 @@ export default function AdminProductsPage() {
         colors: []
     });
 
-    // State for per-color images: { "Red": File | "url", "Blue": File | "url" }
-    const [colorImages, setColorImages] = useState<Record<string, File | string>>({});
+    // State for all product images: Array of File objects or URL strings
+    const [productGallery, setProductGallery] = useState<(File | string)[]>([]);
 
     // Edit & View State
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -100,17 +100,9 @@ export default function AdminProductsPage() {
             colors: colors
         });
 
-        // Pre-fill color images from existing product images
-        const initialColorImages: Record<string, string> = {};
-        if (product.images) {
-            product.images.forEach((img: ProductImage) => {
-                if (img.color) {
-                    initialColorImages[img.color] = img.url;
-                }
-            });
-        }
-        // If main image exists but no specific color images, setting it for default/all (optional logic, skipping for now to keep it clean)
-        setColorImages(initialColorImages);
+        // Pre-fill gallery from existing product images
+        const initialGallery = product.images?.map((img: any) => img.url) || [];
+        setProductGallery(initialGallery);
 
         setIsAddModalOpen(true);
     };
@@ -125,12 +117,10 @@ export default function AdminProductsPage() {
         setIsUploading(true);
 
         try {
-            // 1. Upload all new images from colorImages state
-            // We need to map color names to their final URLs
-            const finalColorImages: Record<string, string> = {};
+            // 1. Upload all new images from productGallery state
+            const finalGalleryUrls: string[] = [];
 
-            // Process uploads likely in parallel or specific order
-            const uploadPromises = Object.entries(colorImages).map(async ([colorName, fileOrUrl]) => {
+            const uploadPromises = productGallery.map(async (fileOrUrl) => {
                 if (fileOrUrl instanceof File) {
                     const formData = new FormData();
                     formData.append('file', fileOrUrl);
@@ -142,13 +132,13 @@ export default function AdminProductsPage() {
 
                     const uploadData = await uploadRes.json();
                     if (uploadData.success) {
-                        finalColorImages[colorName] = uploadData.url;
+                        finalGalleryUrls.push(uploadData.url);
                     } else {
-                        throw new Error(`Failed to upload image for ${colorName}`);
+                        throw new Error(`Failed to upload image`);
                     }
                 } else {
                     // It's already a URL string
-                    finalColorImages[colorName] = fileOrUrl as string;
+                    finalGalleryUrls.push(fileOrUrl as string);
                 }
             });
 
@@ -175,11 +165,10 @@ export default function AdminProductsPage() {
                         stock: 0,
                     } as ProductVariant))
                 ),
-                // Construct images array from finalColorImages map
-                images: Object.entries(finalColorImages).map(([color, url]) => ({
-                    id: 'temp-' + color,
+                // Construct images array
+                images: finalGalleryUrls.map((url, index) => ({
+                    id: 'temp-' + index,
                     url: url,
-                    color: color === 'default' ? undefined : color // Handle "default" key if used
                 })),
                 isActive: editingProduct ? editingProduct.isActive : true
             };
@@ -196,7 +185,7 @@ export default function AdminProductsPage() {
             setIsAddModalOpen(false);
             setEditingProduct(null);
             setNewProduct({ name: '', model: '', price: '', category: 'تيشرتات', description: '', image: '', sizes: [], colors: [] });
-            setColorImages({});
+            setProductGallery([]);
         } catch (error) {
             console.error(error);
             alert('حدث خطأ أثناء حفظ المنتج');
@@ -501,58 +490,61 @@ export default function AdminProductsPage() {
                                     <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">الألوان المتاحة</label>
 
                                     <div className="bg-rich-black/50 border border-white/5 p-4 rounded-xl space-y-4">
-                                        <div className="flex items-center gap-3">
-                                            {/* Circular Color Picker */}
-                                            <div className="relative group shrink-0">
-                                                <input
-                                                    type="color"
-                                                    id="colorPicker"
-                                                    value={/^#[0-9A-F]{6}$/i.test(colorInput) ? colorInput : '#000000'}
-                                                    className="w-12 h-12 rounded-full cursor-pointer overflow-hidden border-2 border-white/10 p-0 bg-transparent transition-transform hover:scale-105"
-                                                    onChange={(e) => setColorInput(e.target.value)}
-                                                />
-                                            </div>
+                                        <div className="flex flex-col gap-4">
+                                            <div className="flex items-center gap-3">
+                                                {/* Circular Color Picker */}
+                                                <div className="relative group shrink-0">
+                                                    <input
+                                                        type="color"
+                                                        id="colorPicker"
+                                                        value={/^#[0-9A-F]{6}$/i.test(colorInput) ? colorInput : '#000000'}
+                                                        className="w-12 h-12 rounded-full cursor-pointer overflow-hidden border-2 border-white/10 p-0 bg-transparent transition-transform hover:scale-105"
+                                                        onChange={(e) => setColorInput(e.target.value)}
+                                                    />
+                                                </div>
 
-                                            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                <input
-                                                    type="text"
-                                                    placeholder="اسم اللون (مثال: أحمر)"
-                                                    id="colorNameInput"
-                                                    className="w-full bg-rich-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:border-gold-500/50 outline-none transition-all placeholder:text-gray-600"
-                                                />
-                                                <div className="flex gap-2">
+                                                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                    <input
+                                                        type="text"
+                                                        placeholder="اسم اللون (مثال: أحمر)"
+                                                        id="colorNameInput"
+                                                        className="w-full bg-rich-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:border-gold-500/50 outline-none transition-all placeholder:text-gray-600"
+                                                    />
                                                     <input
                                                         type="text"
                                                         placeholder="#000000"
                                                         value={colorInput}
                                                         onChange={(e) => setColorInput(e.target.value)}
-                                                        className="flex-1 bg-rich-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm uppercase font-mono focus:border-gold-500/50 outline-none transition-all placeholder:text-gray-600"
+                                                        className="w-full bg-rich-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm uppercase font-mono focus:border-gold-500/50 outline-none transition-all placeholder:text-gray-600"
                                                     />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            let val = colorInput.trim();
-                                                            if (!val.startsWith('#')) val = '#' + val;
-                                                            const nameInput = document.querySelector('#colorNameInput') as HTMLInputElement;
-                                                            const name = nameInput?.value?.trim() || val;
-
-                                                            if (/^#[0-9A-F]{6}$/i.test(val)) {
-                                                                if (!newProduct.colors.some(c => c.hex === val)) {
-                                                                    setNewProduct(prev => ({
-                                                                        ...prev,
-                                                                        colors: [...prev.colors, { name, hex: val }]
-                                                                    }));
-                                                                    setColorInput('');
-                                                                    if (nameInput) nameInput.value = '';
-                                                                }
-                                                            }
-                                                        }}
-                                                        className="bg-gold-500 text-rich-black px-4 rounded-lg text-xs font-bold hover:bg-gold-300 transition-colors shadow-lg shadow-gold-500/10"
-                                                    >
-                                                        إضافة
-                                                    </button>
                                                 </div>
                                             </div>
+                                            
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    let val = colorInput.trim();
+                                                    if (!val.startsWith('#')) val = '#' + val;
+                                                    const nameInput = document.querySelector('#colorNameInput') as HTMLInputElement;
+                                                    const name = nameInput?.value?.trim() || val;
+
+                                                    if (/^#[0-9A-F]{6}$/i.test(val)) {
+                                                        if (!newProduct.colors.some(c => c.hex === val)) {
+                                                            setNewProduct(prev => ({
+                                                                ...prev,
+                                                                colors: [...prev.colors, { name, hex: val }]
+                                                            }));
+                                                            setColorInput('');
+                                                            if (nameInput) nameInput.value = '';
+                                                        }
+                                                    } else {
+                                                        alert('يرجى إدخال كود لون صحيح (HEX)');
+                                                    }
+                                                }}
+                                                className="w-full bg-gold-500 text-rich-black py-3 rounded-lg text-sm font-bold hover:bg-gold-300 transition-colors shadow-lg shadow-gold-500/10"
+                                            >
+                                                إضافة اللون
+                                            </button>
                                         </div>
                                     </div>
 
@@ -577,114 +569,45 @@ export default function AdminProductsPage() {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">الصور</label>
+                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">صور المنتج</label>
                                     
-                                    {/* Main Image */}
-                                    <div className="mb-6">
-                                        <p className="text-[10px] text-gray-500 mb-2 font-bold uppercase tracking-tight">الصورة الأساسية (ستظهر في المتجر)</p>
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={(e) => {
-                                                    const file = e.target.files?.[0];
-                                                    if (file) {
-                                                        setColorImages(prev => ({ ...prev, 'default': file }));
-                                                    }
-                                                }}
-                                                className="hidden"
-                                                id="upload-main"
-                                            />
-                                            <label
-                                                htmlFor="upload-main"
-                                                className="w-full cursor-pointer bg-gold-500/5 border-2 border-gold-500/20 border-dashed rounded-2xl p-6 text-gray-400 hover:border-gold-500 hover:bg-gold-500/10 transition-all flex flex-col items-center justify-center gap-3 min-h-[160px]"
-                                            >
-                                                {colorImages['default'] ? (
-                                                    <div className="relative w-full h-full min-h-[120px]">
-                                                        <Image
-                                                            src={colorImages['default'] instanceof File
-                                                                ? URL.createObjectURL(colorImages['default'] as File)
-                                                                : colorImages['default'] as string
-                                                            }
-                                                            alt="Main"
-                                                            width={300}
-                                                            height={128}
-                                                            className="w-full h-32 object-contain rounded-xl"
-                                                        />
-                                                        <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 hover:opacity-100 transition-opacity rounded-xl">
-                                                            <span className="text-white font-bold text-xs bg-gold-500 px-4 py-2 rounded-full shadow-lg">تغيير الصورة</span>
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    <>
-                                                        <div className="p-4 bg-gold-500/10 rounded-full">
-                                                            <Plus className="w-8 h-8 text-gold-500" />
-                                                        </div>
-                                                        <div className="text-center">
-                                                            <span className="block text-white font-bold text-sm">اضغط لرفع الصورة الأساسية</span>
-                                                            <span className="text-[10px] text-gray-500 mt-1 block">JPG, PNG أو WEBP بحد أقصى 5 ميجا</span>
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">صور موديلات الألوان</label>
-
-                                    {newProduct.colors.length === 0 && (
-                                        <p className="text-gray-600 text-[10px] mb-2 bg-white/5 p-3 rounded-lg border border-white/5">أضف ألواناً للمنتج أولاً إذا كنت تريد رفع صور مخصصة لكل لون.</p>
-                                    )}
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {newProduct.colors.map(color => (
-                                            <div key={color.name} className="space-y-2 bg-white/5 p-3 rounded-xl border border-white/5">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <span className="w-5 h-5 rounded-full border border-white/20" style={{ backgroundColor: color.hex }}></span>
-                                                    <span className="text-xs font-bold text-gray-300 font-mono">{color.hex}</span>
-                                                </div>
-
-                                                <div className="flex gap-2">
-                                                    <input
-                                                        type="file"
-                                                        accept="image/*"
-                                                        onChange={(e) => {
-                                                            const file = e.target.files?.[0];
-                                                            if (file) {
-                                                                setColorImages(prev => ({ ...prev, [color.name]: file }));
-                                                            }
-                                                        }}
-                                                        className="hidden"
-                                                        id={`upload-${color.name}`}
-                                                    />
-                                                    <label
-                                                        htmlFor={`upload-${color.name}`}
-                                                        className="flex-1 cursor-pointer bg-rich-black border border-white/10 border-dashed rounded-lg px-2 py-3 text-gray-400 text-xs hover:border-gold-500 hover:text-gold-500 transition-colors flex flex-col items-center justify-center gap-1 h-20"
-                                                    >
-                                                        {colorImages[color.name] ? (
-                                                            <div className="relative w-full h-full">
-                                                                <Image
-                                                                    src={colorImages[color.name] instanceof File
-                                                                        ? URL.createObjectURL(colorImages[color.name] as File)
-                                                                        : colorImages[color.name] as string
-                                                                    }
-                                                                    alt={color.name}
-                                                                    width={100}
-                                                                    height={80}
-                                                                    className="w-full h-full object-cover rounded"
-                                                                />
-                                                                <span className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold text-[10px] opacity-0 hover:opacity-100 transition-opacity">تغيير</span>
-                                                            </div>
-                                                        ) : (
-                                                            <>
-                                                                <Plus className="w-4 h-4" />
-                                                                <span>إضافة صورة</span>
-                                                            </>
-                                                        )}
-                                                    </label>
-                                                </div>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                        {productGallery.map((img, idx) => (
+                                            <div key={idx} className="relative aspect-[3/4] bg-rich-black rounded-xl overflow-hidden border border-white/10 group">
+                                                <Image
+                                                    src={img instanceof File ? URL.createObjectURL(img) : img}
+                                                    alt={`Product ${idx}`}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const newGallery = [...productGallery];
+                                                        newGallery.splice(idx, 1);
+                                                        setProductGallery(newGallery);
+                                                    }}
+                                                    className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
                                             </div>
                                         ))}
+
+                                        <label className="relative aspect-[3/4] cursor-pointer bg-gold-500/5 border-2 border-gold-500/20 border-dashed rounded-xl flex flex-col items-center justify-center gap-2 hover:border-gold-500 hover:bg-gold-500/10 transition-all">
+                                            <input
+                                                type="file"
+                                                multiple
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const files = Array.from(e.target.files || []);
+                                                    setProductGallery(prev => [...prev, ...files]);
+                                                }}
+                                            />
+                                            <Plus className="w-6 h-6 text-gold-500" />
+                                            <span className="text-[10px] text-gray-400 font-bold uppercase">إضافة صور</span>
+                                        </label>
                                     </div>
                                 </div>
                                 <div>

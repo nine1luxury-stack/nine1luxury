@@ -6,7 +6,7 @@ import { Hero } from "@/components/layout/Hero";
 import { ProductCard } from "@/components/product/ProductCard";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+
 import { useProducts } from "@/context/ProductContext";
 
 export default function Home() {

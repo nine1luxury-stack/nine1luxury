@@ -15,6 +15,7 @@ export default function CheckoutPage() {
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
+        altPhone: "",
         address: "",
         city: "القاهرة",
     });
@@ -66,7 +67,7 @@ export default function CheckoutPage() {
         try {
             const orderData = {
                 guestName: formData.name,
-                guestPhone: formData.phone,
+                guestPhone: formData.phone + (formData.altPhone ? ` / ${formData.altPhone}` : ""),
                 guestAddress: formData.address,
                 guestCity: formData.city,
                 totalAmount: finalTotal,
@@ -161,6 +162,19 @@ export default function CheckoutPage() {
                             </h2>
 
                             <form onSubmit={handleSubmit} className="space-y-6">
+                                <div className="space-y-2">
+                                    <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">رقم الموبايل (اختياري)</label>
+                                    <div className="relative">
+                                        <Phone className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                        <input
+                                            name="altPhone"
+                                            value={formData.altPhone}
+                                            onChange={handleInputChange}
+                                            className="w-full bg-rich-black border border-white/10 px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none"
+                                            placeholder="رقم موبايل إضافي"
+                                        />
+                                    </div>
+                                </div>
                                 <div className="space-y-2">
                                     <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">الاسم بالكامل</label>
                                     <div className="relative">

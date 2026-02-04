@@ -19,7 +19,7 @@ export function Header() {
         <motion.header
             initial={{ y: -100 }}
             animate={{ y: 0 }}
-            className="fixed top-0 left-0 right-0 z-50 bg-rich-black/80 backdrop-blur-md border-b border-gold-500/20"
+            className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gold-500/20"
         >
             <div className="container mx-auto px-4 h-20 flex items-center justify-between">
                 {/* Mobile Menu Button */}
@@ -97,11 +97,11 @@ export function Header() {
                             animate={{ y: 0 }}
                             exit={{ y: "-100%" }}
                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            className="fixed inset-0 z-50 w-full h-full bg-rich-black border-b border-gold-500/20 p-6 lg:hidden flex flex-col"
+                            className="fixed inset-0 z-50 w-full h-full bg-black border-b border-gold-500/20 p-6 lg:hidden flex flex-col"
                         >
                             <div className="flex items-center justify-between mb-12">
                                 <Link href="/" className="relative flex items-center gap-3 group">
-                                    <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-gold-500/20 bg-gradient-to-br from-white to-gold-50/50 p-1 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+                                    <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-gold-500/20 bg-black p-1 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
                                         <Image
                                             src="/logo-main.png"
                                             alt="nine1luxury"
