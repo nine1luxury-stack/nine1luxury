@@ -45,14 +45,14 @@ export function ProductCard({ id, name, price, discount, image, images, category
                 <div className="absolute top-3 right-3 z-20 flex flex-col gap-2 items-end">
                     <Link
                         href={`/products?category=${category}`}
-                        className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold text-white tracking-wider hover:bg-gold-500 hover:text-black hover:border-gold-500 transition-all duration-300 cursor-pointer block"
+                        className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold text-white hover:bg-gold-500 hover:text-black hover:border-gold-500 transition-all duration-300 cursor-pointer block"
                     >
                         {category}
                     </Link>
                     
                     {/* Sold Out Badge */}
                     {isSoldOut && (
-                        <div className="px-3 py-1 bg-red-600 border border-red-500 rounded-full text-[10px] font-bold text-white tracking-wider uppercase animate-pulse">
+                        <div className="px-3 py-1 bg-red-600 border border-red-500 rounded-full text-[10px] font-bold text-white uppercase animate-pulse">
                             نفد من المخزن
                         </div>
                     )}

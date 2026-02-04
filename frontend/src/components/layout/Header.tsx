@@ -45,7 +45,7 @@ export function Header() {
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden lg:flex items-center gap-10 text-sm font-medium uppercase tracking-wider">
+                <nav className="hidden lg:flex items-center gap-10 text-sm font-medium uppercase">
                     <Link href="/" className="text-white hover:text-gold-300 transition-colors font-amiri font-bold">
                         الرئيسية
                     </Link>

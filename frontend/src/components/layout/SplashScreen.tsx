@@ -44,16 +44,17 @@ export function SplashScreen() {
             />
           </motion.div>
 
-          {/* Staggered Text Animation */}
+          {/* Staggered Text Animation - Forced LTR for English */}
           <motion.div 
-            className="mt-4 flex gap-[0.3em] text-gold-500 font-playfair font-bold text-lg md:text-xl tracking-widest"
+            className="mt-4 flex flex-row gap-[0.05em] text-gold-500 font-playfair font-bold text-lg md:text-xl"
+            style={{ direction: 'ltr' }}
             initial="hidden"
             animate="visible"
             variants={{
               visible: {
                 transition: {
-                  delayChildren: 0.5,
-                  staggerChildren: 0.1,
+                  delayChildren: 0.2,
+                  staggerChildren: 0.04,
                 }
               }
             }}
@@ -62,11 +63,10 @@ export function SplashScreen() {
               <motion.span
                 key={index}
                 variants={{
-                  hidden: { opacity: 0, y: -20 },
+                  hidden: { opacity: 0, y: -10 },
                   visible: { opacity: 1, y: 0 }
                 }}
-                transition={{ duration: 0.4 }}
-                className={char === " " ? "w-2" : ""}
+                className={char === " " ? "w-1" : ""}
               >
                 {char}
               </motion.span>
@@ -77,8 +77,8 @@ export function SplashScreen() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.2, duration: 1 }}
-            className="mt-6 text-gray-400 text-sm md:text-base font-light tracking-[0.1em] text-center max-w-[80%]"
+            transition={{ delay: 1.5, duration: 0.8 }}
+            className="mt-6 text-gray-400 text-sm md:text-base font-light text-center max-w-[80%]"
           >
             وجهتك الأولى لأرقى الموديلات الشبابية العصرية في مصر
           </motion.p>
