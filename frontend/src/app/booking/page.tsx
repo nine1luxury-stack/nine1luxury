@@ -118,7 +118,7 @@ export default function BookingPage() {
             <Header />
 
             {/* Hero Section */}
-            <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
+            <section className="relative h-[45vh] flex items-center justify-center overflow-hidden">
                 <Image
                     src="/luxury_fitting_room.png"
                     alt="Luxury Fitting Room"
@@ -156,7 +156,7 @@ export default function BookingPage() {
             </section>
 
             {/* Booking Form Section */}
-            <section className="py-24 container mx-auto px-4 relative">
+            <section className="py-12 container mx-auto px-4 relative">
                 <div className="max-w-4xl mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
                         {/* Info Side */}

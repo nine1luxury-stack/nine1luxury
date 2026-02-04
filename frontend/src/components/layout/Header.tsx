@@ -19,7 +19,7 @@ export function Header() {
         <motion.header
             initial={{ y: -100 }}
             animate={{ y: 0 }}
-            className="fixed top-0 left-0 right-0 z-50 bg-black border-b border-gold-500/20"
+            className="fixed top-0 left-0 right-0 z-50 bg-rich-black border-b border-gold-500/20"
         >
             <div className="w-full px-4 h-20 flex items-center justify-between max-w-[1400px] mx-auto">
                 {/* Mobile Menu Button */}
@@ -90,14 +90,14 @@ export function Header() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm lg:hidden"
+                            className="fixed inset-0 z-50 bg-rich-black/80 backdrop-blur-sm lg:hidden"
                         />
                         <motion.div
                             initial={{ y: "-100%" }}
                             animate={{ y: 0 }}
                             exit={{ y: "-100%" }}
                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            className="fixed inset-0 z-50 w-full h-full bg-black border-b border-gold-500/20 p-6 lg:hidden flex flex-col"
+                            className="fixed inset-0 z-50 w-full h-full bg-rich-black border-b border-gold-500/20 p-6 lg:hidden flex flex-col"
                         >
                             <div className="flex items-center justify-between mb-12">
                                 <Link href="/" className="relative flex items-center gap-3 group">
@@ -212,7 +212,8 @@ export function Header() {
                                     className="flex items-center justify-center gap-2 text-rich-black bg-gold-500 hover:bg-gold-400 transition-colors rounded-xl p-3 mt-3 font-bold text-sm"
                                 >
                                     <Phone className="w-4 h-4" />
-                                    <span dir="ltr">اتصل الآن: 010 9437 2339</span>
+                                    <span>اتصل الآن:</span>
+                                    <span dir="ltr" className="font-mono">010 9437 2339</span>
                                 </a>
                             </div>
                         </motion.div>

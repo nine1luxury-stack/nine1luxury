@@ -35,7 +35,7 @@ export default function AboutPage() {
             <Header />
 
             {/* Hero Section */}
-            <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
+            <section className="relative h-[45vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-gold-500/10 to-transparent" />
                 <div className="absolute top-[20%] left-[10%] w-64 h-64 bg-gold-500/5 rounded-full blur-[100px]" />
                 <div className="absolute bottom-[20%] right-[10%] w-64 h-64 bg-gold-300/5 rounded-full blur-[100px]" />
@@ -56,7 +56,7 @@ export default function AboutPage() {
             </section>
 
             {/* Story Section */}
-            <section className="py-24 bg-surface-dark/20">
+            <section className="py-12 bg-surface-dark/20">
                 <div className="container mx-auto px-4">
                     <div className="max-w-4xl mx-auto space-y-8">
                         <motion.div

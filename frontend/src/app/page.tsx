@@ -27,7 +27,7 @@ export default function Home() {
       <Hero />
 
       {/* Featured Section */}
-      <section className="py-24 bg-rich-black relative">
+      <section className="pt-12 pb-24 bg-rich-black relative">
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-[0.02] flex items-center justify-center">
           <span className="text-[20vw] font-playfair font-bold whitespace-nowrap">NINE 1 LUXURY</span>
         </div>
