@@ -83,7 +83,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                 >
                     {/* Header */}
                     <div className="text-center mb-16">
-                        <h1 className="text-4xl md:text-6xl font-playfair font-bold text-white uppercase tracking-wider mb-4">
+                        <h1 className="text-4xl md:text-6xl font-playfair font-bold text-white uppercase mb-4">
                             تواصل معنا
                         </h1>
                         <div className="h-px w-24 bg-gold-500 mx-auto mb-6" />
@@ -161,7 +161,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                                     href="https://wa.me/201094372339"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 bg-gold-500 text-rich-black px-6 py-3 font-bold uppercase tracking-widest hover:bg-gold-300 transition-colors text-sm rounded-full"
+                                    className="inline-flex items-center gap-2 bg-gold-500 text-rich-black px-6 py-3 font-bold uppercase hover:bg-gold-300 transition-colors text-sm rounded-full"
                                 >
                                     <MessageCircle className="w-4 h-4" />
                                     <span>فتح واتساب</span>
@@ -174,7 +174,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                             <h2 className="text-2xl font-playfair font-bold text-white mb-6">أرسل رسالة</h2>
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">الاسم *</label>
+                                    <label className="text-xs text-gray-500 uppercase font-bold">الاسم *</label>
                                     <input
                                         required
                                         name="name"
@@ -188,7 +188,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
 
 
                                 <div className="space-y-2">
-                                    <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">رقم الهاتف</label>
+                                    <label className="text-xs text-gray-500 uppercase font-bold">رقم الهاتف</label>
                                     <input
                                         type="tel"
                                         name="phone"
@@ -200,7 +200,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">الرسالة *</label>
+                                    <label className="text-xs text-gray-500 uppercase font-bold">الرسالة *</label>
                                     <textarea
                                         required
                                         name="message"
@@ -214,7 +214,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
 
                                 <button
                                     type="submit"
-                                    className="w-full h-14 bg-gold-500 text-rich-black font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-gold-300 transition-colors rounded-full"
+                                    className="w-full h-14 bg-gold-500 text-rich-black font-bold uppercase flex items-center justify-center gap-3 hover:bg-gold-300 transition-colors rounded-full"
                                 >
                                     <Send className="w-5 h-5" />
                                     <span>إرسال الرسالة</span>

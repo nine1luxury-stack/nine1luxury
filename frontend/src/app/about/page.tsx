@@ -45,7 +45,7 @@ export default function AboutPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="container mx-auto px-4 text-center relative z-10"
                 >
-                    <h1 className="text-5xl md:text-7xl font-playfair font-bold text-white uppercase tracking-wider mb-6">
+                    <h1 className="text-5xl md:text-7xl font-playfair font-bold text-white uppercase mb-6">
                         من نحن
                     </h1>
                     <div className="h-px w-24 bg-gold-500 mx-auto mb-8" />

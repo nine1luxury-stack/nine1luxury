@@ -132,7 +132,7 @@ export default function BookingPage() {
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-gold-500 font-bold tracking-[0.3em] uppercase text-sm block"
+                        className="text-gold-500 font-bold uppercase text-sm block"
                     >
                         Exclusive Reservation
                     </motion.span>
@@ -140,7 +140,7 @@ export default function BookingPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-5xl md:text-7xl font-playfair font-bold text-white uppercase tracking-wider"
+                        className="text-5xl md:text-7xl font-playfair font-bold text-white uppercase"
                     >
                         احجز منتجك المفضل
                     </motion.h1>
@@ -216,7 +216,7 @@ export default function BookingPage() {
                                         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
-                                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                                    <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
                                                         <Phone className="w-3 h-3" /> رقم الهاتف
                                                     </label>
                                                     <input
@@ -231,7 +231,7 @@ export default function BookingPage() {
                                                     {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                                    <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
                                                         <User className="w-3 h-3" /> الاسم بالكامل
                                                     </label>
                                                     <input
@@ -247,7 +247,7 @@ export default function BookingPage() {
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
-                                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                                    <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
                                                         <Package className="w-3 h-3" /> اسم الموديل
                                                     </label>
                                                     <input
@@ -260,7 +260,7 @@ export default function BookingPage() {
                                                     {errors.productModel && <p className="text-red-500 text-xs mt-1">{errors.productModel}</p>}
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                                    <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
                                                         <Maximize2 className="w-3 h-3" /> المقاس
                                                     </label>
                                                     <select
@@ -282,7 +282,7 @@ export default function BookingPage() {
 
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
-                                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                                    <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
                                                         <MapPin className="w-3 h-3" /> المحافظة
                                                     </label>
                                                     <select
@@ -298,7 +298,7 @@ export default function BookingPage() {
                                                     {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                                    <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
                                                         <Banknote className="w-3 h-3" /> سعر الشحن
                                                     </label>
                                                     <div className="w-full bg-gold-500/5 border border-gold-500/20 rounded-xl px-4 py-3 text-gold-300 font-bold flex items-center justify-between">

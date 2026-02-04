@@ -34,10 +34,10 @@ export default function Home() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col items-center mb-20 text-center">
-            <h2 className="text-sm uppercase tracking-[0.4em] text-gold-500 font-bold mb-4">
+            <h2 className="text-sm uppercase text-gold-500 font-bold mb-4">
               إصدارات مختارة
             </h2>
-            <h3 className="text-4xl md:text-6xl font-playfair font-bold text-white mb-6 uppercase tracking-wider">
+            <h3 className="text-4xl md:text-6xl font-playfair font-bold text-white mb-6 uppercase">
               المجموعة المميزة
             </h3>
             <div className="h-0.5 w-24 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
@@ -52,7 +52,7 @@ export default function Home() {
           <div className="mt-20 text-center">
             <Link
               href="/products"
-              className="inline-block text-gold-300 font-bold tracking-widest uppercase border-b-2 border-gold-500/30 pb-2 hover:border-gold-500 transition-all hover:tracking-[0.2em]"
+              className="inline-block text-gold-300 font-bold uppercase border-b-2 border-gold-500/30 pb-2 hover:border-gold-500 transition-all"
             >
               عرض جميع المنتجات
             </Link>
@@ -68,11 +68,11 @@ export default function Home() {
         <div className="absolute inset-0 bg-gold-500/5 backdrop-blur-3xl" />
         <div className="container mx-auto px-4 relative z-10 text-center">
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-10 leading-tight">
-            جاهز لإضافة لمسة من <span className="text-gold-400">الرفاهية</span>؟
+            جاهز لإضافة لمسة من <span className="text-gold-400">الرفاهية</span>
           </h2>
           <Link
             href="/products"
-            className="inline-block px-12 py-5 bg-gold-500 text-rich-black font-bold text-lg uppercase tracking-wider hover:bg-gold-400 transition-all rounded-full shadow-[0_0_20px_rgba(234,179,8,0.4)]"
+            className="inline-block px-12 py-5 bg-gold-500 text-rich-black font-bold text-lg uppercase hover:bg-gold-400 transition-all rounded-full shadow-[0_0_20px_rgba(234,179,8,0.4)]"
           >
             احجز منتجك الآن
           </Link>

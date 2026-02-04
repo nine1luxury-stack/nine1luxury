@@ -26,6 +26,10 @@
   }
 }
 
+html {
+  font-size: 105%; /* Increases base size for all rem-based units */
+}
+
 :root {
   --background: #000000;
   --foreground: #ffffff;

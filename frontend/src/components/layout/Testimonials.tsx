@@ -104,7 +104,7 @@ export function Testimonials() {
                                     </div>
                                     <div>
                                         <h4 className="text-white font-bold">{review.name}</h4>
-                                        <p className="text-xs text-gold-500 uppercase tracking-wider">
+                                        <p className="text-xs text-gold-500 uppercase">
                                             {review.role}
                                         </p>
                                     </div>

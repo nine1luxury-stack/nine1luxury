@@ -56,7 +56,7 @@ export function Footer() {
 
                     {/* Contact Info */}
                     <div className="flex flex-col items-center md:items-start">
-                        <h3 className="text-gold-400 font-playfair font-bold mb-8 text-xl tracking-wide relative inline-block">
+                        <h3 className="text-gold-400 font-playfair font-bold mb-8 text-xl relative inline-block">
                             اتصل بنا
                             <span className="absolute -bottom-2 right-0 w-1/2 h-0.5 bg-gold-500/50 rounded-full"></span>
                         </h3>

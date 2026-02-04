@@ -45,7 +45,7 @@ export function Header() {
                 </Link>
 
                 {/* Desktop Nav */}
-                <nav className="hidden lg:flex items-center gap-10 text-sm font-medium uppercase">
+                <nav className="hidden lg:flex items-center gap-10 text-base font-medium uppercase">
                     <Link href="/" className="text-white hover:text-gold-300 transition-colors font-amiri font-bold">
                         الرئيسية
                     </Link>
@@ -74,7 +74,7 @@ export function Header() {
                         )}
                     </Link>
                     <div className="w-px h-6 bg-gold-500/20 mx-2 hidden sm:block" />
-                    <a href="tel:01094372339" className="hidden sm:flex items-center gap-2 bg-gold-500/10 hover:bg-gold-500/20 border border-gold-500/30 px-4 py-2 rounded-full text-gold-300 transition-all text-sm font-bold">
+                    <a href="tel:01094372339" className="hidden sm:flex items-center gap-2 bg-gold-500/10 hover:bg-gold-500/20 border border-gold-500/30 px-4 py-2 rounded-full text-gold-300 transition-all text-base font-bold">
                         <Phone className="w-4 h-4" />
                         <span>طلب سريع</span>
                     </a>
@@ -124,7 +124,7 @@ export function Header() {
                                 <Link
                                     href="/"
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase tracking-wider flex items-center justify-between group"
+                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase flex items-center justify-between group"
                                 >
                                     الرئيسية
                                     <ChevronLeft className="w-5 h-5 text-gold-500/50 group-hover:text-gold-500 transition-colors" />
@@ -133,7 +133,7 @@ export function Header() {
                                 <Link
                                     href="/products"
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase tracking-wider flex items-center justify-between group"
+                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase flex items-center justify-between group"
                                 >
                                     المنتجات
                                     <ChevronLeft className="w-5 h-5 text-gold-500/50 group-hover:text-gold-500 transition-colors" />
@@ -142,7 +142,7 @@ export function Header() {
                                 <Link
                                     href="/booking"
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase tracking-wider flex items-center justify-between group"
+                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase flex items-center justify-between group"
                                 >
                                     الحجز
                                     <ChevronLeft className="w-5 h-5 text-gold-500/50 group-hover:text-gold-500 transition-colors" />
@@ -151,7 +151,7 @@ export function Header() {
                                 <Link
                                     href="/about"
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase tracking-wider flex items-center justify-between group"
+                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase flex items-center justify-between group"
                                 >
                                     عن المتجر
                                     <ChevronLeft className="w-5 h-5 text-gold-500/50 group-hover:text-gold-500 transition-colors" />
@@ -160,7 +160,7 @@ export function Header() {
                                 <Link
                                     href="/contact"
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase tracking-wider flex items-center justify-between group"
+                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase flex items-center justify-between group"
                                 >
                                     تواصل معنا
                                     <ChevronLeft className="w-5 h-5 text-gold-500/50 group-hover:text-gold-500 transition-colors" />
@@ -168,7 +168,7 @@ export function Header() {
                             </nav>
 
                             <div className="mt-auto pt-6 border-t border-gold-500/10 space-y-4">
-                                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-3">تابعنا على</p>
+                                <p className="text-xs text-gray-500 font-bold uppercase mb-3">تابعنا على</p>
                                 <div className="grid grid-cols-2 gap-2">
                                     <a
                                         href="https://www.facebook.com/profile.php?id=61566609135055"
