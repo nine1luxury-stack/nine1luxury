@@ -60,9 +60,7 @@ export function Testimonials() {
                     <h2 className="text-sm uppercase tracking-[0.4em] text-gold-500 font-bold mb-4">
                         آراء عملائنا
                     </h2>
-                    <h3 className="text-3xl md:text-5xl font-playfair font-bold text-white mb-6">
-                        تجارب <span className="text-gold-300">استثنائية</span>
-                    </h3>
+
                     <div className="h-0.5 w-24 bg-gradient-to-r from-transparent via-gold-500 to-transparent mb-8" />
                     
 

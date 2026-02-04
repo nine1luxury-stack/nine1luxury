@@ -45,7 +45,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
         {
             icon: MapPin,
             title: "العنوان",
-            value: "القاهرة، مصر",
+            value: "المحلة، مصر",
             link: "#"
         },
     ];
