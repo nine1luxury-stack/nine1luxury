@@ -57,11 +57,7 @@ export function Testimonials() {
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="flex flex-col items-center mb-16 text-center">
-                    <h2 className="text-sm uppercase tracking-[0.4em] text-gold-500 font-bold mb-4">
-                        آراء عملائنا
-                    </h2>
 
-                    <div className="h-0.5 w-24 bg-gradient-to-r from-transparent via-gold-500 to-transparent mb-8" />
                     
 
                 </div>
