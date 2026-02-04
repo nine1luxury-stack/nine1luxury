@@ -115,7 +115,7 @@ export default function CheckoutPage() {
                         <p className="text-gray-400 mb-8">
                             سيتم مراجعة طلبك وإرسال تفاصيله إلى الإدارة. سنتواصل معك هاتفياً للتأكيد قريباً.
                         </p>
-                        <Link href="/products" className="bg-gold-500 text-rich-black px-8 py-4 font-bold uppercase tracking-widest inline-block rounded-full hover:bg-gold-300 transition-colors">
+                        <Link href="/products" className="bg-gold-500 text-rich-black px-8 py-4 font-bold uppercase inline-block rounded-lg hover:bg-gold-300 transition-colors">
                             متابعة التسوق
                         </Link>
                     </div>
@@ -131,7 +131,7 @@ export default function CheckoutPage() {
                 <Header />
                 <div className="pt-48 pb-24 text-center">
                     <h2 className="text-3xl font-bold text-white mb-6">سلة التسوق فارغة</h2>
-                    <Link href="/products" className="bg-gold-500 text-rich-black px-8 py-3 font-bold uppercase tracking-widest inline-block rounded-full">تواصل للتسوق</Link>
+                    <Link href="/products" className="bg-gold-500 text-rich-black px-8 py-3 font-bold uppercase inline-block rounded-lg">تواصل للتسوق</Link>
                 </div>
                 <Footer />
             </main>
@@ -144,7 +144,7 @@ export default function CheckoutPage() {
 
             <div className="pt-32 pb-24 container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
-                    <h1 className="text-4xl font-playfair font-bold text-white mb-12 uppercase tracking-wider text-center">
+                    <h1 className="text-4xl font-bold text-white mb-12 uppercase text-center">
                         إتمام الطلب
                     </h1>
 
@@ -163,7 +163,7 @@ export default function CheckoutPage() {
 
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="space-y-2">
-                                     <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">رقم الهاتف</label>
+                                        <label className="text-xs text-gray-500 uppercase font-bold">رقم الهاتف</label>
                                      <div className="relative">
                                          <Phone className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                          <input
@@ -180,7 +180,7 @@ export default function CheckoutPage() {
                                  </div>
 
                                  <div className="space-y-2">
-                                     <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">الاسم بالكامل</label>
+                                        <label className="text-xs text-gray-500 uppercase font-bold">الاسم بالكامل</label>
                                      <div className="relative">
                                          <User className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                          <input
@@ -196,7 +196,7 @@ export default function CheckoutPage() {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">المحافظة</label>
+                                           <label className="text-xs text-gray-500 uppercase font-bold">المحافظة</label>
                                         <select
                                             name="city"
                                             value={formData.city}
@@ -209,7 +209,7 @@ export default function CheckoutPage() {
                                         </select>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">العنوان</label>
+                                           <label className="text-xs text-gray-500 uppercase font-bold">العنوان</label>
                                         <input
                                             required
                                             name="address"
@@ -224,7 +224,7 @@ export default function CheckoutPage() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full h-16 bg-gold-500 text-rich-black font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-gold-300 transition-colors mt-8 disabled:opacity-50 disabled:cursor-not-allowed rounded-full"
+                                    className="w-full h-16 bg-gold-500 text-rich-black font-bold uppercase flex items-center justify-center gap-3 hover:bg-gold-300 transition-colors mt-8 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg"
                                 >
                                     <Send className="w-5 h-5" />
                                     <span>{isSubmitting ? 'جاري التنفيذ...' : 'تأكيد الطلب'}</span>
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
                                                 <div className="flex justify-between items-start">
                                                     <div>
                                                         <h4 className="text-white font-medium line-clamp-1">{item.name}</h4>
-                                                        <p className="text-xs text-gray-500 uppercase tracking-widest">{item.size} / {item.color}</p>
+                                                        <p className="text-xs text-gray-500 uppercase">{item.size} / {item.color}</p>
                                                     </div>
                                                     <button
                                                         onClick={() => removeFromCart(item.id, item.size, item.color)}
@@ -283,7 +283,7 @@ export default function CheckoutPage() {
                                     </div>
                                     <div className="flex justify-between text-gray-400">
                                         <span>تكلفة الشحن ({formData.city})</span>
-                                        <span className="text-gold-300 font-bold tracking-widest">{formatPrice(shippingCost)}</span>
+                                        <span className="text-gold-300 font-bold">{formatPrice(shippingCost)}</span>
                                     </div>
                                     <div className="flex justify-between text-2xl font-playfair font-bold text-white pt-4">
                                         <span>الإجمالي</span>
@@ -295,15 +295,15 @@ export default function CheckoutPage() {
                             {/* Secure Payment Note */}
                             <div className="space-y-4">
                                 <div className="p-6 border border-gold-500/10 bg-gold-500/5 text-center space-y-2 rounded-lg">
-                                    <p className="text-sm text-gold-300 font-bold uppercase tracking-widest mb-1">طريقة الدفع</p>
+                                    <p className="text-sm text-gold-300 font-bold uppercase mb-1">طريقة الدفع</p>
                                     <p className="text-xs text-gray-400 leading-relaxed">
-                                        يتم تحويل قيمة السحن فقط (مقدماً) لجدية الحجز، وباقي المبلغ عند الاستلام والمعاينة.
+                                        يتم تحويل قيمة الشحن فقط (مقدماً) لجدية الحجز، وباقي المبلغ عند الاستلام والمعاينة.
                                     </p>
                                 </div>
 
                                 <div className="p-6 border border-white/5 bg-surface-dark/40 text-center space-y-6 rounded-lg">
                                     <div className="space-y-2">
-                                        <h4 className="text-gold-400 font-bold text-lg uppercase tracking-wider">سياسة الاستبدال</h4>
+                                        <h4 className="text-gold-400 font-bold text-lg uppercase">سياسة الاستبدال</h4>
                                         <p className="text-sm text-gray-300 leading-relaxed font-medium">
                                             في حالة وجود أي مشكلة في المقاس أو الخامة، يمكنك طلب الاستبدال فوراً.
                                         </p>
@@ -312,7 +312,7 @@ export default function CheckoutPage() {
                                     <div className="w-1/2 mx-auto h-px bg-white/5" />
 
                                     <div className="space-y-2">
-                                        <h4 className="text-gold-400 font-bold text-lg uppercase tracking-wider">مدة التوصيل</h4>
+                                        <h4 className="text-gold-400 font-bold text-lg uppercase">مدة التوصيل</h4>
                                         <p className="text-sm text-gray-300 leading-relaxed font-medium">
                                             3-4 أيام لمحافظات الوجه البحري
                                             <br />

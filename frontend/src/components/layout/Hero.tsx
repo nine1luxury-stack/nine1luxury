@@ -44,7 +44,11 @@ export function Hero() {
                                 priority
                             />
                         </motion.div>
-                        <div className="flex flex-wrap justify-center gap-x-3 overflow-hidden mt-4" style={{ direction: 'ltr' }} suppressHydrationWarning>
+                        <div
+                            className="mt-4 flex flex-row flex-wrap justify-center gap-x-6" 
+                            style={{ direction: 'ltr' }} 
+                            suppressHydrationWarning
+                        >
                             {"MAKE U FEEL LUXURY".split(" ").map((word, wordIndex) => (
                                 <div key={wordIndex} className="flex flex-row gap-[0.02em]">
                                     {word.split("").map((char, charIndex) => (
@@ -67,12 +71,10 @@ export function Hero() {
                         </div>
                     </motion.div>
 
-
-
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
                         <Link
                             href="/products"
-                            className="group relative px-10 py-5 bg-gold-500 text-rich-black font-bold uppercase overflow-hidden transition-all hover:pr-14 rounded-full text-xl"
+                            className="group relative px-10 py-5 bg-gold-500 text-rich-black font-bold uppercase overflow-hidden transition-all hover:pr-14 rounded-lg text-xl"
                         >
                             <span className="relative z-10">استكشف المجموعة</span>
                             <ArrowRight className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all w-5 h-5" />
@@ -80,7 +82,7 @@ export function Hero() {
 
                         <Link
                             href="/contact"
-                            className="px-10 py-5 border border-gold-500/50 text-gold-300 font-bold uppercase hover:bg-gold-500/10 transition-colors rounded-full text-xl"
+                            className="px-10 py-5 border border-gold-500/50 text-gold-300 font-bold uppercase hover:bg-gold-500/10 transition-colors rounded-lg text-xl"
                         >
                             تواصل معنا
                         </Link>

@@ -27,7 +27,7 @@
 }
 
 html {
-  font-size: 105%; /* Increases base size for all rem-based units */
+  font-size: 115%; /* Increases base size by 15% for all rem-based units */
 }
 
 :root {

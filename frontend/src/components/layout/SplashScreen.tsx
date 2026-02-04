@@ -76,32 +76,15 @@ export function SplashScreen() {
             ))}
           </motion.div>
 
-          {/* Luxury Description - Staggered RTL Arabic */}
+          {/* Luxury Description - Simple Fade (No Word Animation) */}
           <motion.div
-            className="mt-6 flex flex-row-reverse flex-wrap justify-center gap-x-2 text-gray-400 text-sm md:text-base font-light"
+            className="mt-6 flex flex-row-reverse flex-wrap justify-center gap-x-2 text-gray-400 text-sm md:text-base font-light px-4 text-center"
             style={{ direction: 'rtl' }}
-            initial="hidden"
-            animate="visible"
-            variants={{
-              visible: {
-                transition: {
-                  delayChildren: 1.2,
-                  staggerChildren: 0.03,
-                }
-              }
-            }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5, duration: 0.8 }}
           >
-            {"وجهتك الأولى لأرقى الموديلات الشبابية العصرية في مصر".split("").map((char, index) => (
-              <motion.span
-                key={index}
-                variants={{
-                  hidden: { opacity: 0, y: 10 },
-                  visible: { opacity: 1, y: 0 }
-                }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </motion.span>
-            ))}
+            وجهتك الأولى لأرقى الموديلات الشبابية العصرية في مصر
           </motion.div>
 
           {/* Luxury loading bar */}

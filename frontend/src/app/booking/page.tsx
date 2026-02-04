@@ -140,7 +140,7 @@ export default function BookingPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-5xl md:text-7xl font-playfair font-bold text-white uppercase"
+                        className="text-5xl md:text-7xl font-bold text-white uppercase"
                     >
                         احجز منتجك المفضل
                     </motion.h1>

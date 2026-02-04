@@ -64,10 +64,10 @@ function ProductsContent() {
                 {/* Page Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div className="space-y-2">
-                        <h1 className="text-4xl md:text-5xl font-playfair font-bold text-white uppercase tracking-wider">
+                        <h1 className="text-4xl md:text-5xl font-bold text-white uppercase">
                             المتجر الكامل
                         </h1>
-                        <p className="text-gold-300/60 uppercase tracking-[0.2em] font-medium">
+                        <p className="text-gold-300/60 uppercase font-medium">
                             تصفح مجموعتنا الحصرية من الملابس الفاخرة
                         </p>
                     </div>
@@ -83,7 +83,7 @@ function ProductsContent() {
                             }}
                             className="w-full bg-rich-black border border-white/10 p-4 rounded-xl flex items-center justify-between text-white hover:border-gold-500 transition-colors"
                         >
-                            <span className="font-bold uppercase tracking-widest flex items-center gap-2">
+                            <span className="font-bold uppercase flex items-center gap-2">
                                 <SlidersHorizontal className="w-4 h-4 text-gold-500" />
                                 الفلترة والتصنيف
                             </span>
