@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { Amiri } from "next/font/google";
 import "@fontsource-variable/playfair-display";
@@ -38,6 +40,8 @@ export default function RootLayout({
             <NotificationProvider>
               <SecurityWrapper>
                 {children}
+                <Analytics />
+                <SpeedInsights />
               </SecurityWrapper>
             </NotificationProvider>
           </CartProvider>
