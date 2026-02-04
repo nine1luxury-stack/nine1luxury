@@ -43,9 +43,9 @@ export default function AboutPage() {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="container mx-auto px-4 text-center relative z-10"
+                    className="container mx-auto px-4 text-center relative z-10 pt-20"
                 >
-                    <h1 className="text-5xl md:text-7xl font-playfair font-bold text-white uppercase mb-6">
+                    <h1 className="text-5xl md:text-7xl font-bold text-white uppercase mb-6">
                         من نحن
                     </h1>
                     <div className="h-px w-24 bg-gold-500 mx-auto mb-8" />
@@ -65,7 +65,7 @@ export default function AboutPage() {
                             viewport={{ once: true }}
                             className="space-y-6 text-center"
                         >
-                            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-white">
+                            <h2 className="text-3xl md:text-4xl font-bold text-white">
                                 قصتنا
                             </h2>
                             <div className="h-px w-16 bg-gold-500 mx-auto" />
@@ -86,7 +86,7 @@ export default function AboutPage() {
             <section className="py-24">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-playfair font-bold text-white mb-4">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                             قيمنا
                         </h2>
                         <div className="h-px w-16 bg-gold-500 mx-auto" />
@@ -122,7 +122,7 @@ export default function AboutPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                         >
-                            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-white mb-4">
+                            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                                 رؤيتنا
                             </h2>
                             <div className="h-px w-16 bg-gold-500 mx-auto mb-8" />

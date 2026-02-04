@@ -1,0 +1,39 @@
+
+import { sendOrderNotification } from './src/lib/email';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+
+async function sendTestOrder() {
+    console.log("🚀 Starting test order email...");
+    
+    const testData = {
+        guestName: "عميل تجريبي",
+        guestPhone: "01234567890",
+        guestCity: "القاهرة",
+        guestAddress: "شارع التجربة، المعادي",
+        totalAmount: 1550,
+        items: [
+            {
+                productId: "T-Shirt Luxury Gold",
+                variantId: "Large / Black",
+                quantity: 2,
+                price: 750
+            },
+            {
+                productId: "Luxury Cap",
+                variantId: "One Size",
+                quantity: 1,
+                price: 50
+            }
+        ]
+    };
+
+    try {
+        await sendOrderNotification(testData);
+        console.log("✅ Test order email sent successfully to " + process.env.SMTP_USER);
+    } catch (error) {
+        console.error("❌ Failed to send test order email:", error);
+    }
+}
+
+sendTestOrder();

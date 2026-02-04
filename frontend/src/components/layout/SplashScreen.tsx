@@ -76,9 +76,8 @@ export function SplashScreen() {
             ))}
           </motion.div>
 
-          {/* Luxury Description - Simple Fade (No Word Animation) */}
           <motion.div
-            className="mt-6 flex flex-row-reverse flex-wrap justify-center gap-x-2 text-gray-400 text-sm md:text-base font-light px-4 text-center"
+            className="mt-6 flex flex-row-reverse flex-wrap justify-center gap-x-2 text-gray-400 text-base md:text-xl font-light px-4 text-center"
             style={{ direction: 'rtl' }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

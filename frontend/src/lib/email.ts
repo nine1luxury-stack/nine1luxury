@@ -1,12 +1,19 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_PORT === '465',
     auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
     }
 });
+
+// Diagnostic check
+if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.error("⚠️ SMTP Credentials are missing in environment variables!");
+}
 
 interface OrderItem {
     productId: string;
@@ -80,12 +87,21 @@ export async function sendOrderNotification(orderData: OrderData) {
         </div>
     `;
 
-    return transporter.sendMail({
-        from: `"Nine1Luxury Shop" <${process.env.SMTP_USER}>`,
-        to: process.env.SMTP_USER, // Send to yourself
-        subject: `طلب جديد: ${guestName} - ${totalAmount} ج.م`,
-        html: html
-    });
+    console.log(`📧 Sending order notification email to: ${process.env.SMTP_USER}`);
+    
+    try {
+        const info = await transporter.sendMail({
+            from: `"Nine1Luxury Shop" <${process.env.SMTP_USER}>`,
+            to: process.env.SMTP_USER,
+            subject: `طلب جديد: ${guestName} - ${totalAmount} ج.م`,
+            html: html
+        });
+        console.log("✅ Order email sent successfully:", info.messageId);
+        return info;
+    } catch (error) {
+        console.error("❌ Failed to send order email:", error);
+        throw error;
+    }
 }
 
 export async function sendReservationNotification(reservationData: ReservationData) {
@@ -107,10 +123,19 @@ export async function sendReservationNotification(reservationData: ReservationDa
         </div>
     `;
 
-    return transporter.sendMail({
-        from: `"Nine1Luxury Reservations" <${process.env.SMTP_USER}>`,
-        to: process.env.SMTP_USER, // Send to yourself
-        subject: `حجز جديد: ${name} - ${productModel}`,
-        html: html
-    });
+    console.log(`📧 Sending reservation notification email to: ${process.env.SMTP_USER}`);
+
+    try {
+        const info = await transporter.sendMail({
+            from: `"Nine1Luxury Reservations" <${process.env.SMTP_USER}>`,
+            to: process.env.SMTP_USER,
+            subject: `حجز جديد: ${name} - ${productModel}`,
+            html: html
+        });
+        console.log("✅ Reservation email sent successfully:", info.messageId);
+        return info;
+    } catch (error) {
+        console.error("❌ Failed to send reservation email:", error);
+        throw error;
+    }
 }
