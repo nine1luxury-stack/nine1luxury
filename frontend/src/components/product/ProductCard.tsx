@@ -4,9 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { Eye } from "lucide-react";
 
-import { useRouter } from "next/navigation";
+
 
 import { ProductVariant } from "@/lib/api";
 
@@ -22,22 +21,13 @@ interface ProductCardProps {
     isActive?: boolean;
 }
 
-export function ProductCard({ id, name, price, discount, image, images, category, variants, isActive }: ProductCardProps) {
-    const router = useRouter();
+export function ProductCard({ id, name, price, discount, image, images, category, isActive }: ProductCardProps) {
+    // Component logic
 
 
     const displayImage = image || images?.[0]?.url || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800';
     const discountedPrice = discount ? price * (1 - discount / 100) : price;
-    const totalStock = variants?.reduce((acc, v) => acc + (v.stock || 0), 0) ?? 1;
     const isSoldOut = isActive === false;
-
-    const handleViewDetails = (e: React.MouseEvent) => {
-        // Prevent generic card click (navigation)
-        e.preventDefault();
-        e.stopPropagation();
-
-        router.push(`/products/${id}`);
-    };
 
     return (
         <motion.div
@@ -75,7 +65,7 @@ export function ProductCard({ id, name, price, discount, image, images, category
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className={cn(
-                            "object-cover transition-transform duration-700 group-hover:scale-105",
+                            "object-cover transition-opacity duration-700",
                             isSoldOut && "grayscale opacity-80"
                         )}
                         onContextMenu={(e) => e.preventDefault()}

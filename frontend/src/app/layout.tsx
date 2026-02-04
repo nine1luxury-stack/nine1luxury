@@ -22,10 +22,12 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo-main.png", // Using the main logo as the tab icon
     apple: "/logo-main.png",
-  }
+  },
+  manifest: "/manifest.json"
 };
 
 import { SecurityWrapper } from "@/components/common/SecurityWrapper";
+import { SplashScreen } from "@/components/layout/SplashScreen";
 
 export default function RootLayout({
   children,
@@ -34,7 +36,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl" className="dark" suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#0f0f0f" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      </head>
       <body className={`${amiri.variable} antialiased min-h-screen selection:bg-gold-500/30 selection:text-gold-300`} suppressHydrationWarning>
+        <SplashScreen />
         <ProductProvider>
           <CartProvider>
             <NotificationProvider>

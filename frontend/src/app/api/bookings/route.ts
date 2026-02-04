@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { sendNewBookingEmail } from '@/lib/mail';
+import { sendReservationNotification } from '@/lib/email';
 
 export async function POST(request: Request) {
     try {
@@ -35,7 +35,11 @@ export async function POST(request: Request) {
         });
 
         // Send notification email
-        await sendNewBookingEmail(newBooking);
+        try {
+            await sendReservationNotification(newBooking);
+        } catch (emailError) {
+            console.error("Email notification failed:", emailError);
+        }
 
         // Create in-app notification
         await prisma.notification.create({

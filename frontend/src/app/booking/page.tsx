@@ -94,7 +94,7 @@ export default function BookingPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     ...formData,
-                    phone: formData.phone + (formData.altPhone ? ` / ${formData.altPhone}` : "")
+                    phone: formData.phone
                 }),
             });
             if (res.ok) {
@@ -214,20 +214,22 @@ export default function BookingPage() {
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 blur-3xl -mr-16 -mt-16" />
                                         
                                         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
-                                                    <Phone className="w-3 h-3" /> رقم الموبايل (اختياري)
-                                                </label>
-                                                <input
-                                                    type="tel"
-                                                    value={formData.altPhone}
-                                                    onChange={(e) => setFormData({ ...formData, altPhone: e.target.value })}
-                                                    className="w-full bg-rich-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none transition-all text-right"
-                                                    placeholder="رقم موبايل إضافي"
-                                                    maxLength={11}
-                                                />
-                                            </div>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div className="space-y-2">
+                                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                                        <Phone className="w-3 h-3" /> رقم الهاتف
+                                                    </label>
+                                                    <input
+                                                        type="tel"
+                                                        dir="ltr"
+                                                        value={formData.phone}
+                                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                                        className={`w-full bg-rich-black border rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none transition-all text-right ${errors.phone ? 'border-red-500' : 'border-white/10'}`}
+                                                        placeholder="01xxxxxxxxx"
+                                                        maxLength={11}
+                                                    />
+                                                    {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                                                </div>
                                                 <div className="space-y-2">
                                                     <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
                                                         <User className="w-3 h-3" /> الاسم بالكامل
@@ -240,20 +242,6 @@ export default function BookingPage() {
                                                         placeholder="ادخل اسمك هنا"
                                                     />
                                                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
-                                                        <Phone className="w-3 h-3" /> رقم الهاتف
-                                                    </label>
-                                                    <input
-                                                        type="tel"
-                                                        value={formData.phone}
-                                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                                        className={`w-full bg-rich-black border rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none transition-all text-right ${errors.phone ? 'border-red-500' : 'border-white/10'}`}
-                                                        placeholder="01xxxxxxxxx"
-                                                        maxLength={11}
-                                                    />
-                                                    {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                                                 </div>
                                             </div>
 

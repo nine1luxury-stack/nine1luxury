@@ -22,7 +22,7 @@ export function Footer() {
                     <div className="flex flex-col items-center md:items-start space-y-8">
                         <div className="text-center md:text-right space-y-6">
                             <Link href="/" className="relative block inline-block">
-                                <div className="relative w-40 h-16 transition-transform hover:scale-105 duration-300">
+                                <div className="relative w-40 h-16 transition-opacity duration-300">
                                     <Image
                                         src="/logo-main.png"
                                         alt="nine1luxury"

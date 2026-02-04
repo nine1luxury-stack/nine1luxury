@@ -67,7 +67,7 @@ export default function CheckoutPage() {
         try {
             const orderData = {
                 guestName: formData.name,
-                guestPhone: formData.phone + (formData.altPhone ? ` / ${formData.altPhone}` : ""),
+                guestPhone: formData.phone,
                 guestAddress: formData.address,
                 guestCity: formData.city,
                 totalAmount: finalTotal,
@@ -163,48 +163,36 @@ export default function CheckoutPage() {
 
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">رقم الموبايل (اختياري)</label>
-                                    <div className="relative">
-                                        <Phone className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                                        <input
-                                            name="altPhone"
-                                            value={formData.altPhone}
-                                            onChange={handleInputChange}
-                                            className="w-full bg-rich-black border border-white/10 px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none"
-                                            placeholder="رقم موبايل إضافي"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">الاسم بالكامل</label>
-                                    <div className="relative">
-                                        <User className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                                        <input
-                                            required
-                                            name="name"
-                                            value={formData.name}
-                                            onChange={handleInputChange}
-                                            className="w-full bg-rich-black border border-white/10 px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none"
-                                            placeholder="أدخل اسمك بالكامل"
-                                        />
-                                    </div>
-                                </div>
+                                     <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">رقم الهاتف</label>
+                                     <div className="relative">
+                                         <Phone className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                         <input
+                                             required
+                                             type="tel"
+                                             name="phone"
+                                             dir="ltr"
+                                             value={formData.phone}
+                                             onChange={handleInputChange}
+                                             className="w-full bg-rich-black border border-white/10 px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none text-right"
+                                             placeholder="رقم الموبايل (واتساب)"
+                                         />
+                                     </div>
+                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">رقم الهاتف</label>
-                                    <div className="relative">
-                                        <Phone className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                                        <input
-                                            required
-                                            type="tel"
-                                            name="phone"
-                                            value={formData.phone}
-                                            onChange={handleInputChange}
-                                            className="w-full bg-rich-black border border-white/10 px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none"
-                                            placeholder="رقم الموبايل (واتساب)"
-                                        />
-                                    </div>
-                                </div>
+                                 <div className="space-y-2">
+                                     <label className="text-xs text-gray-500 uppercase tracking-widest font-bold">الاسم بالكامل</label>
+                                     <div className="relative">
+                                         <User className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                         <input
+                                             required
+                                             name="name"
+                                             value={formData.name}
+                                             onChange={handleInputChange}
+                                             className="w-full bg-rich-black border border-white/10 px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none"
+                                             placeholder="أدخل اسمك بالكامل"
+                                         />
+                                     </div>
+                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">

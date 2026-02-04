@@ -195,7 +195,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                                         value={formData.phone}
                                         onChange={handleInputChange}
                                         className="w-full bg-rich-black border border-white/10 px-4 py-4 text-white focus:border-gold-500 transition-colors outline-none"
-                                        placeholder="رقم الموبايل (اختياري)"
+                                        placeholder="رقم الموبايل (واتساب)"
                                     />
                                 </div>
 

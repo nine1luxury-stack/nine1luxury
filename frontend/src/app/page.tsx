@@ -72,7 +72,7 @@ export default function Home() {
           </h2>
           <Link
             href="/products"
-            className="inline-block px-12 py-5 bg-gold-500 text-rich-black font-bold text-lg uppercase tracking-wider hover:bg-gold-400 transition-all transform hover:scale-105 rounded-full shadow-[0_0_20px_rgba(234,179,8,0.4)]"
+            className="inline-block px-12 py-5 bg-gold-500 text-rich-black font-bold text-lg uppercase tracking-wider hover:bg-gold-400 transition-all rounded-full shadow-[0_0_20px_rgba(234,179,8,0.4)]"
           >
             احجز منتجك الآن
           </Link>
