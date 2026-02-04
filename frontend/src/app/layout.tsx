@@ -20,10 +20,15 @@ export const metadata: Metadata = {
   description: "متجر ملابس شبابي فاخر - تسوق الآن أرقى الموديلات",
   keywords: ["luxury", "clothing", "nine1luxury", "ملابس شباب", "فاشن", "موضة"],
   icons: {
-    icon: "/logo-main.png", // Using the main logo as the tab icon
-    apple: "/logo-main.png",
+    icon: "/app-icon.png",
+    apple: "/app-icon.png",
   },
-  manifest: "/manifest.json"
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Nine1Luxury",
+  }
 };
 
 import { SecurityWrapper } from "@/components/common/SecurityWrapper";
@@ -37,9 +42,13 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className="dark" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#0f0f0f" />
+        <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="apple-touch-startup-image" href="/splash-logo.png" />
+        <style>{`
+          body { background-color: #000000 !important; }
+        `}</style>
       </head>
       <body className={`${amiri.variable} antialiased min-h-screen selection:bg-gold-500/30 selection:text-gold-300`} suppressHydrationWarning>
         <SplashScreen />

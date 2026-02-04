@@ -27,37 +27,21 @@ export function SplashScreen() {
         >
           {/* Main Logo Animation */}
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ 
-              duration: 1, 
+              duration: 0.8, 
               ease: "easeOut"
             }}
-            className="relative w-48 h-48 md:w-64 md:h-64"
+            className="relative w-64 h-64 md:w-80 md:h-80"
           >
             <Image
-              src="/logo-main.png"
+              src="/splash-logo.png"
               alt="Nine1Luxury"
               fill
               className="object-contain"
               priority
             />
-          </motion.div>
-
-          {/* Shimmer text under logo */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="mt-8 text-center"
-          >
-            <h2 className="text-2xl md:text-3xl font-playfair font-bold text-gold-500 tracking-[0.3em] uppercase">
-              Nine1Luxury
-            </h2>
-            <div className="mt-2 h-[1px] w-32 mx-auto bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
-            <p className="mt-4 text-gray-500 text-xs tracking-[0.2em] font-light">
-              MAKE U FEEL LUXURY
-            </p>
           </motion.div>
 
           {/* Luxury loading bar */}
