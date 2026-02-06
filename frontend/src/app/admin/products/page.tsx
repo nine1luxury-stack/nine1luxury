@@ -499,7 +499,7 @@ export default function AdminProductsPage() {
                                                         type="color"
                                                         id="colorPicker"
                                                         value={/^#[0-9A-F]{6}$/i.test(colorInput) ? colorInput : '#000000'}
-                                                        className="w-12 h-12 rounded-full cursor-pointer overflow-hidden border-2 border-white/10 p-0 bg-transparent transition-transform hover:scale-105"
+                                                        className="w-12 h-12 rounded-full cursor-pointer overflow-hidden border-2 border-white/10 p-0 bg-transparent transition-transform hover:scale-105 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-full"
                                                         onChange={(e) => setColorInput(e.target.value)}
                                                     />
                                                 </div>
@@ -520,7 +520,7 @@ export default function AdminProductsPage() {
                                                     />
                                                 </div>
                                             </div>
-                                            
+
                                             <button
                                                 type="button"
                                                 onClick={() => {
@@ -571,7 +571,7 @@ export default function AdminProductsPage() {
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">صور المنتج</label>
-                                    
+
                                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                         {productGallery.map((img, idx) => (
                                             <div key={idx} className="relative aspect-[3/4] bg-rich-black rounded-xl overflow-hidden border border-white/10 group">

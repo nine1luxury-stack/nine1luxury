@@ -87,7 +87,7 @@ export function SplashScreen() {
           </motion.div>
 
           {/* Luxury loading bar */}
-          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 w-48 h-[2px] bg-white/5 overflow-hidden">
+          <div className="mt-8 w-48 h-[2px] bg-white/5 overflow-hidden">
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: "100%" }}
