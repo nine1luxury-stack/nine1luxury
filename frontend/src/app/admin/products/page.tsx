@@ -134,7 +134,7 @@ export default function AdminProductsPage() {
                     if (uploadData.success) {
                         finalGalleryUrls.push(uploadData.url);
                     } else {
-                        throw new Error(`Failed to upload image`);
+                        throw new Error(uploadData.message || `Failed to upload image`);
                     }
                 } else {
                     // It's already a URL string
