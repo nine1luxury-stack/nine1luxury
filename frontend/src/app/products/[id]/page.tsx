@@ -149,13 +149,16 @@ export default function ProductDetailsPage() {
                         العودة للمتجر
                     </button>
                 </div>
-            </div>
+                <Footer />
+            </main>
         );
     }
 
     const discountedPrice = product.discount
         ? product.price * (1 - product.discount / 100)
         : product.price;
+
+    const currentImageIndex = Math.min(activeImage, (product.images?.length || 1) - 1);
 
     const handleBooking = () => {
         if (!selectedSize || !selectedColor || isSoldOut) return;
@@ -474,7 +477,7 @@ export default function ProductDetailsPage() {
                                     }}
                                     className={cn(
                                         "relative w-16 h-16 flex-shrink-0 border-2 transition-all overflow-hidden rounded-lg",
-                                        activeImage === idx ? "border-gold-500 scale-110" : "border-white/20 opacity-50 hover:opacity-100"
+                                        currentImageIndex === idx ? "border-gold-500 scale-110" : "border-white/20 opacity-50 hover:opacity-100"
                                     )}
                                 >
                                     <Image
