@@ -56,7 +56,7 @@ export interface OrderItem {
     variantId?: string;
     quantity: number;
     price: number;
-    product?: { 
+    product?: {
         name: string;
         images?: { url: string }[];
     };
@@ -149,15 +149,21 @@ export const productsApi = {
         const query = new URLSearchParams();
         if (params?.category) query.append('category', params.category);
         if (params?.featured !== undefined) query.append('featured', String(params.featured));
-        
+
         const res = await fetch(`/api/products?${query.toString()}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch products');
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.details || err.error || 'Failed to fetch products');
+        }
         return res.json();
     },
 
     async getById(id: string): Promise<Product> {
         const res = await fetch(`/api/products/${id}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('Failed to fetch product');
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.details || err.error || 'Failed to fetch product');
+        }
         return res.json();
     },
 
@@ -167,7 +173,10 @@ export const productsApi = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
         });
-        if (!res.ok) throw new Error('Failed to create product');
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.details || err.error || 'Failed to create product');
+        }
         return res.json();
     },
 
@@ -177,7 +186,10 @@ export const productsApi = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
         });
-        if (!res.ok) throw new Error('Failed to update product');
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.details || err.error || 'Failed to update product');
+        }
         return res.json();
     },
 
@@ -185,7 +197,10 @@ export const productsApi = {
         const res = await fetch(`/api/products/${id}`, {
             method: 'DELETE',
         });
-        if (!res.ok) throw new Error('Failed to delete product');
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.details || err.error || 'Failed to delete product');
+        }
     },
 };
 
@@ -204,9 +219,9 @@ export const ordersApi = {
     },
 
     async getById(id: string): Promise<Order> {
-       const res = await fetch(`/api/orders/${id}`, { cache: 'no-store' });
-       if (!res.ok) throw new Error('Failed to fetch order');
-       return res.json();
+        const res = await fetch(`/api/orders/${id}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Failed to fetch order');
+        return res.json();
     },
 
     async create(data: CreateOrderDto): Promise<Order> {
@@ -217,7 +232,7 @@ export const ordersApi = {
         });
         if (!res.ok) {
             const err = await res.json();
-             throw new Error(err.details || err.error || 'Failed to create order');
+            throw new Error(err.details || err.error || 'Failed to create order');
         }
         return res.json();
     },
@@ -233,7 +248,7 @@ export const ordersApi = {
     },
 
     async delete(id: string): Promise<void> {
-         const res = await fetch(`/api/orders/${id}`, {
+        const res = await fetch(`/api/orders/${id}`, {
             method: 'DELETE',
         });
         if (!res.ok) throw new Error('Failed to delete order');

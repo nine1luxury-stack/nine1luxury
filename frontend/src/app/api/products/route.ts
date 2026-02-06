@@ -31,9 +31,12 @@ export async function GET(request: Request) {
         }));
 
         return NextResponse.json(formattedProducts);
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching products:', error);
-        return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+        return NextResponse.json({
+            error: 'Failed to fetch products',
+            details: error.message
+        }, { status: 500 });
     }
 }
 
@@ -56,13 +59,13 @@ export async function POST(request: Request) {
                 category: data.category,
                 featured: data.featured || false,
                 isActive: data.isActive !== false, // Default to true
-                images: {
+                productimage: {
                     create: data.images?.map((img: { url: string, color?: string }) => ({
                         url: img.url,
                         color: img.color
                     })) || []
                 },
-                variants: {
+                productvariant: {
                     create: data.variants?.map((v: { color: string, colorHex?: string, size: string, stock: string | number, sku?: string }) => ({
                         color: v.color,
                         colorHex: v.colorHex || '#000000',
@@ -85,8 +88,11 @@ export async function POST(request: Request) {
         };
 
         return NextResponse.json(formattedProduct);
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error creating product:', error);
-        return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+        return NextResponse.json({
+            error: 'Failed to create product',
+            details: error.message
+        }, { status: 500 });
     }
 }
