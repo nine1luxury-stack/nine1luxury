@@ -16,21 +16,15 @@ export async function GET(request: Request) {
         const products = await prisma.product.findMany({
             where,
             include: {
-                productimage: true,
-                productvariant: true,
+                images: true,
+                variants: true,
             },
             orderBy: {
                 createdAt: 'desc',
             }
         });
 
-        const formattedProducts = products.map((p: any) => ({
-            ...p,
-            images: p.productimage,
-            variants: p.productvariant,
-        }));
-
-        return NextResponse.json(formattedProducts);
+        return NextResponse.json(products);
     } catch (error: any) {
         console.error('Error fetching products:', error);
         return NextResponse.json({
@@ -59,13 +53,13 @@ export async function POST(request: Request) {
                 category: data.category,
                 featured: data.featured || false,
                 isActive: data.isActive !== false, // Default to true
-                productimage: {
+                images: {
                     create: data.images?.map((img: { url: string, color?: string }) => ({
                         url: img.url,
                         color: img.color || null
                     })) || []
                 },
-                productvariant: {
+                variants: {
                     create: data.variants?.map((v: { color: string, colorHex?: string, size: string, stock: string | number, sku?: string }) => ({
                         color: v.color,
                         colorHex: v.colorHex || '#000000',
@@ -76,18 +70,13 @@ export async function POST(request: Request) {
                 }
             },
             include: {
-                productimage: true,
-                productvariant: true
+                images: true,
+                variants: true
             }
         });
 
-        const formattedProduct = {
-            ...product,
-            images: (product as any).productimage,
-            variants: (product as any).productvariant,
-        };
 
-        return NextResponse.json(formattedProduct);
+        return NextResponse.json(product);
     } catch (error: any) {
         console.error('Error creating product:', error);
         return NextResponse.json({
