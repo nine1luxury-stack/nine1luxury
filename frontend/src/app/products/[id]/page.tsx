@@ -33,6 +33,7 @@ export default function ProductDetailsPage() {
     const [quantity, setQuantity] = useState(1);
     const [isZoomOpen, setIsZoomOpen] = useState(false);
     const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
+    const [isSizeChartTableOpen, setIsSizeChartTableOpen] = useState(false);
 
     // Extract unique colors from variants
     const availableColors = useMemo(() => {
@@ -122,9 +123,23 @@ export default function ProductDetailsPage() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isSizeChartOpen]);
 
+    // Keyboard navigation for size chart table modal
+    useEffect(() => {
+        if (!isSizeChartTableOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setIsSizeChartTableOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isSizeChartTableOpen]);
+
     // Prevent body scroll when zoom or size chart is open
     useEffect(() => {
-        if (isZoomOpen || isSizeChartOpen) {
+        if (isZoomOpen || isSizeChartOpen || isSizeChartTableOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
@@ -132,7 +147,7 @@ export default function ProductDetailsPage() {
         return () => {
             document.body.style.overflow = 'unset';
         };
-    }, [isZoomOpen, isSizeChartOpen]);
+    }, [isZoomOpen, isSizeChartOpen, isSizeChartTableOpen]);
 
     const isSoldOut = useMemo(() => {
         if (!product) return true;
@@ -339,15 +354,19 @@ export default function ProductDetailsPage() {
                                 <div className="space-y-4">
                                     <div className="flex justify-between">
                                         <h3 className="text-white font-bold uppercase tracking-widest text-sm">المقاس: <span className="text-gold-300">{selectedSize || "اختر المقاس"}</span></h3>
-                                        {product.sizeChartImage && (
-                                            <button
-                                                type="button"
-                                                onClick={() => setIsSizeChartOpen(true)}
-                                                className="text-[10px] text-gold-300/60 uppercase tracking-widest hover:text-gold-300 underline"
-                                            >
-                                                جدول المقاسات
-                                            </button>
-                                        )}
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                if (product.sizeChartImage) {
+                                                    setIsSizeChartOpen(true);
+                                                } else {
+                                                    setIsSizeChartTableOpen(true);
+                                                }
+                                            }}
+                                            className="text-[10px] text-gold-300/60 uppercase tracking-widest hover:text-gold-300 underline"
+                                        >
+                                            جدول المقاسات
+                                        </button>
                                     </div>
                                     <div className="flex flex-wrap gap-3">
                                         {availableSizes.map((size) => (
@@ -551,6 +570,106 @@ export default function ProductDetailsPage() {
                         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-xs text-center">
                             اضغط ESC للإغلاق • يمكنك أخذ سكرين شوت للصورة
                         </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Size Chart Table Modal */}
+            <AnimatePresence>
+                {isSizeChartTableOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+                        onClick={() => setIsSizeChartTableOpen(false)}
+                    >
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setIsSizeChartTableOpen(false)}
+                            className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+
+                        {/* Title */}
+                        <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-bold z-10">
+                            جدول المقاسات
+                        </div>
+
+                        {/* Size Chart Table */}
+                        <motion.div
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0.9 }}
+                            className="relative w-full max-w-4xl bg-rich-black border border-gold-500/20 rounded-2xl p-8 overflow-auto max-h-[90vh]"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <h2 className="text-2xl font-bold text-white mb-6 text-center">جدول المقاسات</h2>
+
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-white border-collapse">
+                                    <thead>
+                                        <tr className="border-b border-gold-500/30">
+                                            <th className="py-4 px-6 text-right font-bold text-gold-300">المقاس</th>
+                                            <th className="py-4 px-6 text-center font-bold text-gold-300">الصدر (سم)</th>
+                                            <th className="py-4 px-6 text-center font-bold text-gold-300">الخصر (سم)</th>
+                                            <th className="py-4 px-6 text-center font-bold text-gold-300">الطول (سم)</th>
+                                            <th className="py-4 px-6 text-center font-bold text-gold-300">الكتف (سم)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="border-b border-white/10 hover:bg-gold-500/5 transition-colors">
+                                            <td className="py-4 px-6 text-right font-bold">S</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">90-95</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">75-80</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">68-70</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">42-44</td>
+                                        </tr>
+                                        <tr className="border-b border-white/10 hover:bg-gold-500/5 transition-colors">
+                                            <td className="py-4 px-6 text-right font-bold">M</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">96-101</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">81-86</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">71-73</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">45-47</td>
+                                        </tr>
+                                        <tr className="border-b border-white/10 hover:bg-gold-500/5 transition-colors">
+                                            <td className="py-4 px-6 text-right font-bold">L</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">102-107</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">87-92</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">74-76</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">48-50</td>
+                                        </tr>
+                                        <tr className="border-b border-white/10 hover:bg-gold-500/5 transition-colors">
+                                            <td className="py-4 px-6 text-right font-bold">XL</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">108-113</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">93-98</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">77-79</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">51-53</td>
+                                        </tr>
+                                        <tr className="hover:bg-gold-500/5 transition-colors">
+                                            <td className="py-4 px-6 text-right font-bold">XXL</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">114-119</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">99-104</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">80-82</td>
+                                            <td className="py-4 px-6 text-center text-gray-300">54-56</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Note */}
+                            <div className="mt-6 p-4 bg-gold-500/10 border border-gold-500/20 rounded-lg">
+                                <p className="text-gold-300 text-sm text-center">
+                                    📏 القياسات تقريبية وقد تختلف قليلاً حسب نوع القماش
+                                </p>
+                            </div>
+
+                            {/* Hint Text */}
+                            <div className="mt-4 text-white/60 text-xs text-center">
+                                اضغط ESC للإغلاق
+                            </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
