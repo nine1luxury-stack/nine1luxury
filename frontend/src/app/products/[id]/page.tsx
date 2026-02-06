@@ -482,7 +482,7 @@ export default function ProductDetailsPage() {
                                         alt={`${product.name} ${idx}`}
                                         fill
                                         unoptimized
-                                        className="object-cover"
+                                        className="object-contain"
                                     />
                                 </button>
                             ))}
