@@ -55,6 +55,9 @@ export default function AdminProductsPage() {
     // State for all product images: Array of File objects or URL strings
     const [productGallery, setProductGallery] = useState<(File | string)[]>([]);
 
+    // State for size chart image
+    const [sizeChartImage, setSizeChartImage] = useState<File | string | null>(null);
+
     // Edit & View State
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -104,6 +107,9 @@ export default function AdminProductsPage() {
         const initialGallery = product.images?.map((img: any) => img.url) || [];
         setProductGallery(initialGallery);
 
+        // Pre-fill size chart image if exists
+        setSizeChartImage(product.sizeChartImage || null);
+
         setIsAddModalOpen(true);
     };
 
@@ -144,7 +150,31 @@ export default function AdminProductsPage() {
 
             await Promise.all(uploadPromises);
 
-            // 2. Determine main image (use first color's image or fallback)
+            // 2. Upload size chart image if provided
+            let finalSizeChartUrl: string | null = null;
+            if (sizeChartImage) {
+                if (sizeChartImage instanceof File) {
+                    const formData = new FormData();
+                    formData.append('file', sizeChartImage);
+
+                    const uploadRes = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const uploadData = await uploadRes.json();
+                    if (uploadData.success) {
+                        finalSizeChartUrl = uploadData.url;
+                    } else {
+                        throw new Error(uploadData.message || 'Failed to upload size chart image');
+                    }
+                } else {
+                    // It's already a URL string
+                    finalSizeChartUrl = sizeChartImage as string;
+                }
+            }
+
+            // 3. Determine main image (use first color's image or fallback)
             // If we have colors, picking the first one as "main" if newProduct.image is empty or needs update
 
 
@@ -156,6 +186,7 @@ export default function AdminProductsPage() {
                 price: Number(newProduct.price),
                 category: newProduct.category,
                 featured: false,
+                sizeChartImage: finalSizeChartUrl || undefined,
                 // These will be properly populated by the backend
                 variants: newProduct.colors.flatMap(color =>
                     newProduct.sizes.map(size => ({
@@ -186,6 +217,7 @@ export default function AdminProductsPage() {
             setEditingProduct(null);
             setNewProduct({ name: '', model: '', price: '', category: 'تيشرتات', description: '', image: '', sizes: [], colors: [] });
             setProductGallery([]);
+            setSizeChartImage(null);
         } catch (error: any) {
             console.error('Product save error:', error);
             const errorMessage = error?.message || 'حدث خطأ أثناء حفظ المنتج';
@@ -595,21 +627,58 @@ export default function AdminProductsPage() {
                                             </div>
                                         ))}
 
-                                        <label className="relative aspect-[3/4] cursor-pointer bg-gold-500/5 border-2 border-gold-500/20 border-dashed rounded-xl flex flex-col items-center justify-center gap-2 hover:border-gold-500 hover:bg-gold-500/10 transition-all">
+                                        <label className="relative aspect-[3/4] bg-rich-black/50 rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500/50 transition-all group">
+                                            <Upload className="w-8 h-8 text-gray-600 group-hover:text-gold-500 transition-colors" />
+                                            <span className="text-xs text-gray-600 mt-2 group-hover:text-gold-500 transition-colors">إضافة صورة</span>
                                             <input
                                                 type="file"
-                                                multiple
                                                 accept="image/*"
+                                                multiple
                                                 className="hidden"
                                                 onChange={(e) => {
                                                     const files = Array.from(e.target.files || []);
                                                     setProductGallery(prev => [...prev, ...files]);
                                                 }}
                                             />
-                                            <Plus className="w-6 h-6 text-gold-500" />
-                                            <span className="text-[10px] text-gray-400 font-bold uppercase">إضافة صور</span>
                                         </label>
                                     </div>
+                                </div>
+
+                                {/* Size Chart Image */}
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">صورة جدول المقاسات (اختياري)</label>
+
+                                    {sizeChartImage ? (
+                                        <div className="relative aspect-video bg-rich-black rounded-xl overflow-hidden border border-white/10 group">
+                                            <Image
+                                                src={sizeChartImage instanceof File ? URL.createObjectURL(sizeChartImage) : sizeChartImage}
+                                                alt="Size Chart"
+                                                fill
+                                                className="object-contain"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setSizeChartImage(null)}
+                                                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500/80 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <label className="relative aspect-video bg-rich-black/50 rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500/50 transition-all group">
+                                            <Upload className="w-8 h-8 text-gray-600 group-hover:text-gold-500 transition-colors" />
+                                            <span className="text-xs text-gray-600 mt-2 group-hover:text-gold-500 transition-colors">رفع صورة جدول المقاسات</span>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) setSizeChartImage(file);
+                                                }}
+                                            />
+                                        </label>
+                                    )}
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">وصف المنتج</label>

@@ -32,6 +32,7 @@ export default function ProductDetailsPage() {
     const [selectedSize, setSelectedSize] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [isZoomOpen, setIsZoomOpen] = useState(false);
+    const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
 
     // Extract unique colors from variants
     const availableColors = useMemo(() => {
@@ -105,9 +106,23 @@ export default function ProductDetailsPage() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isZoomOpen, product]);
 
-    // Prevent body scroll when zoom is open
+    // Keyboard navigation for size chart modal
     useEffect(() => {
-        if (isZoomOpen) {
+        if (!isSizeChartOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setIsSizeChartOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isSizeChartOpen]);
+
+    // Prevent body scroll when zoom or size chart is open
+    useEffect(() => {
+        if (isZoomOpen || isSizeChartOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
@@ -115,7 +130,7 @@ export default function ProductDetailsPage() {
         return () => {
             document.body.style.overflow = 'unset';
         };
-    }, [isZoomOpen]);
+    }, [isZoomOpen, isSizeChartOpen]);
 
     const isSoldOut = useMemo(() => {
         if (!product) return true;
@@ -314,7 +329,15 @@ export default function ProductDetailsPage() {
                                 <div className="space-y-4">
                                     <div className="flex justify-between">
                                         <h3 className="text-white font-bold uppercase tracking-widest text-sm">المقاس: <span className="text-gold-300">{selectedSize || "اختر المقاس"}</span></h3>
-                                        <button className="text-[10px] text-gold-300/60 uppercase tracking-widest hover:text-gold-300 underline">جدول المقاسات</button>
+                                        {product.sizeChartImage && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsSizeChartOpen(true)}
+                                                className="text-[10px] text-gold-300/60 uppercase tracking-widest hover:text-gold-300 underline"
+                                            >
+                                                جدول المقاسات
+                                            </button>
+                                        )}
                                     </div>
                                     <div className="flex flex-wrap gap-3">
                                         {availableSizes.map((size) => (
@@ -468,6 +491,55 @@ export default function ProductDetailsPage() {
                         {/* Hint Text */}
                         <div className="absolute bottom-24 left-1/2 -translate-x-1/2 text-white/60 text-xs text-center">
                             اضغط ESC للإغلاق • استخدم الأسهم للتنقل
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Size Chart Modal */}
+            <AnimatePresence>
+                {isSizeChartOpen && product.sizeChartImage && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+                        onClick={() => setIsSizeChartOpen(false)}
+                    >
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setIsSizeChartOpen(false)}
+                            className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+
+                        {/* Title */}
+                        <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-bold z-10">
+                            جدول المقاسات
+                        </div>
+
+                        {/* Size Chart Image - Full and Zoomable */}
+                        <motion.div
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0.9 }}
+                            className="relative w-full h-full max-w-6xl max-h-[90vh]"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <Image
+                                src={product.sizeChartImage}
+                                alt="Size Chart"
+                                fill
+                                unoptimized
+                                className="object-contain"
+                                priority
+                            />
+                        </motion.div>
+
+                        {/* Hint Text */}
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-xs text-center">
+                            اضغط ESC للإغلاق • يمكنك أخذ سكرين شوت للصورة
                         </div>
                     </motion.div>
                 )}

@@ -53,6 +53,7 @@ export async function POST(request: Request) {
                 category: data.category,
                 featured: data.featured || false,
                 isActive: data.isActive !== false, // Default to true
+                sizeChartImage: data.sizeChartImage || null,
                 images: {
                     create: data.images?.map((img: { url: string, color?: string }) => ({
                         url: img.url,

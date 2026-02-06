@@ -54,6 +54,7 @@ export async function PATCH(
             if (data.featured !== undefined) updateData.featured = data.featured;
             if (data.isActive !== undefined) updateData.isActive = data.isActive;
             if (data.reorderPoint !== undefined) updateData.reorderPoint = Number(data.reorderPoint);
+            if (data.sizeChartImage !== undefined) updateData.sizeChartImage = data.sizeChartImage || null;
 
             // 2. Update basic fields if any
             if (Object.keys(updateData).length > 0) {
