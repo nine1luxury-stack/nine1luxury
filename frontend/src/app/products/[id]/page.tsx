@@ -134,8 +134,10 @@ export default function ProductDetailsPage() {
 
     const isSoldOut = useMemo(() => {
         if (!product) return true;
-        return product.isActive === false;
-    }, [product]);
+        if (!selectedColor || !selectedSize) return false;
+        const variant = product.variants?.find(v => v.color === selectedColor && v.size === selectedSize);
+        return variant ? variant.stock <= 0 : true;
+    }, [product, selectedColor, selectedSize]);
 
     if (!product) {
         return (
