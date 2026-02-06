@@ -12,8 +12,8 @@ export async function GET(
         const product = await prisma.product.findUnique({
             where: { id },
             include: {
-                images: true,
-                variants: true,
+                productimage: true,
+                productvariant: true,
             },
         });
 
@@ -21,7 +21,13 @@ export async function GET(
             return NextResponse.json({ error: 'Product not found' }, { status: 404 });
         }
 
-        return NextResponse.json(product);
+        const formattedProduct = {
+            ...product,
+            images: (product as any).productimage,
+            variants: (product as any).productvariant,
+        };
+
+        return NextResponse.json(formattedProduct);
     } catch (error) {
         console.error('Error fetching product:', error);
         return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 });
@@ -83,7 +89,7 @@ export async function PATCH(
                             });
                         }
                     }
-                    
+
                     if (data.variants.create) {
                         for (const variantCreate of data.variants.create) {
                             await tx.productvariant.create({
@@ -99,23 +105,29 @@ export async function PATCH(
 
             // 4. Handle Images sync if provided as array
             if (data.images && Array.isArray(data.images)) {
-                 await tx.productimage.deleteMany({ where: { productId: id } });
-                 await tx.productimage.createMany({
-                     data: data.images.map((img: any) => ({
-                         url: img.url,
-                         color: img.color,
-                         productId: id
-                     }))
-                 });
+                await tx.productimage.deleteMany({ where: { productId: id } });
+                await tx.productimage.createMany({
+                    data: data.images.map((img: any) => ({
+                        url: img.url,
+                        color: img.color,
+                        productId: id
+                    }))
+                });
             }
 
-            return tx.product.findUnique({ 
+            return tx.product.findUnique({
                 where: { id },
-                include: { images: true, variants: true }
+                include: { productimage: true, productvariant: true }
             });
         });
 
-        return NextResponse.json(freshProduct);
+        const formattedProduct = {
+            ...freshProduct,
+            images: (freshProduct as any).productimage,
+            variants: (freshProduct as any).productvariant,
+        };
+
+        return NextResponse.json(formattedProduct);
     } catch (error) {
         console.error('Error updating product:', error);
         return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });

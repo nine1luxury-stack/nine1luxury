@@ -16,15 +16,21 @@ export async function GET(request: Request) {
         const products = await prisma.product.findMany({
             where,
             include: {
-                images: true,
-                variants: true,
+                productimage: true,
+                productvariant: true,
             },
             orderBy: {
                 createdAt: 'desc',
             }
         });
 
-        return NextResponse.json(products);
+        const formattedProducts = products.map((p: any) => ({
+            ...p,
+            images: p.productimage,
+            variants: p.productvariant,
+        }));
+
+        return NextResponse.json(formattedProducts);
     } catch (error) {
         console.error('Error fetching products:', error);
         return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
@@ -67,12 +73,18 @@ export async function POST(request: Request) {
                 }
             },
             include: {
-                images: true,
-                variants: true
+                productimage: true,
+                productvariant: true
             }
         });
 
-        return NextResponse.json(product);
+        const formattedProduct = {
+            ...product,
+            images: (product as any).productimage,
+            variants: (product as any).productvariant,
+        };
+
+        return NextResponse.json(formattedProduct);
     } catch (error) {
         console.error('Error creating product:', error);
         return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
