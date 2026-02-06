@@ -60,16 +60,20 @@ export default function ProductDetailsPage() {
 
     // Initialize selections when product loads
     useEffect(() => {
-        if (product && availableColors.length > 0 && !selectedColor) {
+        if (!product) return;
+
+        if (availableColors.length > 0 && !selectedColor) {
             setSelectedColor(availableColors[0].name);
         }
-    }, [product?.id, availableColors.length]); // Use product.id and length instead of full arrays
+    }, [product, availableColors, selectedColor]);
 
     useEffect(() => {
+        if (!product) return;
+
         if (selectedSize && availableSizes.length > 0 && !availableSizes.includes(selectedSize)) {
             setSelectedSize("");
         }
-    }, [selectedColor]); // Only reset when color changes
+    }, [product, availableSizes, selectedSize]);
 
     // Sync image with selected color
     useEffect(() => {
