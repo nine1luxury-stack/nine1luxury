@@ -60,18 +60,16 @@ export default function ProductDetailsPage() {
 
     // Initialize selections when product loads
     useEffect(() => {
-        if (availableColors.length > 0 && !selectedColor) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (product && availableColors.length > 0 && !selectedColor) {
             setSelectedColor(availableColors[0].name);
         }
-    }, [availableColors, selectedColor]);
+    }, [product?.id, availableColors.length]); // Use product.id and length instead of full arrays
 
     useEffect(() => {
-        if (availableSizes.length > 0 && selectedSize && !availableSizes.includes(selectedSize)) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (selectedSize && availableSizes.length > 0 && !availableSizes.includes(selectedSize)) {
             setSelectedSize("");
         }
-    }, [availableSizes, selectedSize]);
+    }, [selectedColor]); // Only reset when color changes
 
     // Sync image with selected color
     useEffect(() => {
