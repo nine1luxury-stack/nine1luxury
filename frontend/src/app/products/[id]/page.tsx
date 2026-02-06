@@ -12,7 +12,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     ShoppingBag,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    X,
+    ZoomIn
 } from "lucide-react";
 
 export default function ProductDetailsPage() {
@@ -29,6 +31,7 @@ export default function ProductDetailsPage() {
     const [selectedColor, setSelectedColor] = useState("");
     const [selectedSize, setSelectedSize] = useState("");
     const [quantity, setQuantity] = useState(1);
+    const [isZoomOpen, setIsZoomOpen] = useState(false);
 
     // Extract unique colors from variants
     const availableColors = useMemo(() => {
@@ -65,7 +68,7 @@ export default function ProductDetailsPage() {
     useEffect(() => {
         if (availableSizes.length > 0 && selectedSize && !availableSizes.includes(selectedSize)) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
-            setSelectedSize(""); 
+            setSelectedSize("");
         }
     }, [availableSizes, selectedSize]);
 
@@ -83,6 +86,36 @@ export default function ProductDetailsPage() {
             }
         }
     }, [selectedColor, product]);
+
+    // Keyboard navigation for zoom modal
+    useEffect(() => {
+        if (!isZoomOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setIsZoomOpen(false);
+            } else if (e.key === 'ArrowLeft') {
+                setActiveImage(prev => (prev === 0 ? (product?.images?.length || 1) - 1 : prev - 1));
+            } else if (e.key === 'ArrowRight') {
+                setActiveImage(prev => (prev === (product?.images?.length || 1) - 1 ? 0 : prev + 1));
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isZoomOpen, product]);
+
+    // Prevent body scroll when zoom is open
+    useEffect(() => {
+        if (isZoomOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isZoomOpen]);
 
     const isSoldOut = useMemo(() => {
         if (!product) return true;
@@ -135,7 +168,10 @@ export default function ProductDetailsPage() {
 
                     {/* Product Images Section */}
                     <div className="space-y-6">
-                        <div className="relative aspect-[4/5] lg:aspect-auto lg:h-[500px] bg-surface-dark overflow-hidden group rounded-2xl border border-white/5">
+                        <div
+                            className="relative aspect-[4/5] lg:aspect-auto lg:h-[500px] bg-surface-dark overflow-hidden group rounded-2xl border border-white/5 cursor-zoom-in"
+                            onClick={() => setIsZoomOpen(true)}
+                        >
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={activeImage}
@@ -162,13 +198,19 @@ export default function ProductDetailsPage() {
                             {product.images && product.images.length > 1 && (
                                 <>
                                     <button
-                                        onClick={() => setActiveImage(prev => (prev === 0 ? product.images!.length - 1 : prev - 1))}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveImage(prev => (prev === 0 ? product.images!.length - 1 : prev - 1));
+                                        }}
                                         className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-rich-black/50 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
                                     >
                                         <ChevronLeft className="w-6 h-6" />
                                     </button>
                                     <button
-                                        onClick={() => setActiveImage(prev => (prev === product.images!.length - 1 ? 0 : prev + 1))}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveImage(prev => (prev === product.images!.length - 1 ? 0 : prev + 1));
+                                        }}
                                         className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-rich-black/50 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
                                     >
                                         <ChevronRight className="w-6 h-6" />
@@ -257,7 +299,7 @@ export default function ProductDetailsPage() {
                                                 )}
                                                 title={color.name}
                                             >
-                                                <div 
+                                                <div
                                                     className="w-full h-full rounded-full"
                                                     style={{ backgroundColor: color.hex }}
                                                 />
@@ -332,6 +374,104 @@ export default function ProductDetailsPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Image Zoom Modal */}
+            <AnimatePresence>
+                {isZoomOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+                        onClick={() => setIsZoomOpen(false)}
+                    >
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setIsZoomOpen(false)}
+                            className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+                        >
+                            <X className="w-6 h-6" />
+                        </button>
+
+                        {/* Image Counter */}
+                        <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-bold z-10">
+                            {activeImage + 1} / {product.images?.length || 1}
+                        </div>
+
+                        {/* Main Zoomed Image */}
+                        <motion.div
+                            initial={{ scale: 0.9 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0.9 }}
+                            className="relative w-full h-full max-w-6xl max-h-[90vh]"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <Image
+                                src={product.images?.[activeImage]?.url || product.images?.[0]?.url || ''}
+                                alt={product.name}
+                                fill
+                                unoptimized
+                                className="object-contain"
+                                priority
+                            />
+                        </motion.div>
+
+                        {/* Navigation Arrows */}
+                        {product.images && product.images.length > 1 && (
+                            <>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setActiveImage(prev => (prev === 0 ? product.images!.length - 1 : prev - 1));
+                                    }}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                                >
+                                    <ChevronLeft className="w-8 h-8" />
+                                </button>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setActiveImage(prev => (prev === product.images!.length - 1 ? 0 : prev + 1));
+                                    }}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                                >
+                                    <ChevronRight className="w-8 h-8" />
+                                </button>
+                            </>
+                        )}
+
+                        {/* Thumbnails */}
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 max-w-full overflow-x-auto px-4">
+                            {product.images?.map((img, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setActiveImage(idx);
+                                    }}
+                                    className={cn(
+                                        "relative w-16 h-16 flex-shrink-0 border-2 transition-all overflow-hidden rounded-lg",
+                                        activeImage === idx ? "border-gold-500 scale-110" : "border-white/20 opacity-50 hover:opacity-100"
+                                    )}
+                                >
+                                    <Image
+                                        src={img.url}
+                                        alt={`${product.name} ${idx}`}
+                                        fill
+                                        unoptimized
+                                        className="object-cover"
+                                    />
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Hint Text */}
+                        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 text-white/60 text-xs text-center">
+                            اضغط ESC للإغلاق • استخدم الأسهم للتنقل
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <Footer />
         </main>
