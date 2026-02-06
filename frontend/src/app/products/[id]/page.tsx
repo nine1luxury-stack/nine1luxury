@@ -139,15 +139,18 @@ export default function ProductDetailsPage() {
 
     if (!product) {
         return (
-            <div className="min-h-screen bg-rich-black flex items-center justify-center">
-                <div className="text-center space-y-4">
-                    <h2 className="text-2xl text-white font-bold">المنتج غير موجود</h2>
-                    <button
-                        onClick={() => router.push("/products")}
-                        className="text-gold-300 underline"
-                    >
-                        العودة للمتجر
-                    </button>
+            <main className="min-h-screen bg-rich-black">
+                <Header />
+                <div className="min-h-screen bg-rich-black flex items-center justify-center">
+                    <div className="text-center space-y-4">
+                        <h2 className="text-2xl text-white font-bold">المنتج غير موجود</h2>
+                        <button
+                            onClick={() => router.push("/products")}
+                            className="text-gold-300 underline"
+                        >
+                            العودة للمتجر
+                        </button>
+                    </div>
                 </div>
                 <Footer />
             </main>
