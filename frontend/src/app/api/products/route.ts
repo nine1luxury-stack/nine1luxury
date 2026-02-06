@@ -62,7 +62,7 @@ export async function POST(request: Request) {
                 productimage: {
                     create: data.images?.map((img: { url: string, color?: string }) => ({
                         url: img.url,
-                        color: img.color
+                        color: img.color || null
                     })) || []
                 },
                 productvariant: {
@@ -70,8 +70,8 @@ export async function POST(request: Request) {
                         color: v.color,
                         colorHex: v.colorHex || '#000000',
                         size: v.size,
-                        stock: typeof v.stock === 'string' ? parseInt(v.stock) : v.stock || 0,
-                        sku: v.sku
+                        stock: typeof v.stock === 'string' ? parseInt(v.stock) : (v.stock || 0),
+                        sku: v.sku || null
                     })) || []
                 }
             },
