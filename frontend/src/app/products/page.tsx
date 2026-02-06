@@ -45,9 +45,16 @@ function ProductsContent() {
             .filter((product) => {
                 const categoryMatch = selectedCategory === "جميع المنتجات" || product.category === selectedCategory;
                 const priceMatch = Number(product.price) <= priceRange;
-                return categoryMatch && priceMatch;
+
+                // Size filter: check if product has any of the selected sizes
+                const sizeMatch = selectedSizes.length === 0 ||
+                    (product.variants && product.variants.some(variant =>
+                        selectedSizes.includes(variant.size)
+                    ));
+
+                return categoryMatch && priceMatch && sizeMatch;
             });
-    }, [products, selectedCategory, priceRange]);
+    }, [products, selectedCategory, priceRange, selectedSizes]);
 
 
     const toggleSize = (size: string) => {
@@ -196,47 +203,47 @@ function ProductsContent() {
                     {/* Product Grid */}
                     <div className="flex-1">
                         <>
-                                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-                                    <AnimatePresence mode="popLayout">
-                                        {filteredProducts.map((product) => (
-                                            <motion.div
-                                                key={product.id}
-                                                layout
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: 10 }}
-                                                transition={{ duration: 0.3 }}
-                                            >
-                                                <ProductCard {...product} image={product.images[0]?.url || ''} />
-                                            </motion.div>
-                                        ))}
-                                    </AnimatePresence>
-                                </div>
-
-                                {filteredProducts.length === 0 && (
-                                    <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 border border-dashed border-gold-500/20 rounded-sm mt-8">
-                                        <X className="w-12 h-12 text-gold-500/20" />
-                                        <div>
-                                            <h3 className="text-xl font-bold text-white">لا توجد منتجات تطابق اختياراتك</h3>
-                                            <p className="text-gray-500">جرب تغيير فلاتر البحث للحصول على نتائج أفضل</p>
-                                        </div>
-                                        <button
-                                            suppressHydrationWarning
-                                            onClick={() => {
-                                                setSelectedCategory("جميع المنتجات");
-                                                setPriceRange(10000);
-                                                setSelectedSizes([]);
-                                                setSelectedColors([]);
-                                            }}
-                                            className="text-gold-300 underline underline-offset-4 hover:text-gold-500 transition-colors"
+                            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+                                <AnimatePresence mode="popLayout">
+                                    {filteredProducts.map((product) => (
+                                        <motion.div
+                                            key={product.id}
+                                            layout
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: 10 }}
+                                            transition={{ duration: 0.3 }}
                                         >
-                                            إعادة ضبط الفلاتر
-                                        </button>
+                                            <ProductCard {...product} image={product.images[0]?.url || ''} />
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
+                            </div>
+
+                            {filteredProducts.length === 0 && (
+                                <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 border border-dashed border-gold-500/20 rounded-sm mt-8">
+                                    <X className="w-12 h-12 text-gold-500/20" />
+                                    <div>
+                                        <h3 className="text-xl font-bold text-white">لا توجد منتجات تطابق اختياراتك</h3>
+                                        <p className="text-gray-500">جرب تغيير فلاتر البحث للحصول على نتائج أفضل</p>
                                     </div>
-                                )}
-                            </>
-                        </div>
+                                    <button
+                                        suppressHydrationWarning
+                                        onClick={() => {
+                                            setSelectedCategory("جميع المنتجات");
+                                            setPriceRange(10000);
+                                            setSelectedSizes([]);
+                                            setSelectedColors([]);
+                                        }}
+                                        className="text-gold-300 underline underline-offset-4 hover:text-gold-500 transition-colors"
+                                    >
+                                        إعادة ضبط الفلاتر
+                                    </button>
+                                </div>
+                            )}
+                        </>
                     </div>
+                </div>
 
                 {/* Overlay for mobile drawer */}
                 <div
