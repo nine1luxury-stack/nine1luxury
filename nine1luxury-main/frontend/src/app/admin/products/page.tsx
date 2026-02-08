@@ -77,40 +77,65 @@ export default function AdminProductsPage() {
     };
 
     const handleEditClick = (product: Product) => {
-        setEditingProduct(product);
+        try {
+            setEditingProduct(product);
 
-        // Extract unique sizes and colors from variants
-        const sizes = Array.from(new Set(product.variants?.map((v: ProductVariant) => v.size) || [])) as string[];
-        const colorNames = Array.from(new Set(product.variants?.map((v: ProductVariant) => v.color) || []));
+            // Extract unique sizes and colors from variants, filtering out null/undefined
+            const sizesSet = new Set<string>();
+            const colorNamesSet = new Set<string>();
 
-        // Map color names/hex from variants
-        const colors = colorNames.map(name => {
-            const variant = product.variants?.find((v: ProductVariant) => v.color === name);
-            return {
-                name: name as string,
-                hex: variant?.colorHex || ((name as string).startsWith('#') ? name as string : '#000000')
-            };
-        });
+            if (product.variants && Array.isArray(product.variants)) {
+                product.variants.forEach(v => {
+                    if (v.size) sizesSet.add(v.size);
+                    if (v.color) colorNamesSet.add(v.color);
+                });
+            }
 
-        setNewProduct({
-            name: product.name,
-            model: product.model || '',
-            price: product.price.toString(),
-            category: product.category,
-            description: product.description,
-            image: product.images?.[0]?.url || product.image || '',
-            sizes: sizes,
-            colors: colors
-        });
+            const sizes = Array.from(sizesSet);
+            const colorNames = Array.from(colorNamesSet);
 
-        // Pre-fill gallery from existing product images
-        const initialGallery = product.images?.map((img: any) => img.url) || [];
-        setProductGallery(initialGallery);
+            // Map color names/hex from variants safely
+            const colors = colorNames.map(name => {
+                const variant = product.variants?.find((v: ProductVariant) => v.color === name);
+                const safeName = name || ''; // Should not happen due to Set filtering, but safety first
+                return {
+                    name: safeName,
+                    hex: variant?.colorHex || (safeName.startsWith('#') ? safeName : '#000000')
+                };
+            });
 
-        // Pre-fill size chart image if exists
-        setSizeChartImage(product.sizeChartImage || null);
+            // Handle legacy image field if images array is empty
+            const mainImage = product.images?.[0]?.url || (product as any).image || '';
 
-        setIsAddModalOpen(true);
+            setNewProduct({
+                name: product.name || '',
+                model: product.model || '',
+                price: product.price != null ? product.price.toString() : '0',
+                category: product.category || 'تيشرتات',
+                description: product.description || '',
+                image: mainImage,
+                sizes: sizes,
+                colors: colors
+            });
+
+            // Pre-fill gallery from existing product images
+            const initialGallery = product.images?.map((img: any) => img.url).filter((url: string) => url) || [];
+            
+            // If we have a main image but gallery is empty (legacy data), add it
+            if (mainImage && initialGallery.length === 0) {
+                initialGallery.push(mainImage);
+            }
+
+            setProductGallery(initialGallery);
+
+            // Pre-fill size chart image if exists
+            setSizeChartImage(product.sizeChartImage || null);
+
+            setIsAddModalOpen(true);
+        } catch (error) {
+            console.error("Error opening edit modal:", error);
+            alert("حدث خطأ غير متوقع أثناء فتح نافذة التعديل.");
+        }
     };
 
     const handleViewClick = (product: Product) => {
