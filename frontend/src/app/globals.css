@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gold-300: #eec869;
+  --color-gold-500: #ae8439;
+  --color-gold-700: #8b6a2d;
+
+  --color-rich-black: #000000;
+  --color-surface-dark: #111111;
+
+  --color-surface-dark: #111111;
+
+  --font-amiri: var(--font-amiri);
+  --font-playfair: "Playfair Display Variable", serif;
+
+  --animate-gold-shimmer: gold-shimmer 3s ease-in-out infinite;
+
+  @keyframes gold-shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
+
+html {
+  font-size: 115%; /* Increases base size by 15% for all rem-based units */
+}
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --primary: #ae8439;
+  --secondary: #eec869;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-amiri);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Image Protection */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  pointer-events: auto;
+}
+
+.luxury-gradient {
+  background: linear-gradient(135deg, #ae8439 0%, #eec869 50%, #ae8439 100%);
+  background-size: 200% auto;
+}
+
+.text-gold-gradient {
+  background: linear-gradient(to right, #ae8439, #eec869, #ae8439);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+}
+
+/* Global Scrollbar Hiding - Extremely Aggressive */
+html,
+body {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+* {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide Number Input Arrows */
+@layer base {
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+}
