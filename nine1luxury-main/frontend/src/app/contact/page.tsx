@@ -6,7 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 } from "lucide-react";
 
-    export default function ContactPage() {
+export default function ContactPage() {
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
@@ -83,7 +83,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                 >
                     {/* Header */}
                     <div className="text-center mb-16">
-                        <h1 className="text-4xl md:text-6xl font-playfair font-bold text-white uppercase mb-4">
+                        <h1 className="text-4xl md:text-6xl font-bold text-white uppercase mb-4 tracking-wide">
                             تواصل معنا
                         </h1>
                         <div className="h-px w-24 bg-gold-500 mx-auto mb-6" />
