@@ -133,10 +133,10 @@ function ProductsContent() {
                                             setSelectedCategory(cat);
                                         }}
                                         className={cn(
-                                            "text-right px-4 py-2 transition-all rounded-full text-sm",
+                                            "text-right px-6 py-3 transition-all rounded-2xl text-sm",
                                             selectedCategory === cat
-                                                ? "bg-gold-500 text-rich-black font-bold"
-                                                : "text-gray-400 hover:text-gold-300 hover:bg-gold-500/5"
+                                                ? "bg-gold-500 text-rich-black font-bold shadow-lg shadow-gold-500/20"
+                                                : "text-gray-400 hover:text-gold-300 hover:bg-gold-500/5 hover:rounded-2xl"
                                         )}
                                     >
                                         {cat}
@@ -174,7 +174,7 @@ function ProductsContent() {
                                         suppressHydrationWarning
                                         onClick={() => toggleSize(size)}
                                         className={cn(
-                                            "w-10 h-10 border transition-all flex items-center justify-center font-bold text-xs uppercase",
+                                            "w-10 h-10 border transition-all flex items-center justify-center font-bold text-xs uppercase rounded-full",
                                             selectedSizes.includes(size)
                                                 ? "bg-gold-500 border-gold-500 text-rich-black"
                                                 : "border-gold-500/20 text-gray-400 hover:border-gold-500 hover:text-gold-300"
@@ -221,7 +221,7 @@ function ProductsContent() {
                             </div>
 
                             {filteredProducts.length === 0 && (
-                                <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 border border-dashed border-gold-500/20 rounded-sm mt-8">
+                                <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 border border-dashed border-gold-500/20 rounded-3xl mt-8">
                                     <X className="w-12 h-12 text-gold-500/20" />
                                     <div>
                                         <h3 className="text-xl font-bold text-white">لا توجد منتجات تطابق اختياراتك</h3>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Plus,
@@ -28,7 +28,22 @@ export default function AdminProductsPage() {
     // Use Global Context
     const { products, addProduct, deleteProduct, updateProduct } = useProducts();
 
-    const categories = ["الكل", "هوديز", "تيشرتات", "بناطيل", "سويت شيرتات"];
+    // Categories management
+    const initialCategories = ["الكل", "هوديز", "تيشرتات", "بناطيل", "سويت شيرتات"];
+    const [categories, setCategories] = useState(initialCategories);
+
+    // Sync categories with products
+    useEffect(() => {
+        if (products.length > 0) {
+            const productCategories = products.map(p => p.category);
+            const allCategories = [...initialCategories, ...productCategories];
+            const uniqueCategories = Array.from(new Set(allCategories.filter(Boolean)));
+            setCategories(uniqueCategories);
+        }
+    }, [products]);
+
+    const [showCategoryInput, setShowCategoryInput] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState("");
     const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"];
     // availableColors removed in favor of dynamic hex input
 
@@ -343,6 +358,64 @@ export default function AdminProductsPage() {
                             {cat}
                         </button>
                     ))}
+
+                    {/* Add Category Input/Button */}
+                    <div className="flex items-center gap-2">
+                        <AnimatePresence>
+                            {showCategoryInput ? (
+                                <motion.div
+                                    initial={{ width: 0, opacity: 0 }}
+                                    animate={{ width: 150, opacity: 1 }}
+                                    exit={{ width: 0, opacity: 0 }}
+                                    className="relative flex items-center"
+                                >
+                                    <input
+                                        autoFocus
+                                        type="text"
+                                        placeholder="اسم الصنف..."
+                                        value={newCategoryName}
+                                        onChange={(e) => setNewCategoryName(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && newCategoryName.trim()) {
+                                                if (!categories.includes(newCategoryName.trim())) {
+                                                    setCategories([...categories, newCategoryName.trim()]);
+                                                }
+                                                setNewCategoryName("");
+                                                setShowCategoryInput(false);
+                                            } else if (e.key === 'Escape') {
+                                                setShowCategoryInput(false);
+                                            }
+                                        }}
+                                        className="bg-rich-black border border-gold-500/30 rounded-full py-2 px-4 pr-10 text-xs text-white focus:border-gold-500 outline-none w-full"
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            if (newCategoryName.trim()) {
+                                                if (!categories.includes(newCategoryName.trim())) {
+                                                    setCategories([...categories, newCategoryName.trim()]);
+                                                }
+                                                setNewCategoryName("");
+                                                setShowCategoryInput(false);
+                                            } else {
+                                                setShowCategoryInput(false);
+                                            }
+                                        }}
+                                        className="absolute right-2 text-gold-500 hover:text-gold-300 transition-colors"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                    </button>
+                                </motion.div>
+                            ) : (
+                                <button
+                                    onClick={() => setShowCategoryInput(true)}
+                                    className="p-3 bg-rich-black border border-white/5 rounded-full text-gold-500 hover:border-gold-500/30 transition-all"
+                                    title="إضافة صنف جديد"
+                                >
+                                    <Plus className="w-4 h-4" />
+                                </button>
+                            )}
+                        </AnimatePresence>
+                    </div>
                 </div>
             </div>
 

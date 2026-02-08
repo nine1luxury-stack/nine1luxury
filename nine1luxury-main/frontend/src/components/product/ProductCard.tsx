@@ -34,13 +34,13 @@ export function ProductCard({ id, name, price, discount, image, images, category
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="group relative bg-surface-dark/40 border border-gold-500/10 hover:border-gold-500/30 transition-all duration-500 rounded-sm overflow-hidden"
+            className="group relative bg-surface-dark/40 border border-gold-500/10 hover:border-gold-500/30 transition-all duration-500 rounded-3xl overflow-hidden"
         >
             {/* Category Tag */}
 
 
             {/* Product Image */}
-            <div className="relative aspect-[3/4] overflow-hidden">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-t-3xl">
                 {/* Category & Status Badges */}
                 <div className="absolute top-3 right-3 z-20 flex flex-col gap-2 items-end">
                     <Link
@@ -49,7 +49,7 @@ export function ProductCard({ id, name, price, discount, image, images, category
                     >
                         {category}
                     </Link>
-                    
+
                     {/* Sold Out Badge */}
                     {isSoldOut && (
                         <div className="px-3 py-1 bg-red-600 border border-red-500 rounded-full text-[10px] font-bold text-white uppercase animate-pulse">

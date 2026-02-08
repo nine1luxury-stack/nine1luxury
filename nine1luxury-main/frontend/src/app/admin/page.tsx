@@ -59,7 +59,7 @@ export default function AdminDashboard() {
 
     // Calculate dynamic stats
     const stats = useMemo(() => {
-        const completedOrders = orders.filter(o => o.status === 'COMPLETED');
+        const completedOrders = orders.filter(o => o.status === 'DELIVERED');
         const pendingOrders = orders.filter(o => o.status === 'PENDING');
 
         const totalSales = completedOrders.reduce((sum, order) => sum + Number(order.totalAmount), 0);
@@ -120,7 +120,7 @@ export default function AdminDashboard() {
             .sort(([, qtyA], [, qtyB]) => qtyB - qtyA)
             .slice(0, 5)
             .map(([productId, quantity]) => {
-                const product = products.find(p => p.id === productId);
+                const product = products.find(p => String(p.id) === String(productId));
                 return {
                     id: productId,
                     name: product?.name || 'منتج غير معروف',
@@ -221,18 +221,20 @@ export default function AdminDashboard() {
                                             <td className="px-4 py-5 text-center">
                                                 <select
                                                     value={order.status}
-                                                    onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
+                                                    onChange={(e) => handleStatusUpdate(order.id, e.target.value as any)}
                                                     className={cn(
                                                         "text-[10px] px-3 py-1.5 rounded-full font-bold uppercase cursor-pointer outline-none border transition-all text-center mx-auto block",
                                                         order.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20' :
-                                                            order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
-                                                                order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
-                                                                    'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
+                                                            order.status === 'CONFIRMED' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
+                                                                order.status === 'SHIPPED' ? 'bg-purple-500/10 border-purple-500/20 text-purple-500 hover:bg-purple-500/20' :
+                                                                    order.status === 'DELIVERED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
+                                                                        'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
                                                     )}
                                                 >
                                                     <option value="PENDING" className="bg-rich-black text-gray-300">قيد الانتظار</option>
-                                                    <option value="PROCESSING" className="bg-rich-black text-blue-300">جاري التجهيز</option>
-                                                    <option value="COMPLETED" className="bg-rich-black text-green-300">تم التسليم</option>
+                                                    <option value="CONFIRMED" className="bg-rich-black text-blue-300">تم التأكيد</option>
+                                                    <option value="SHIPPED" className="bg-rich-black text-purple-300">تم الشحن</option>
+                                                    <option value="DELIVERED" className="bg-rich-black text-green-300">تم التسليم</option>
                                                     <option value="CANCELLED" className="bg-rich-black text-red-300">ملغي</option>
                                                 </select>
                                             </td>
@@ -260,7 +262,7 @@ export default function AdminDashboard() {
                                 <div key={product.id} className="flex items-center gap-4">
                                     <div className="w-12 h-12 rounded-lg bg-white/5 overflow-hidden flex-shrink-0">
                                         <Image
-                                            src={product.image || '/placeholder.png'}
+                                            src={product.image || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=48&h=48&q=80'}
                                             alt={product.name}
                                             width={48}
                                             height={48}
