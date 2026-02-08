@@ -659,6 +659,7 @@ export default function AdminOrdersPage() {
                         }
                     };
                     fetchOrders();
+                    refreshProducts();
                 }}
             />
         </div>

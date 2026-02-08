@@ -36,27 +36,45 @@ export async function POST(request: Request) {
     console.error("🔥 API ROUTE HIT: /api/orders");
     try {
         const data = await request.json();
-        
-        const order = await prisma.order.create({
-            data: {
-                userId: data.userId || undefined,
-                guestName: data.guestName,
-                guestPhone: data.guestPhone,
-                guestAddress: data.guestAddress,
-                guestCity: data.guestCity,
-                totalAmount: parseFloat(data.totalAmount),
-                status: 'PENDING',
-                paymentMethod: data.paymentMethod || 'CASH_ON_DELIVERY',
-                items: {
-                    create: data.items.map((item: OrderItemInput) => ({
-                        productId: item.productId,
-                        variantId: item.variantId,
-                        quantity: item.quantity,
-                        price: parseFloat(item.price.toString())
-                    }))
+
+        const order = await prisma.$transaction(async (tx) => {
+            const newOrder = await tx.order.create({
+                data: {
+                    userId: data.userId || undefined,
+                    guestName: data.guestName,
+                    guestPhone: data.guestPhone,
+                    guestAddress: data.guestAddress,
+                    guestCity: data.guestCity,
+                    totalAmount: parseFloat(data.totalAmount),
+                    status: 'PENDING',
+                    paymentMethod: data.paymentMethod || 'CASH_ON_DELIVERY',
+                    items: {
+                        create: data.items.map((item: OrderItemInput) => ({
+                            productId: item.productId,
+                            variantId: item.variantId,
+                            quantity: item.quantity,
+                            price: parseFloat(item.price.toString())
+                        }))
+                    }
+                },
+                include: { items: true }
+            });
+
+            // Decrease stock for each item
+            for (const item of data.items) {
+                if (item.variantId) {
+                    await tx.productvariant.update({
+                        where: { id: item.variantId },
+                        data: {
+                            stock: {
+                                decrement: item.quantity
+                            }
+                        }
+                    });
                 }
-            },
-            include: { items: true }
+            }
+
+            return newOrder;
         });
 
         // 📨 Email Notification Logic - Simplified through lib

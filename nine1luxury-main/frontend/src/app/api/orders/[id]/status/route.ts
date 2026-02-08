@@ -29,6 +29,7 @@ export async function PATCH(
         }
 
         const oldStatus = currentOrder.status;
+        const committedStatuses = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED'];
 
         // Use transaction to ensure both order status and stock are updated atomically
         const updatedOrder = await prisma.$transaction(async (tx) => {
@@ -38,8 +39,11 @@ export async function PATCH(
                 include: { items: true }
             });
 
-            // 1. If moving TO Delivered status, decrement stock
-            if (newStatus === 'DELIVERED' && oldStatus !== 'DELIVERED') {
+            const isNewCommitted = committedStatuses.includes(newStatus);
+            const isOldCommitted = committedStatuses.includes(oldStatus);
+
+            // 1. If moving FROM non-committed TO committed, decrement stock
+            if (isNewCommitted && !isOldCommitted) {
                 for (const item of currentOrder.items) {
                     if (item.variantId) {
                         await tx.productvariant.update({
@@ -54,8 +58,8 @@ export async function PATCH(
                 }
             }
 
-            // 2. If moving AWAY FROM Delivered status, increment stock back
-            if (oldStatus === 'DELIVERED' && newStatus !== 'DELIVERED') {
+            // 2. If moving FROM committed TO non-committed, increment stock back
+            if (!isNewCommitted && isOldCommitted) {
                 for (const item of currentOrder.items) {
                     if (item.variantId) {
                         await tx.productvariant.update({

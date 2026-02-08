@@ -27,6 +27,7 @@ export async function PATCH(
             }
 
             const oldStatus = currentOrder.status;
+            const committedStatuses = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED'];
 
             const updatedOrder = await prisma.$transaction(async (tx) => {
                 const updated = await tx.order.update({
@@ -35,8 +36,11 @@ export async function PATCH(
                     include: { items: true, user: true }
                 });
 
-                // Stock management: To DELIVERED
-                if (newStatus === 'DELIVERED' && oldStatus !== 'DELIVERED') {
+                const isNewCommitted = committedStatuses.includes(newStatus);
+                const isOldCommitted = committedStatuses.includes(oldStatus);
+
+                // 1. If moving FROM non-committed TO committed, decrement stock
+                if (isNewCommitted && !isOldCommitted) {
                     for (const item of currentOrder.items) {
                         if (item.variantId) {
                             await tx.productvariant.update({
@@ -47,8 +51,8 @@ export async function PATCH(
                     }
                 }
 
-                // Stock management: FROM DELIVERED
-                if (oldStatus === 'DELIVERED' && newStatus !== 'DELIVERED') {
+                // 2. If moving FROM committed TO non-committed, increment stock back
+                if (!isNewCommitted && isOldCommitted) {
                     for (const item of currentOrder.items) {
                         if (item.variantId) {
                             await tx.productvariant.update({
@@ -80,7 +84,34 @@ export async function DELETE(
     try {
         const { id: idStr } = await context.params;
         const id = Number(idStr);
-        await prisma.order.delete({ where: { id } });
+
+        const order = await prisma.order.findUnique({
+            where: { id },
+            include: { items: true }
+        });
+
+        if (!order) {
+            return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+        }
+
+        const committedStatuses = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED'];
+
+        await prisma.$transaction(async (tx) => {
+            // Restore stock if the order was in a committed status
+            if (committedStatuses.includes(order.status)) {
+                for (const item of order.items) {
+                    if (item.variantId) {
+                        await tx.productvariant.update({
+                            where: { id: item.variantId },
+                            data: { stock: { increment: item.quantity } }
+                        });
+                    }
+                }
+            }
+
+            await tx.order.delete({ where: { id } });
+        });
+
         return new NextResponse(null, { status: 200 });
     } catch (error) {
         console.error(`DELETE /api/orders/[id] - Error:`, error);
