@@ -8,7 +8,8 @@ export async function PATCH(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
         const body = await request.json();
 
         // Use transaction if we are approving, to ensure stock is updated
@@ -25,9 +26,9 @@ export async function PATCH(
             if (body.status === 'APPROVED') {
                 if (updatedReturn.variantId) {
                     // Update variant stock based on type
-                    const stockField = updatedReturn.type === 'VALID' ? 'stock' : 
-                                     updatedReturn.type === 'DAMAGED' ? 'damagedStock' :
-                                     updatedReturn.type === 'WASH' ? 'washStock' : 'repackageStock';
+                    const stockField = updatedReturn.type === 'VALID' ? 'stock' :
+                        updatedReturn.type === 'DAMAGED' ? 'damagedStock' :
+                            updatedReturn.type === 'WASH' ? 'washStock' : 'repackageStock';
 
                     await tx.productvariant.update({
                         where: { id: updatedReturn.variantId },
@@ -41,9 +42,9 @@ export async function PATCH(
                         where: { productId: updatedReturn.productId }
                     });
                     if (firstVariant) {
-                        const stockField = updatedReturn.type === 'VALID' ? 'stock' : 
-                                         updatedReturn.type === 'DAMAGED' ? 'damagedStock' :
-                                         updatedReturn.type === 'WASH' ? 'washStock' : 'repackageStock';
+                        const stockField = updatedReturn.type === 'VALID' ? 'stock' :
+                            updatedReturn.type === 'DAMAGED' ? 'damagedStock' :
+                                updatedReturn.type === 'WASH' ? 'washStock' : 'repackageStock';
                         await tx.productvariant.update({
                             where: { id: firstVariant.id },
                             data: {

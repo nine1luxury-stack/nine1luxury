@@ -6,13 +6,9 @@ export async function PUT(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
         const data = await request.json();
-        
-        // Only allow updating manual customers (ID is UUID, not guest- or user-)
-        if (id.startsWith('guest-') || id.startsWith('user-')) {
-            return NextResponse.json({ error: 'Cannot edit automatic customers' }, { status: 400 });
-        }
 
         const customer = await prisma.customer.update({
             where: { id },
@@ -34,11 +30,8 @@ export async function DELETE(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
-        
-        if (id.startsWith('guest-') || id.startsWith('user-')) {
-             return NextResponse.json({ error: 'Cannot delete automatic customers' }, { status: 400 });
-        }
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
 
         await prisma.customer.delete({
             where: { id }

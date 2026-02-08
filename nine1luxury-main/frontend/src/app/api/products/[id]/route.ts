@@ -8,7 +8,9 @@ export async function GET(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
+
         const product = await prisma.product.findUnique({
             where: { id },
             include: {
@@ -33,7 +35,8 @@ export async function PATCH(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
         const data = await request.json();
 
         // Handle transaction for complex update involving relations
@@ -79,7 +82,7 @@ export async function PATCH(
                     if (data.variants.update) {
                         for (const variantUpdate of data.variants.update) {
                             await tx.productvariant.update({
-                                where: { id: variantUpdate.where.id }, // Standardizing on ID update
+                                where: { id: Number(variantUpdate.where.id) },
                                 data: variantUpdate.data
                             });
                         }
@@ -128,7 +131,9 @@ export async function DELETE(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
+
         await prisma.product.delete({
             where: { id },
         });

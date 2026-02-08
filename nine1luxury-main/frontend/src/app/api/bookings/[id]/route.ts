@@ -6,7 +6,8 @@ export async function PATCH(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await params;
+        const { id: idStr } = await params;
+        const id = Number(idStr);
         const data = await request.json();
 
         // fetch existing booking to check status transition
@@ -78,7 +79,7 @@ async function updateStock(modelName: string | null, size: string | null, change
             });
             console.log(`Stock updated for ${modelName} (${size}): ${change > 0 ? '+' : ''}${change}`);
         } else {
-             console.warn(`Variant not found for stock update: ${modelName} - ${size}`);
+            console.warn(`Variant not found for stock update: ${modelName} - ${size}`);
         }
 
     } catch (err) {
@@ -91,7 +92,8 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await params;
+        const { id: idStr } = await params;
+        const id = Number(idStr);
         await prisma.booking.delete({
             where: { id }
         });

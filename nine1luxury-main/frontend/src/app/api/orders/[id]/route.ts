@@ -9,16 +9,17 @@ export async function PATCH(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
         const body = await request.json();
 
         if (body.status) {
-             const updatedOrder = await prisma.order.update({
-                 where: { id },
-                 data: { status: body.status as any },
-                 include: { items: true, user: true }
-             });
-             return NextResponse.json(updatedOrder);
+            const updatedOrder = await prisma.order.update({
+                where: { id },
+                data: { status: body.status as any },
+                include: { items: true, user: true }
+            });
+            return NextResponse.json(updatedOrder);
         }
 
         return NextResponse.json({ error: 'No update data provided' }, { status: 400 });
@@ -34,7 +35,8 @@ export async function DELETE(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
         await prisma.order.delete({ where: { id } });
         return new NextResponse(null, { status: 200 });
     } catch (error) {

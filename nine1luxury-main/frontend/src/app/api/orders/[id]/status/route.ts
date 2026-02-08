@@ -8,7 +8,8 @@ export async function PATCH(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
         const body = await request.json();
 
         if (!body.status) {

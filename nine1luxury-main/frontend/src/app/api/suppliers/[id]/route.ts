@@ -6,9 +6,10 @@ export async function PATCH(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
         const data = await request.json();
-        
+
         const supplier = await prisma.supplier.update({
             where: { id },
             data: {
@@ -33,8 +34,9 @@ export async function DELETE(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
-        
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
+
         // Check if supplier has linked items (Optional: handle cascade or restrict)
         await prisma.supplier.delete({
             where: { id }

@@ -6,9 +6,10 @@ export async function PATCH(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
         const data = await request.json();
-        
+
         const expense = await prisma.expense.update({
             where: { id },
             data: {
@@ -31,9 +32,10 @@ export async function DELETE(
     context: { params: Promise<{ id: string }> }
 ) {
     try {
-        const { id } = await context.params;
+        const { id: idStr } = await context.params;
+        const id = Number(idStr);
         console.log(`[API] Deleting expense: ${id}`);
-        
+
         // Use deleteMany to avoid throwing if not found, making it more robust
         const result = await prisma.expense.deleteMany({
             where: { id }
@@ -46,7 +48,7 @@ export async function DELETE(
         return NextResponse.json({ success: true, count: result.count });
     } catch (error) {
         console.error("DELETE /api/expenses/[id] - Error:", error);
-        return NextResponse.json({ 
+        return NextResponse.json({
             error: 'Internal Server Error',
             message: error instanceof Error ? error.message : String(error)
         }, { status: 500 });
