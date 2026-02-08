@@ -172,10 +172,10 @@ export default function ReturnsPage() {
                             {returns.map((ret) => (
                                 <tr key={ret.id} className="group hover:bg-white/[0.02] transition-colors">
                                     <td className="px-6 py-5">
-                                        <span className="text-xs font-mono text-gray-400">#{ret.id.slice(0, 8)}</span>
+                                        <span className="text-xs font-mono text-gray-400">#{String(ret.id)}</span>
                                     </td>
                                     <td className="px-6 py-5">
-                                        <span className="text-xs font-mono text-gold-500">{ret.orderId ? '#' + ret.orderId.slice(0, 8) : '-'}</span>
+                                        <span className="text-xs font-mono text-gold-500">{ret.orderId ? '#' + String(ret.orderId) : '-'}</span>
                                     </td>
                                     <td className="px-6 py-5">
                                         <p className="text-white font-bold text-sm">
@@ -312,7 +312,7 @@ export default function ReturnsPage() {
                                                             />
                                                             <div className="flex-1">
                                                                 <div className="flex justify-between">
-                                                                    <p className="text-white font-bold text-sm">Product ID: {item.productId.slice(0, 8)}...</p>
+                                                                    <p className="text-white font-bold text-sm">Product ID: {String(item.productId)}</p>
                                                                     <p className="text-white font-mono">{formatPrice(item.price)}</p>
                                                                 </div>
                                                                 <p className="text-xs text-gray-500 mt-1">الكمية المطلوبة: {item.quantity}</p>

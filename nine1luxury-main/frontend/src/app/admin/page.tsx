@@ -201,7 +201,7 @@ export default function AdminDashboard() {
                                         <tr key={order.id} className="group hover:bg-white/[0.02] transition-all">
                                             <td className="px-4 py-5">
                                                 <span className="text-xs text-gray-400 font-mono group-hover:text-gold-500/80 transition-colors uppercase">
-                                                    #{order.id.slice(-6)}
+                                                    #{String(order.id)}
                                                 </span>
                                             </td>
                                             <td className="px-4 py-5">
@@ -225,9 +225,9 @@ export default function AdminDashboard() {
                                                     className={cn(
                                                         "text-[10px] px-3 py-1.5 rounded-full font-bold uppercase cursor-pointer outline-none border transition-all text-center mx-auto block",
                                                         order.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20' :
-                                                        order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
-                                                        order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
-                                                        'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
+                                                            order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
+                                                                order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
+                                                                    'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
                                                     )}
                                                 >
                                                     <option value="PENDING" className="bg-rich-black text-gray-300">قيد الانتظار</option>

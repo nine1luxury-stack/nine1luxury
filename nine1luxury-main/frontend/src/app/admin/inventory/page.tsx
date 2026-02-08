@@ -32,7 +32,7 @@ export default function InventoryPage() {
     const [baseDamagedStock, setBaseDamagedStock] = useState(0);
     const [isSaving, setIsSaving] = useState(false);
     const [isAddReturnModalOpen, setIsAddReturnModalOpen] = useState(false);
-    
+
     // Form State for new Return
     const [newReturn, setNewReturn] = useState({
         orderId: '',
@@ -91,7 +91,7 @@ export default function InventoryPage() {
                 body: JSON.stringify({ status })
             });
             if (!res.ok) throw new Error("فشل تحديث حالة المرتجع");
-            
+
             // Background sync
             loadReturns();
             if (status === 'APPROVED') {
@@ -109,7 +109,7 @@ export default function InventoryPage() {
         setNewReorderPoint(product.reorderPoint || 10);
         const variants = product.variants ? JSON.parse(JSON.stringify(product.variants)) : [];
         setEditingVariants(variants);
-        
+
         // If no variants, we might want to edit "base" stock
         if (variants.length === 0) {
             setBaseStock(0);
@@ -243,7 +243,7 @@ export default function InventoryPage() {
                             طلبات الاسترجاع
                         </button>
                     </div>
-                
+
                     {activeTab === 'RETURNS' && (
                         <button
                             onClick={() => setIsAddReturnModalOpen(true)}
@@ -323,7 +323,7 @@ export default function InventoryPage() {
                                             <h3 className="font-bold text-white text-xl group-hover:text-gold-300 transition-colors truncate">{product.name}</h3>
                                             <div className="flex items-center justify-center lg:justify-start gap-2 mt-1">
                                                 <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded text-gray-400 font-bold uppercase">{product.category}</span>
-                                                <span className="text-[10px] text-gray-500 font-mono">ID: {product.id.slice(-8)}</span>
+                                                <span className="text-[10px] text-gray-500 font-mono">ID: {String(product.id)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -427,7 +427,7 @@ export default function InventoryPage() {
                                     returns.map((ret) => (
                                         <tr key={ret.id} className="group hover:bg-white/[0.01] transition-all">
                                             <td className="px-6 py-6">
-                                                <span className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">#{ret.id.slice(-8)}</span>
+                                                <span className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">#{String(ret.id)}</span>
                                             </td>
                                             <td className="px-6 py-6">
                                                 <div className="flex flex-col">
@@ -441,13 +441,13 @@ export default function InventoryPage() {
                                                 <div className={cn(
                                                     "inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold border",
                                                     ret.type === 'VALID' ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" :
-                                                    ret.type === 'DAMAGED' ? "bg-rose-500/10 text-rose-500 border-rose-500/20" :
-                                                    ret.type === 'WASH' ? "bg-sky-500/10 text-sky-500 border-sky-500/20" :
-                                                    "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                                                        ret.type === 'DAMAGED' ? "bg-rose-500/10 text-rose-500 border-rose-500/20" :
+                                                            ret.type === 'WASH' ? "bg-sky-500/10 text-sky-500 border-sky-500/20" :
+                                                                "bg-amber-500/10 text-amber-500 border-amber-500/20"
                                                 )}>
                                                     {ret.type === 'VALID' ? 'صالح للبيع' :
-                                                     ret.type === 'DAMAGED' ? 'تالف' :
-                                                     ret.type === 'WASH' ? 'يحتاج غسيل' : 'إعادة تغليف'}
+                                                        ret.type === 'DAMAGED' ? 'تالف' :
+                                                            ret.type === 'WASH' ? 'يحتاج غسيل' : 'إعادة تغليف'}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-6">
@@ -455,15 +455,15 @@ export default function InventoryPage() {
                                                     <div className={cn(
                                                         "w-1.5 h-1.5 rounded-full ring-4 shadow-sm",
                                                         ret.status === 'APPROVED' ? "bg-emerald-500 ring-emerald-500/10" :
-                                                        ret.status === 'REJECTED' ? "bg-rose-500 ring-rose-500/10" : "bg-amber-500 ring-amber-500/10"
+                                                            ret.status === 'REJECTED' ? "bg-rose-500 ring-rose-500/10" : "bg-amber-500 ring-amber-500/10"
                                                     )}></div>
                                                     <span className={cn(
                                                         "text-[10px] font-bold uppercase",
                                                         ret.status === 'APPROVED' ? "text-emerald-500" :
-                                                        ret.status === 'REJECTED' ? "text-rose-500" : "text-amber-500"
+                                                            ret.status === 'REJECTED' ? "text-rose-500" : "text-amber-500"
                                                     )}>
                                                         {ret.status === 'APPROVED' ? 'تمت التسوية' :
-                                                         ret.status === 'REJECTED' ? 'مرفوض' : 'قيد المراجعة'}
+                                                            ret.status === 'REJECTED' ? 'مرفوض' : 'قيد المراجعة'}
                                                     </span>
                                                 </div>
                                             </td>
@@ -627,8 +627,8 @@ export default function InventoryPage() {
                 <div className="space-y-4">
                     <div className="space-y-2">
                         <label className="text-sm text-gray-400">رقم الطلب</label>
-                        <input 
-                            placeholder="65ba... (رقم الطلب من قائمة الطلبات)" 
+                        <input
+                            placeholder="65ba... (رقم الطلب من قائمة الطلبات)"
                             value={newReturn.orderId}
                             onChange={(e) => setNewReturn({ ...newReturn, orderId: e.target.value })}
                             className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none"
@@ -637,7 +637,7 @@ export default function InventoryPage() {
 
                     <div className="space-y-2">
                         <label className="text-sm text-gray-400">المنتج</label>
-                        <select 
+                        <select
                             value={newReturn.productId}
                             onChange={(e) => setNewReturn({ ...newReturn, productId: e.target.value })}
                             className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none appearance-none"
@@ -652,7 +652,7 @@ export default function InventoryPage() {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <label className="text-sm text-gray-400">الحالة</label>
-                            <select 
+                            <select
                                 value={newReturn.type}
                                 onChange={(e) => setNewReturn({ ...newReturn, type: e.target.value })}
                                 className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none appearance-none"
@@ -665,8 +665,8 @@ export default function InventoryPage() {
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm text-gray-400">الكمية</label>
-                            <input 
-                                type="number" 
+                            <input
+                                type="number"
                                 min="1"
                                 value={newReturn.quantity}
                                 onChange={(e) => setNewReturn({ ...newReturn, quantity: Number(e.target.value) })}
@@ -677,21 +677,21 @@ export default function InventoryPage() {
 
                     <div className="space-y-2">
                         <label className="text-sm text-gray-400">ملاحظات</label>
-                        <textarea 
+                        <textarea
                             rows={3}
-                            placeholder="سبب الاسترجاع أو تفاصيل إضافية..." 
+                            placeholder="سبب الاسترجاع أو تفاصيل إضافية..."
                             className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none resize-none"
                         />
                     </div>
 
                     <div className="flex justify-end gap-2 pt-4">
-                        <button 
+                        <button
                             onClick={() => setIsAddReturnModalOpen(false)}
                             className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
                         >
                             إلغاء
                         </button>
-                        <button 
+                        <button
                             onClick={async () => {
                                 if (!newReturn.orderId || !newReturn.productId) {
                                     alert("يرجى إدخال رقم الطلب واختيار المنتج");

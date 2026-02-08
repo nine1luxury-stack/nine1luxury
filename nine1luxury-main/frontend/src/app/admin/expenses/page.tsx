@@ -10,11 +10,11 @@ export default function ExpensesPage() {
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [stats, setStats] = useState<ExpenseStats | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState({ 
-        amount: '', 
-        category: 'OTHER', 
-        description: '', 
-        date: new Date().toISOString().slice(0, 10) 
+    const [formData, setFormData] = useState({
+        amount: '',
+        category: 'OTHER',
+        description: '',
+        date: new Date().toISOString().slice(0, 10)
     });
     const [editingId, setEditingId] = useState<string | null>(null);
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -77,13 +77,13 @@ export default function ExpensesPage() {
 
     const handleDelete = async (id: string) => {
         if (!confirm('هل أنت متأكد من حذف هذا المصروف؟')) return;
-        
+
         const previousExpenses = [...expenses];
         const previousStats = stats;
 
         // Optimistic delete
         setExpenses(prev => prev.filter(e => e.id !== id));
-        
+
         try {
             await expensesApi.delete(id);
             loadData(); // Sync stats & list
@@ -207,7 +207,7 @@ export default function ExpensesPage() {
                                     <tr key={expense.id} className="group hover:bg-white/[0.01] transition-all">
                                         <td className="px-6 py-5">
                                             <span className="text-sm text-white font-bold block">{expense.description || 'بدون وصف'}</span>
-                                            <span className="text-[10px] text-gray-600 uppercase tracking-widest mt-0.5">ID: {expense.id.slice(-6)}</span>
+                                            <span className="text-[10px] text-gray-600 uppercase tracking-widest mt-0.5">ID: {String(expense.id)}</span>
                                         </td>
                                         <td className="px-6 py-5">
                                             <span className="text-xs px-2 py-1 bg-white/5 border border-white/10 rounded-md text-gray-400">
@@ -234,9 +234,8 @@ export default function ExpensesPage() {
                                             </button>
 
                                             {activeMenu === expense.id && (
-                                                <div className={`absolute left-6 w-40 bg-surface-dark border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden ${
-                                                    index >= expenses.length - 2 && expenses.length > 2 ? "bottom-full mb-2" : "top-full mt-1"
-                                                }`}>
+                                                <div className={`absolute left-6 w-40 bg-surface-dark border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden ${index >= expenses.length - 2 && expenses.length > 2 ? "bottom-full mb-2" : "top-full mt-1"
+                                                    }`}>
                                                     <button
                                                         onClick={() => handleEdit(expense)}
                                                         className="w-full text-right px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2"

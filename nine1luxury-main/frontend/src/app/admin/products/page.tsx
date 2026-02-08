@@ -343,7 +343,7 @@ export default function AdminProductsPage() {
                                                     </div>
                                                     <div>
                                                         <p className="text-sm font-bold text-white group-hover:text-gold-300 transition-colors">{product.name}</p>
-                                                        <p className="text-[10px] text-gray-500 mt-0.5 tracking-widest uppercase">ID: {product.id.slice(0, 8)}</p>
+                                                        <p className="text-[10px] text-gray-500 mt-0.5 tracking-widest uppercase">ID: {String(product.id)}</p>
                                                     </div>
                                                 </div>
                                             </td>

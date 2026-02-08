@@ -302,7 +302,7 @@ export default function AdminOrdersPage() {
                                     <tr key={order.id} className="group hover:bg-white/[0.01] transition-all cursor-pointer" onClick={() => handleViewOrder(order)}>
                                         <td className="px-6 py-6" onClick={(e) => e.stopPropagation()}>
                                             <span className="text-xs text-gray-500 font-mono group-hover:text-gold-500/80 transition-colors uppercase">
-                                                {order.id.slice(-8)}
+                                                {String(order.id)}
                                             </span>
                                         </td>
                                         <td className="px-6 py-6 font-playfair transition-all">
@@ -388,7 +388,7 @@ export default function AdminOrdersPage() {
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                title={`تفاصيل الطلب #${selectedOrder?.id?.slice(0, 8)}`}
+                title={`تفاصيل الطلب #${selectedOrder?.id}`}
             >
                 {selectedOrder && (
                     <div className="space-y-8" dir="rtl">
