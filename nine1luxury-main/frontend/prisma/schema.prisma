@@ -3,25 +3,25 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model notification {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int      @id @default(autoincrement())
   title       String
-  description String
+  description String   @db.Text
   type        String
   read        Boolean  @default(false)
   createdAt   DateTime @default(now())
 }
 
 model order {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String?     @db.ObjectId
+  id            Int         @id @default(autoincrement())
+  userId        Int?
   guestName     String?
   guestPhone    String?
-  guestAddress  String?
+  guestAddress  String?     @db.Text
   guestCity     String?
   totalAmount   Float
   shippingCost  Float       @default(0)
@@ -37,32 +37,30 @@ model order {
 }
 
 model orderitem {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  orderId   String  @db.ObjectId
-  productId String  @db.ObjectId
-  variantId String? @db.ObjectId // Optional reference
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  variantId Int?
   quantity  Int
   price     Float
   order     order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  // Note: Relations to product/variant are loose in this schema style or need specific model definition. 
-  // keeping purely data fields for product/variant reference as typically done if not enforcing strict Foreign Key constraints in Mongo or if Product can be deleted.
-  // Ideally we would add @relation but for migration stability I'll keep them as IDs unless strictly needed.
-  // Actually, to be safe with existing code that might assume relation existence, I should check if we navigate `orderitem.product`.
-  // The 'include' in previous calls used `items: true` on order, so we need order->items.
+
+  @@index([orderId])
+  @@index([productId])
 }
 
 model product {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  id             Int              @id @default(autoincrement())
   name           String
   model          String?
-  description    String
+  description    String           @db.Text
   price          Float
   discount       Float?
   category       String
   featured       Boolean          @default(false)
   isActive       Boolean          @default(true)
   reorderPoint   Int              @default(10)
-  sizeChartImage String?
+  sizeChartImage String?          @db.Text
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   images         productimage[]
@@ -70,16 +68,18 @@ model product {
 }
 
 model productimage {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  productId String  @db.ObjectId
-  url       String
+  id        Int     @id @default(autoincrement())
+  productId Int
+  url       String  @db.Text
   color     String?
   product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
 }
 
 model productvariant {
-  id             String  @id @default(auto()) @map("_id") @db.ObjectId
-  productId      String  @db.ObjectId
+  id             Int     @id @default(autoincrement())
+  productId      Int
   color          String
   colorHex       String?
   size           String
@@ -89,10 +89,12 @@ model productvariant {
   repackageStock Int     @default(0)
   sku            String?
   product        product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
 }
 
 model user {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
   name      String
@@ -103,24 +105,27 @@ model user {
 }
 
 model returnrequest {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  orderId     String   @db.ObjectId
-  productId   String   @db.ObjectId
-  variantId   String?  @db.ObjectId
-  quantity    Int
-  type        String   // VALID, DAMAGED, WASH, REPACKAGE
-  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
-  notes       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  variantId Int?
+  quantity  Int
+  type      String
+  status    String   @default("PENDING")
+  notes     String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([productId])
 }
 
 model supplier {
-  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  id                   Int      @id @default(autoincrement())
   name                 String
   phone                String?
   email                String?
-  description          String?
+  description          String?  @db.Text
   manualTotalPurchases Float    @default(0)
   manualTotalPaid      Float    @default(0)
   createdAt            DateTime @default(now())
@@ -128,17 +133,17 @@ model supplier {
 }
 
 model expense {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int      @id @default(autoincrement())
   amount      Float
-  category    String   // PURCHASE, SHIPPING, ADS, SALARY, OTHER
-  description String?
+  category    String
+  description String?  @db.Text
   date        DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model customer {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            Int      @id @default(autoincrement())
   name          String
   phone         String   @unique
   totalOrders   Int      @default(0)
@@ -147,17 +152,18 @@ model customer {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
+
 model booking {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             Int      @id @default(autoincrement())
   name           String
   phone          String
   city           String?
   shippingAmount Float    @default(0)
   productModel   String?
   productSize    String?
-  type           String   @default("RESERVATION") // FITTING, CONSULTATION, RESERVATION
-  status         String   @default("PENDING") // PENDING, CONFIRMED, CANCELLED
-  notes          String?
+  type           String   @default("RESERVATION")
+  status         String   @default("PENDING")
+  notes          String?  @db.Text
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
