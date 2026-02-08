@@ -8,7 +8,7 @@ import {
     Edit2,
     Trash2,
     Eye,
-
+    Upload,
     ChevronRight,
     ChevronLeft,
     X
@@ -120,7 +120,7 @@ export default function AdminProductsPage() {
 
             // Pre-fill gallery from existing product images
             const initialGallery = product.images?.map((img: any) => img.url).filter((url: string) => url) || [];
-            
+
             // If we have a main image but gallery is empty (legacy data), add it
             if (mainImage && initialGallery.length === 0) {
                 initialGallery.push(mainImage);
