@@ -12,8 +12,8 @@ export async function GET(
         const product = await prisma.product.findUnique({
             where: { id },
             include: {
-                productimage: true,
-                productvariant: true,
+                images: true,
+                variants: true,
             },
         });
 
@@ -21,13 +21,7 @@ export async function GET(
             return NextResponse.json({ error: 'Product not found' }, { status: 404 });
         }
 
-        const formattedProduct = {
-            ...product,
-            images: (product as any).productimage,
-            variants: (product as any).productvariant,
-        };
-
-        return NextResponse.json(formattedProduct);
+        return NextResponse.json(product);
     } catch (error: any) {
         console.error('Error fetching product:', error);
         return NextResponse.json({ error: 'Failed to fetch product', details: error.message }, { status: 500 });
@@ -118,17 +112,11 @@ export async function PATCH(
 
             return tx.product.findUnique({
                 where: { id },
-                include: { productimage: true, productvariant: true }
+                include: { images: true, variants: true }
             });
         });
 
-        const formattedProduct = {
-            ...freshProduct,
-            images: (freshProduct as any).productimage,
-            variants: (freshProduct as any).productvariant,
-        };
-
-        return NextResponse.json(formattedProduct);
+        return NextResponse.json(freshProduct);
     } catch (error: any) {
         console.error('Error updating product:', error);
         return NextResponse.json({ error: 'Failed to update product', details: error.message }, { status: 500 });
