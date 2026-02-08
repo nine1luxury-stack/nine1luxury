@@ -17,8 +17,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@/components/ui/Modal";
 import { useProducts } from "@/context/ProductContext";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { createArabicPDF, reshapeArabic, autoTable } from "@/lib/pdf-utils";
 
 interface Booking {
     id: string;
@@ -153,31 +152,29 @@ export default function AdminBookingsPage() {
     };
 
     const downloadPDF = () => {
-        const doc = new jsPDF('p', 'mm', 'a4');
-
-        // Add title
-        doc.setFontSize(20);
-        doc.text("Bookings Report", 105, 15, { align: "center" });
+        const doc = createArabicPDF();
+        doc.setFontSize(22);
+        doc.text(reshapeArabic("تقرير طلبات الحجز"), 105, 15, { align: "center" });
         doc.setFontSize(10);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+        doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
         const tableData = filteredBookings.map(b => [
-            b.name,
+            reshapeArabic(b.name),
             b.phone,
-            b.productModel || "-",
+            reshapeArabic(b.productModel || "-"),
             b.productSize || "-",
-            b.city || "-",
-            `${b.shippingAmount} EGP`,
-            getStatusLabel(b.status)
+            reshapeArabic(b.city || "-"),
+            `${b.shippingAmount} ج.م`,
+            reshapeArabic(getStatusLabel(b.status))
         ]);
 
         autoTable(doc, {
-            head: [['Customer', 'Phone', 'Model', 'Size', 'City', 'Shipping', 'Status']],
+            head: [[reshapeArabic('العميل'), reshapeArabic('الهاتف'), reshapeArabic('الموديل'), reshapeArabic('المقاس'), reshapeArabic('المدينة'), reshapeArabic('الشحن'), reshapeArabic('الحالة')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57] }, // gold-500 equivalent
-            styles: { font: "helvetica", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
+            styles: { font: "Amiri", halign: 'center' },
         });
 
         doc.save(`bookings-${new Date().getTime()}.pdf`);

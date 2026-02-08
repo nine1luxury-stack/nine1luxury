@@ -5,8 +5,7 @@ import { Truck, Plus, MoreVertical, Phone, Edit, Trash2 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { suppliersApi, Supplier, SupplierStat } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { createArabicPDF, reshapeArabic, autoTable } from "@/lib/pdf-utils";
 import { Download } from "lucide-react";
 
 
@@ -103,26 +102,26 @@ export default function SuppliersPage() {
     };
 
     const downloadPDF = () => {
-        const doc = new jsPDF('p', 'mm', 'a4');
-        doc.setFontSize(20);
-        doc.text("Suppliers Report", 105, 15, { align: "center" });
+        const doc = createArabicPDF();
+        doc.setFontSize(22);
+        doc.text(reshapeArabic("تقرير الموردين"), 105, 15, { align: "center" });
         doc.setFontSize(10);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+        doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
         const tableData = suppliers.map(s => [
-            s.name,
+            reshapeArabic(s.name),
             s.phone || "-",
-            s.description || "-",
-            new Date(s.createdAt).toLocaleDateString()
+            reshapeArabic(s.description || "-"),
+            new Date(s.createdAt).toLocaleDateString('ar-EG')
         ]);
 
         autoTable(doc, {
-            head: [['Supplier', 'Phone', 'Description', 'Joined Date']],
+            head: [[reshapeArabic('المورد'), reshapeArabic('الهاتف'), reshapeArabic('الوصف'), reshapeArabic('تاريخ الانضمام')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57] },
-            styles: { font: "helvetica", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
+            styles: { font: "Amiri", halign: 'center' },
         });
 
         doc.save(`suppliers-${new Date().getTime()}.pdf`);

@@ -18,8 +18,7 @@ import { formatPrice, cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/Modal";
 import { ordersApi, Order, OrderItem } from "@/lib/api";
 import { CreateOrderModal } from "@/components/admin/orders/CreateOrderModal";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { createArabicPDF, reshapeArabic, autoTable } from "@/lib/pdf-utils";
 
 
 
@@ -113,28 +112,28 @@ export default function AdminOrdersPage() {
     };
 
     const handleDownloadPDF = () => {
-        const doc = new jsPDF('p', 'mm', 'a4');
-        doc.setFontSize(20);
-        doc.text("Orders Report", 105, 15, { align: "center" });
+        const doc = createArabicPDF();
+        doc.setFontSize(22);
+        doc.text(reshapeArabic("تقرير الطلبات"), 105, 15, { align: "center" });
         doc.setFontSize(10);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+        doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
         const tableData = filteredOrders.map(o => [
-            String(o.id),
-            o.guestName || "N/A",
+            String(o.id).substring(0, 8),
+            reshapeArabic(o.guestName || "غير مسجل"),
             o.guestPhone || "N/A",
-            `${o.totalAmount} EGP`,
-            o.status,
-            new Date(o.createdAt).toLocaleDateString()
+            `${o.totalAmount} ج.م`,
+            reshapeArabic(o.status === 'PENDING' ? 'معلق' : o.status === 'CONFIRMED' ? 'مؤكد' : o.status === 'SHIPPED' ? 'مشحون' : o.status === 'DELIVERED' ? 'تم التوصيل' : 'ملغي'),
+            new Date(o.createdAt).toLocaleDateString('ar-EG')
         ]);
 
         autoTable(doc, {
-            head: [['ID', 'Customer', 'Phone', 'Total', 'Status', 'Date']],
+            head: [[reshapeArabic('المعرف'), reshapeArabic('العميل'), reshapeArabic('الهاتف'), reshapeArabic('الإجمالي'), reshapeArabic('الحالة'), reshapeArabic('التاريخ')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57] },
-            styles: { font: "helvetica", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
+            styles: { font: "Amiri", halign: 'center' },
         });
 
         doc.save(`orders-${new Date().getTime()}.pdf`);

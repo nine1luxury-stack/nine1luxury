@@ -6,8 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import { formatPrice } from "@/lib/utils";
 import { Customer } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { createArabicPDF, reshapeArabic, autoTable } from "@/lib/pdf-utils";
 import { Download } from "lucide-react";
 
 export default function AdminCustomersPage() {
@@ -101,26 +100,26 @@ export default function AdminCustomersPage() {
     };
 
     const downloadPDF = () => {
-        const doc = new jsPDF('p', 'mm', 'a4');
-        doc.setFontSize(20);
-        doc.text("Customers Report", 105, 15, { align: "center" });
+        const doc = createArabicPDF();
+        doc.setFontSize(22);
+        doc.text(reshapeArabic("تقرير العملاء"), 105, 15, { align: "center" });
         doc.setFontSize(10);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+        doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
         const tableData = filteredCustomers.map(c => [
-            c.name,
+            reshapeArabic(c.name),
             c.phone || "-",
             c.totalOrders,
-            `${c.totalSpent} EGP`
+            `${c.totalSpent} ج.م`
         ]);
 
         autoTable(doc, {
-            head: [['Customer', 'Phone', 'Orders', 'Total Spent']],
+            head: [[reshapeArabic('العميل'), reshapeArabic('الهاتف'), reshapeArabic('الطلبات'), reshapeArabic('إجمالي المشتريات')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57] },
-            styles: { font: "helvetica", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
+            styles: { font: "Amiri", halign: 'center' },
         });
 
         doc.save(`customers-${new Date().getTime()}.pdf`);

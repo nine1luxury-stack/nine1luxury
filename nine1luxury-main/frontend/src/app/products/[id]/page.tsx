@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { useProducts } from "@/context/ProductContext";
 import { useCart } from "@/context/CartContext";
 import { formatPrice, cn } from "@/lib/utils";
+import { Product, ProductVariant, ProductImage } from "@/lib/api";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -21,11 +22,35 @@ export default function ProductDetailsPage() {
     const { id } = useParams();
     const router = useRouter();
     const { addToCart } = useCart();
-    const { products, loading } = useProducts();
+    const { products, loading: contextLoading } = useProducts();
 
-    const product = useMemo(() =>
-        products.find(p => String(p.id) === String(id)),
-        [id, products]);
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Try to find in context first
+        const foundProduct = products.find(p => String(p.id) === String(id));
+        if (foundProduct) {
+            setProduct(foundProduct);
+            setLoading(false);
+        } else if (!contextLoading) {
+            // If not in context and context finished loading, try fetching directly
+            const fetchProduct = async () => {
+                try {
+                    const response = await fetch(`/api/products/${id}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setProduct(data);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch product", error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchProduct();
+        }
+    }, [id, products, contextLoading]);
 
     const [activeImage, setActiveImage] = useState(0);
     const [selectedColor, setSelectedColor] = useState("");
@@ -38,24 +63,22 @@ export default function ProductDetailsPage() {
     // Extract unique colors from variants
     const availableColors = useMemo(() => {
         if (!product?.variants) return [];
-        const uniqueColors = Array.from(new Set(product.variants.map(v => v.color)));
+        const variants = product.variants as ProductVariant[];
+        const uniqueColors = Array.from(new Set(variants.map((v: ProductVariant) => v.color)));
         return uniqueColors.map(color => ({
             name: color,
-            // If color is a valid hex, use it. Else check if it's a known legacy name or fallback to black/gray.
-            // Since we are migrating, new ones are Hex. Old ones are names.
-            // Basic check: starts with #
-            // Use colorHex if available, otherwise check if name is hex, otherwise fallback
-            hex: (product.variants.find(v => v.color === color)?.colorHex) || (color.startsWith('#') ? color : '#808080')
+            hex: (variants.find((v: ProductVariant) => v.color === color)?.colorHex) || (color.startsWith('#') ? color : '#808080')
         }));
     }, [product]);
 
     // Extract sizes for selected color
     const availableSizes = useMemo(() => {
         if (!product?.variants || !selectedColor) return [];
+        const variants = product.variants as ProductVariant[];
         return Array.from(new Set(
-            product.variants
-                .filter(v => v.color === selectedColor)
-                .map(v => v.size)
+            variants
+                .filter((v: ProductVariant) => v.color === selectedColor)
+                .map((v: ProductVariant) => v.size)
         ));
     }, [product, selectedColor]);
 
@@ -79,7 +102,8 @@ export default function ProductDetailsPage() {
     // Sync image with selected color
     useEffect(() => {
         if (selectedColor && product?.images) {
-            const imageIndex = product.images.findIndex(img =>
+            const images = product.images as ProductImage[];
+            const imageIndex = images.findIndex((img: ProductImage) =>
                 img.color === selectedColor ||
                 img.color?.trim() === selectedColor.trim()
             );
@@ -152,7 +176,8 @@ export default function ProductDetailsPage() {
     const isSoldOut = useMemo(() => {
         if (!product) return true;
         if (!selectedColor || !selectedSize) return false;
-        const variant = product.variants?.find(v => v.color === selectedColor && v.size === selectedSize);
+        const variants = product.variants as ProductVariant[];
+        const variant = variants?.find((v: ProductVariant) => v.color === selectedColor && v.size === selectedSize);
         return variant ? variant.stock <= 0 : true;
     }, [product, selectedColor, selectedSize]);
 
@@ -205,8 +230,8 @@ export default function ProductDetailsPage() {
 
     const handleBooking = () => {
         if (!selectedSize || !selectedColor || isSoldOut) return;
-
-        const selectedVariant = product.variants?.find(v => v.color === selectedColor && v.size === selectedSize);
+        const variants = product!.variants as ProductVariant[];
+        const selectedVariant = variants?.find((v: ProductVariant) => v.color === selectedColor && v.size === selectedSize);
 
         addToCart({
             id: product.id,
@@ -280,9 +305,8 @@ export default function ProductDetailsPage() {
                             )}
                         </div>
 
-                        {/* Thumbnails */}
                         <div className="grid grid-cols-4 gap-4">
-                            {product.images?.map((img, idx) => (
+                            {(product.images as ProductImage[])?.map((img: ProductImage, idx: number) => (
                                 <button
                                     key={idx}
                                     onClick={() => setActiveImage(idx)}
@@ -513,9 +537,8 @@ export default function ProductDetailsPage() {
                             </>
                         )}
 
-                        {/* Thumbnails */}
                         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 max-w-full overflow-x-auto px-4">
-                            {product.images?.map((img, idx) => (
+                            {(product.images as ProductImage[])?.map((img: ProductImage, idx: number) => (
                                 <button
                                     key={idx}
                                     onClick={(e) => {

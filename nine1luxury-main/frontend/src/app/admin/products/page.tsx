@@ -16,10 +16,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useProducts } from "@/context/ProductContext";
-import { formatPrice, cn } from "@/lib/utils";
 import { Product, ProductVariant } from "@/lib/api";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { createArabicPDF, reshapeArabic, autoTable } from "@/lib/pdf-utils";
 
 export default function AdminProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -256,28 +254,28 @@ export default function AdminProductsPage() {
     };
 
     const downloadPDF = () => {
-        const doc = new jsPDF('p', 'mm', 'a4');
-        doc.setFontSize(20);
-        doc.text("Products Report", 105, 15, { align: "center" });
+        const doc = createArabicPDF();
+        doc.setFontSize(22);
+        doc.text(reshapeArabic("تقرير المنتجات"), 105, 15, { align: "center" });
         doc.setFontSize(10);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+        doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
         const tableData = filteredProducts.map(p => [
-            p.name,
+            reshapeArabic(p.name),
             p.model || "-",
-            p.category,
-            `${p.price} EGP`,
+            reshapeArabic(p.category),
+            `${p.price} ج.م`,
             p.variants?.reduce((acc: number, v: ProductVariant) => acc + (v.stock || 0), 0) || 0,
-            p.isActive !== false ? "Active" : "Inactive"
+            reshapeArabic(p.isActive !== false ? "نشط" : "غير نشط")
         ]);
 
         autoTable(doc, {
-            head: [['Product', 'Model', 'Category', 'Price', 'Stock', 'Status']],
+            head: [[reshapeArabic('المنتج'), reshapeArabic('الموديل'), reshapeArabic('القسم'), reshapeArabic('السعر'), reshapeArabic('المخزون'), reshapeArabic('الحالة')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57] },
-            styles: { font: "helvetica", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
+            styles: { font: "Amiri", halign: 'center' },
         });
 
         doc.save(`products-${new Date().getTime()}.pdf`);

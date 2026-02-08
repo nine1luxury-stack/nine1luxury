@@ -5,8 +5,7 @@ import { Plus, Calendar, TrendingDown, MoreVertical, Edit, Trash2 } from "lucide
 import { useState, useEffect, useCallback } from "react";
 import { expensesApi, Expense, ExpenseStats } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { createArabicPDF, reshapeArabic, autoTable } from "@/lib/pdf-utils";
 import { Download } from "lucide-react";
 
 export default function ExpensesPage() {
@@ -117,27 +116,26 @@ export default function ExpensesPage() {
     };
 
     const downloadPDF = () => {
-        const doc = new jsPDF('p', 'mm', 'a4');
-
-        doc.setFontSize(20);
-        doc.text("Expenses Report", 105, 15, { align: "center" });
+        const doc = createArabicPDF();
+        doc.setFontSize(22);
+        doc.text(reshapeArabic("تقرير المصروفات"), 105, 15, { align: "center" });
         doc.setFontSize(10);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+        doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
         const tableData = expenses.map(e => [
-            e.description || "No description",
-            getCategoryName(e.category),
-            `${Number(e.amount).toLocaleString()} EGP`,
-            new Date(e.date).toLocaleDateString()
+            reshapeArabic(e.description || "بدون وصف"),
+            reshapeArabic(getCategoryName(e.category)),
+            `${Number(e.amount).toLocaleString()} ج.م`,
+            new Date(e.date).toLocaleDateString('ar-EG')
         ]);
 
         autoTable(doc, {
-            head: [['Description', 'Category', 'Amount', 'Date']],
+            head: [[reshapeArabic('الوصف'), reshapeArabic('الفئة'), reshapeArabic('المبلغ'), reshapeArabic('التاريخ')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57] },
-            styles: { font: "helvetica", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
+            styles: { font: "Amiri", halign: 'center' },
         });
 
         doc.save(`expenses-${new Date().getTime()}.pdf`);

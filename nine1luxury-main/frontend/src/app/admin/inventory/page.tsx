@@ -7,8 +7,7 @@ import { productsApi, Product, ProductVariant, ReturnRequest } from "@/lib/api";
 import Image from "next/image";
 import { Modal } from "@/components/ui/Modal";
 import { cn } from "@/lib/utils";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { createArabicPDF, reshapeArabic, autoTable } from "@/lib/pdf-utils";
 
 
 
@@ -81,7 +80,7 @@ export default function InventoryPage() {
         }
     }, [activeTab, loadInventory, loadReturns]);
 
-    const handleUpdateReturnStatus = async (id: string, status: string) => {
+    const handleUpdateReturnStatus = async (id: string, status: ReturnRequest['status']) => {
         const previousReturns = [...returns];
         // Optimistic update
         setReturns(prev => prev.map(r => r.id === id ? { ...r, status } : r));
@@ -174,7 +173,7 @@ export default function InventoryPage() {
             }
 
             console.log('Sending update payload:', JSON.stringify(payload, null, 2));
-            await productsApi.update(selectedProduct.id, payload);
+            await productsApi.update(selectedProduct.id, payload as any);
 
             setIsEditModalOpen(false);
             loadInventory();
@@ -193,54 +192,54 @@ export default function InventoryPage() {
     };
 
     const downloadInventoryPDF = () => {
-        const doc = new jsPDF('p', 'mm', 'a4');
-        doc.setFontSize(20);
-        doc.text("Inventory Report", 105, 15, { align: "center" });
+        const doc = createArabicPDF();
+        doc.setFontSize(22);
+        doc.text(reshapeArabic("تقرير المخزون"), 105, 15, { align: "center" });
         doc.setFontSize(10);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+        doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
         const tableData = filteredProducts.map(p => [
-            p.name,
-            p.category,
+            reshapeArabic(p.name),
+            reshapeArabic(p.category || ""),
             getStockLevel(p),
             p.reorderPoint || 10,
-            getStockLevel(p) <= (p.reorderPoint || 10) ? "Low Stock" : "OK"
+            reshapeArabic(getStockLevel(p) <= (p.reorderPoint || 10) ? "مطلوب شراء" : "متوفر")
         ]);
 
         autoTable(doc, {
-            head: [['Product', 'Category', 'Stock', 'Reorder Point', 'Status']],
+            head: [[reshapeArabic('المنتج'), reshapeArabic('الفئة'), reshapeArabic('المخزون'), reshapeArabic('حد الطلب'), reshapeArabic('الحالة')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57] },
-            styles: { font: "helvetica", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
+            styles: { font: "Amiri", halign: 'center' },
         });
 
         doc.save(`inventory-${new Date().getTime()}.pdf`);
     };
 
     const downloadReturnsPDF = () => {
-        const doc = new jsPDF('p', 'mm', 'a4');
-        doc.setFontSize(20);
-        doc.text("Returns Report", 105, 15, { align: "center" });
+        const doc = createArabicPDF();
+        doc.setFontSize(22);
+        doc.text(reshapeArabic("تقرير المرتجعات"), 105, 15, { align: "center" });
         doc.setFontSize(10);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+        doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
         const tableData = returns.map(r => [
-            String(r.id),
-            r.orderItem?.product?.name || "Unknown",
-            r.type,
-            r.status,
+            String(r.id).substring(0, 8),
+            reshapeArabic(r.orderItem?.product?.name || "غير معروف"),
+            reshapeArabic(r.type === 'VALID' ? 'صالح' : r.type === 'DAMAGED' ? 'تالف' : 'أخرى'),
+            reshapeArabic(r.status === 'APPROVED' ? 'مكتمل' : 'معلق'),
             r.quantity
         ]);
 
         autoTable(doc, {
-            head: [['ID', 'Product', 'Type', 'Status', 'Qty']],
+            head: [[reshapeArabic('المعرف'), reshapeArabic('المنتج'), reshapeArabic('النوع'), reshapeArabic('الحالة'), reshapeArabic('الكمية')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57] },
-            styles: { font: "helvetica", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
+            styles: { font: "Amiri", halign: 'center' },
         });
 
         doc.save(`returns-${new Date().getTime()}.pdf`);
