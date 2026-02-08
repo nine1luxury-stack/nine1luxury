@@ -172,7 +172,7 @@ export default function AdminOrdersPage() {
 
     // Filter orders based on search term (searching by ID, name, or phone)
     const filteredOrders = orders.filter(order =>
-        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        String(order.id).toLowerCase().includes(searchTerm.toLowerCase()) ||
         (order.guestName && order.guestName.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (order.guestPhone && order.guestPhone.includes(searchTerm))
     );
