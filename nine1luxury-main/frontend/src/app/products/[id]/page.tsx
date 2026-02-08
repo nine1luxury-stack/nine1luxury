@@ -21,10 +21,10 @@ export default function ProductDetailsPage() {
     const { id } = useParams();
     const router = useRouter();
     const { addToCart } = useCart();
-    const { products } = useProducts();
+    const { products, loading } = useProducts();
 
     const product = useMemo(() =>
-        products.find(p => p.id === id),
+        products.find(p => String(p.id) === String(id)),
         [id, products]);
 
     const [activeImage, setActiveImage] = useState(0);
@@ -156,16 +156,37 @@ export default function ProductDetailsPage() {
         return variant ? variant.stock <= 0 : true;
     }, [product, selectedColor, selectedSize]);
 
-    if (!product) {
+    if (loading) {
         return (
             <main className="min-h-screen bg-rich-black">
                 <Header />
                 <div className="min-h-screen bg-rich-black flex items-center justify-center">
-                    <div className="text-center space-y-4">
-                        <h2 className="text-2xl text-white font-bold">المنتج غير موجود</h2>
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="w-12 h-12 border-4 border-gold-500/20 border-t-gold-500 rounded-full animate-spin" />
+                        <p className="text-gray-400 font-medium">جاري تحميل بيانات المنتج...</p>
+                    </div>
+                </div>
+                <Footer />
+            </main>
+        );
+    }
+
+    if (!product) {
+        return (
+            <main className="min-h-screen bg-rich-black">
+                <Header />
+                <div className="min-h-[70vh] flex items-center justify-center">
+                    <div className="text-center space-y-6 px-4">
+                        <div className="w-20 h-20 bg-gold-500/10 rounded-full flex items-center justify-center mx-auto">
+                            <X className="w-10 h-10 text-gold-500" />
+                        </div>
+                        <div className="space-y-2">
+                            <h2 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider">المنتج غير موجود</h2>
+                            <p className="text-gray-500 max-w-xs mx-auto">يبدو أن المنتج الذي تبحث عنه غير متوفر حالياً أو تم حذفه.</p>
+                        </div>
                         <button
                             onClick={() => router.push("/products")}
-                            className="text-gold-300 underline"
+                            className="bg-gold-500 text-rich-black px-8 py-3 rounded-full font-bold hover:bg-gold-400 transition-all shadow-lg shadow-gold-500/10"
                         >
                             العودة للمتجر
                         </button>

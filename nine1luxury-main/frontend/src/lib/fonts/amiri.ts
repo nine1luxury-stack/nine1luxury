@@ -1,0 +1,1 @@
+export const amiriFont = "  + (Get-Content amiri_base64.txt -Raw).Trim() +  \;

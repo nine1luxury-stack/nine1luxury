@@ -6,6 +6,9 @@ import { useState, useEffect, useCallback } from "react";
 import { formatPrice } from "@/lib/utils";
 import { Customer } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { Download } from "lucide-react";
 
 export default function AdminCustomersPage() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -43,7 +46,7 @@ export default function AdminCustomersPage() {
         try {
             const method = editingId ? 'PUT' : 'POST';
             const url = editingId ? `/api/customers/${editingId}` : '/api/customers';
-            
+
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
@@ -69,12 +72,8 @@ export default function AdminCustomersPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (id.startsWith('guest-') || id.startsWith('user-')) {
-            alert("لا يمكن حذف العملاء المسجلين تلقائياً من الطلبات");
-            return;
-        }
         if (!confirm('هل أنت متأكد من حذف هذا العميل؟')) return;
-        
+
         try {
             const res = await fetch(`/api/customers/${id}`, { method: 'DELETE' });
             if (res.ok) {
@@ -89,13 +88,8 @@ export default function AdminCustomersPage() {
     };
 
     const handleEdit = (customer: Customer) => {
-        if (customer.id.startsWith('guest-') || customer.id.startsWith('user-')) {
-            alert("لا يمكن تعديل بيانات العملاء المسجلين تلقائياً");
-            setActiveMenu(null);
-            return;
-        }
         setFormData({ name: customer.name, phone: customer.phone || '' });
-        setEditingId(customer.id);
+        setEditingId(String(customer.id));
         setIsModalOpen(true);
         setActiveMenu(null);
     };
@@ -104,6 +98,32 @@ export default function AdminCustomersPage() {
         setFormData({ name: '', phone: '' });
         setEditingId(null);
         setIsModalOpen(true);
+    };
+
+    const downloadPDF = () => {
+        const doc = new jsPDF('p', 'mm', 'a4');
+        doc.setFontSize(20);
+        doc.text("Customers Report", 105, 15, { align: "center" });
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+
+        const tableData = filteredCustomers.map(c => [
+            c.name,
+            c.phone || "-",
+            c.totalOrders,
+            `${c.totalSpent} EGP`
+        ]);
+
+        autoTable(doc, {
+            head: [['Customer', 'Phone', 'Orders', 'Total Spent']],
+            body: tableData,
+            startY: 30,
+            theme: 'grid',
+            headStyles: { fillColor: [174, 132, 57] },
+            styles: { font: "helvetica", halign: 'center' },
+        });
+
+        doc.save(`customers-${new Date().getTime()}.pdf`);
     };
 
     const filteredCustomers = customers.filter(customer =>
@@ -119,13 +139,22 @@ export default function AdminCustomersPage() {
                     <p className="text-gray-400 text-sm mt-1">عرض قائمة العملاء وإحصائيات طلباتهم.</p>
                 </div>
 
-                <button
-                    onClick={openAddModal}
-                    className="bg-gold-500 text-rich-black px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-gold-400 transition-all shadow-lg shadow-gold-500/20 active:scale-95"
-                >
-                    <Plus className="w-5 h-5" />
-                    <span>إضافة عميل</span>
-                </button>
+                <div className="flex gap-4">
+                    <button
+                        onClick={downloadPDF}
+                        className="bg-surface-dark text-white border border-white/5 px-6 py-2.5 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-white/5 transition-all shadow-lg"
+                    >
+                        <Download className="w-4 h-4 text-gold-500" />
+                        <span>تحميل PDF</span>
+                    </button>
+                    <button
+                        onClick={openAddModal}
+                        className="bg-gold-500 text-rich-black px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-gold-400 transition-all shadow-lg shadow-gold-500/20 active:scale-95"
+                    >
+                        <Plus className="w-5 h-5" />
+                        <span>إضافة عميل</span>
+                    </button>
+                </div>
             </div>
 
             <motion.div
@@ -182,7 +211,7 @@ export default function AdminCustomersPage() {
                                                         {customer.name}
                                                     </span>
                                                     <span className="text-[10px] text-gray-600 font-mono uppercase tracking-widest mt-0.5">
-                                                        {customer.id.startsWith('guest-') ? 'زائر' : customer.id.startsWith('user-') ? 'مستخدم' : 'يدوي'}
+                                                        ID: {customer.id}
                                                     </span>
                                                 </div>
                                             </div>
@@ -205,7 +234,7 @@ export default function AdminCustomersPage() {
                                         <td className="px-6 py-6 text-right">
                                             <div className="flex flex-col">
                                                 <span className="text-gray-400 text-sm font-medium">
-                                                    {customer.lastOrderDate 
+                                                    {customer.lastOrderDate
                                                         ? new Date(customer.lastOrderDate).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' })
                                                         : 'لا يوجد'}
                                                 </span>
@@ -214,16 +243,15 @@ export default function AdminCustomersPage() {
                                         </td>
                                         <td className="px-6 py-6 relative">
                                             <button
-                                                onClick={() => setActiveMenu(activeMenu === customer.id ? null : customer.id)}
+                                                onClick={() => setActiveMenu(activeMenu === String(customer.id) ? null : String(customer.id))}
                                                 className="text-gray-500 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5"
                                             >
                                                 <MoreVertical className="w-4 h-4" />
                                             </button>
 
-                                            {activeMenu === customer.id && (
-                                                <div className={`absolute left-6 w-40 bg-surface-dark border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden ${
-                                                    index >= filteredCustomers.length - 2 && filteredCustomers.length > 2 ? "bottom-full mb-2" : "top-full mt-1"
-                                                }`}>
+                                            {activeMenu === String(customer.id) && (
+                                                <div className={`absolute left-6 w-40 bg-surface-dark border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden ${index >= filteredCustomers.length - 2 && filteredCustomers.length > 2 ? "bottom-full mb-2" : "top-full mt-1"
+                                                    }`}>
                                                     <button
                                                         onClick={() => handleEdit(customer)}
                                                         className="w-full text-right px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2"
@@ -234,7 +262,7 @@ export default function AdminCustomersPage() {
                                                     <button
                                                         onClick={() => {
                                                             setActiveMenu(null);
-                                                            handleDelete(customer.id);
+                                                            handleDelete(String(customer.id));
                                                         }}
                                                         className="w-full text-right px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors flex items-center gap-2"
                                                     >

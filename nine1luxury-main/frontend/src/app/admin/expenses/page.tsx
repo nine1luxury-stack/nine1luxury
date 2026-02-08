@@ -5,6 +5,9 @@ import { Plus, Calendar, TrendingDown, MoreVertical, Edit, Trash2 } from "lucide
 import { useState, useEffect, useCallback } from "react";
 import { expensesApi, Expense, ExpenseStats } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { Download } from "lucide-react";
 
 export default function ExpensesPage() {
     const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -113,6 +116,33 @@ export default function ExpensesPage() {
         setIsModalOpen(true);
     };
 
+    const downloadPDF = () => {
+        const doc = new jsPDF('p', 'mm', 'a4');
+
+        doc.setFontSize(20);
+        doc.text("Expenses Report", 105, 15, { align: "center" });
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+
+        const tableData = expenses.map(e => [
+            e.description || "No description",
+            getCategoryName(e.category),
+            `${Number(e.amount).toLocaleString()} EGP`,
+            new Date(e.date).toLocaleDateString()
+        ]);
+
+        autoTable(doc, {
+            head: [['Description', 'Category', 'Amount', 'Date']],
+            body: tableData,
+            startY: 30,
+            theme: 'grid',
+            headStyles: { fillColor: [174, 132, 57] },
+            styles: { font: "helvetica", halign: 'center' },
+        });
+
+        doc.save(`expenses-${new Date().getTime()}.pdf`);
+    };
+
     const categories = [
         { id: 'SALARY', name: 'رواتب' },
         { id: 'RENT', name: 'إيجار' },
@@ -134,13 +164,22 @@ export default function ExpensesPage() {
                     <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider text-right">المصروفات</h1>
                     <p className="text-gray-400 text-sm mt-1">تتبع وإدارة نفقات المتجر التشغيلية.</p>
                 </div>
-                <button
-                    onClick={openAddModal}
-                    className="bg-gold-500 text-rich-black px-6 py-3 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-gold-300 transition-all shadow-lg shadow-gold-500/10"
-                >
-                    <Plus className="w-4 h-4" />
-                    <span>تسجيل مصروف</span>
-                </button>
+                <div className="flex gap-4">
+                    <button
+                        onClick={downloadPDF}
+                        className="bg-surface-dark text-white border border-white/5 px-6 py-3 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-white/5 transition-all shadow-lg"
+                    >
+                        <Download className="w-4 h-4 text-gold-500" />
+                        <span>تحميل PDF</span>
+                    </button>
+                    <button
+                        onClick={openAddModal}
+                        className="bg-gold-500 text-rich-black px-6 py-3 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-gold-300 transition-all shadow-lg shadow-gold-500/10"
+                    >
+                        <Plus className="w-4 h-4" />
+                        <span>تسجيل مصروف</span>
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

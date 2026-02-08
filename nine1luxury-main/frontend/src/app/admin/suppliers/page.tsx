@@ -5,6 +5,9 @@ import { Truck, Plus, MoreVertical, Phone, Edit, Trash2 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { suppliersApi, Supplier, SupplierStat } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { Download } from "lucide-react";
 
 
 
@@ -37,7 +40,7 @@ export default function SuppliersPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const previousSuppliers = [...suppliers];
-        
+
         try {
             const payload = {
                 ...formData,
@@ -72,7 +75,7 @@ export default function SuppliersPage() {
     const handleDelete = async (id: string) => {
         if (!confirm('هل أنت متأكد من حذف هذا المورد؟')) return;
         const previousSuppliers = [...suppliers];
-        
+
         // Optimistic delete
         setSuppliers(prev => prev.filter(s => s.id !== id));
 
@@ -99,6 +102,32 @@ export default function SuppliersPage() {
         setActiveMenu(null);
     };
 
+    const downloadPDF = () => {
+        const doc = new jsPDF('p', 'mm', 'a4');
+        doc.setFontSize(20);
+        doc.text("Suppliers Report", 105, 15, { align: "center" });
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+
+        const tableData = suppliers.map(s => [
+            s.name,
+            s.phone || "-",
+            s.description || "-",
+            new Date(s.createdAt).toLocaleDateString()
+        ]);
+
+        autoTable(doc, {
+            head: [['Supplier', 'Phone', 'Description', 'Joined Date']],
+            body: tableData,
+            startY: 30,
+            theme: 'grid',
+            headStyles: { fillColor: [174, 132, 57] },
+            styles: { font: "helvetica", halign: 'center' },
+        });
+
+        doc.save(`suppliers-${new Date().getTime()}.pdf`);
+    };
+
     const openAddModal = () => {
         setFormData({ name: '', phone: '', manualTotalPurchases: '', manualTotalPaid: '', description: '' });
         setEditingId(null);
@@ -112,13 +141,22 @@ export default function SuppliersPage() {
                     <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider">الموردين</h1>
                     <p className="text-gray-400 text-sm mt-1">إدارة الموردين ومتابعة الالتزام والفواتير.</p>
                 </div>
-                <button
-                    onClick={openAddModal}
-                    className="flex items-center gap-2 bg-gold-500 text-rich-black px-6 py-2 rounded-full font-bold hover:bg-gold-400 transition-colors"
-                >
-                    <Plus className="w-4 h-4" />
-                    إضافة مورد
-                </button>
+                <div className="flex gap-4">
+                    <button
+                        onClick={downloadPDF}
+                        className="bg-surface-dark text-white border border-white/5 px-6 py-2 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-white/5 transition-all shadow-lg h-[42px]"
+                    >
+                        <Download className="w-4 h-4 text-gold-500" />
+                        <span>تحميل PDF</span>
+                    </button>
+                    <button
+                        onClick={openAddModal}
+                        className="flex items-center gap-2 bg-gold-500 text-rich-black px-6 py-2 rounded-xl font-bold hover:bg-gold-400 transition-colors shadow-lg h-[42px]"
+                    >
+                        <Plus className="w-4 h-4" />
+                        إضافة مورد
+                    </button>
+                </div>
             </div>
 
             {/* Stats Cards */}
@@ -176,7 +214,7 @@ export default function SuppliersPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                             {suppliers.map((supplier, index) => (
+                            {suppliers.map((supplier, index) => (
                                 <tr key={supplier.id} className="group hover:bg-white/5 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="font-bold text-white">{supplier.name}</div>
@@ -201,9 +239,8 @@ export default function SuppliersPage() {
                                         </button>
 
                                         {activeMenu === supplier.id && (
-                                            <div className={`absolute left-6 w-40 bg-surface-dark border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden ${
-                                                index >= suppliers.length - 2 && suppliers.length > 2 ? "bottom-full mb-2" : "top-full mt-1"
-                                            }`}>
+                                            <div className={`absolute left-6 w-40 bg-surface-dark border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden ${index >= suppliers.length - 2 && suppliers.length > 2 ? "bottom-full mb-2" : "top-full mt-1"
+                                                }`}>
                                                 <button
                                                     onClick={() => handleEdit(supplier)}
                                                     className="w-full text-right px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2"

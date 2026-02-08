@@ -11,12 +11,15 @@ import {
     Download,
     RefreshCcw,
     Trash2,
-    Loader2
+    Loader2,
+    CheckCircle
 } from "lucide-react";
 import { formatPrice, cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/Modal";
 import { ordersApi, Order, OrderItem } from "@/lib/api";
 import { CreateOrderModal } from "@/components/admin/orders/CreateOrderModal";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 
 
@@ -109,6 +112,34 @@ export default function AdminOrdersPage() {
         document.body.removeChild(link);
     };
 
+    const handleDownloadPDF = () => {
+        const doc = new jsPDF('p', 'mm', 'a4');
+        doc.setFontSize(20);
+        doc.text("Orders Report", 105, 15, { align: "center" });
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+
+        const tableData = filteredOrders.map(o => [
+            String(o.id),
+            o.guestName || "N/A",
+            o.guestPhone || "N/A",
+            `${o.totalAmount} EGP`,
+            o.status,
+            new Date(o.createdAt).toLocaleDateString()
+        ]);
+
+        autoTable(doc, {
+            head: [['ID', 'Customer', 'Phone', 'Total', 'Status', 'Date']],
+            body: tableData,
+            startY: 30,
+            theme: 'grid',
+            headStyles: { fillColor: [174, 132, 57] },
+            styles: { font: "helvetica", halign: 'center' },
+        });
+
+        doc.save(`orders-${new Date().getTime()}.pdf`);
+    };
+
     useEffect(() => {
         const fetchOrders = async () => {
             try {
@@ -128,7 +159,7 @@ export default function AdminOrdersPage() {
         return () => clearInterval(interval);
     }, []);
 
-    const handleStatusUpdate = async (orderId: string, newStatus: string) => {
+    const handleStatusUpdate = async (orderId: string, newStatus: Order['status']) => {
         // Optimistic Update
         const previousOrders = [...orders];
         setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
@@ -202,11 +233,18 @@ export default function AdminOrdersPage() {
                         <Printer className="w-5 h-5" />
                     </button>
                     <button
-                        onClick={handleDownload}
-                        className="p-3 bg-surface-dark border border-white/5 rounded-xl text-gray-400 hover:text-white transition-all"
-                        title="تصدير CSV"
+                        onClick={handleDownloadPDF}
+                        className="p-3 bg-surface-dark border border-white/5 rounded-xl text-gray-400 hover:text-gold-500 hover:bg-white/5 transition-all"
+                        title="تصدير PDF"
                     >
                         <Download className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={handleDownload}
+                        className="p-3 bg-surface-dark border border-white/5 rounded-xl text-gray-400 hover:text-white transition-all hidden sm:block"
+                        title="تصدير CSV"
+                    >
+                        <RefreshCcw className="w-5 h-5 rotate-90" />
                     </button>
                 </div>
             </div>
@@ -217,8 +255,8 @@ export default function AdminOrdersPage() {
                 <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-4">
                     {[
                         { label: "كل الطلبات", count: orders.length, active: true },
-                        { label: "قيد المعالجة", count: orders.filter(o => o.status === 'PROCESSING').length },
-                        { label: "تم التوصيل", count: orders.filter(o => o.status === 'COMPLETED').length },
+                        { label: "تم التأكيد", count: orders.filter(o => o.status === 'CONFIRMED').length },
+                        { label: "تم التوصيل", count: orders.filter(o => o.status === 'DELIVERED').length },
                     ].map((filter) => (
                         <div
                             key={filter.label}
@@ -308,7 +346,7 @@ export default function AdminOrdersPage() {
                                         <td className="px-6 py-6 font-playfair transition-all">
                                             <div className="flex flex-col">
                                                 <span className="text-base text-white font-bold group-hover:text-gold-300 transition-colors">
-                                                    {order.guestName || order.user?.name || 'عميل مجهول'}
+                                                    {order.guestName || 'عميل مجهول'}
                                                 </span>
                                                 <span className="text-[10px] text-gray-600 font-mono mt-0.5">{order.guestPhone || 'بدون رقم'}</span>
                                             </div>
@@ -316,24 +354,26 @@ export default function AdminOrdersPage() {
                                         <td className="px-6 py-6">
                                             <div className="flex flex-col">
                                                 <span className="text-gold-400 font-bold text-base">{formatPrice(order.totalAmount)}</span>
-                                                <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{order.paymentMethod === 'COD' ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
+                                                <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{order.paymentMethod === 'CASH_ON_DELIVERY' ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-6 text-center" onClick={(e) => e.stopPropagation()}>
                                             <select
                                                 value={order.status}
-                                                onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
+                                                onChange={(e) => handleStatusUpdate(order.id, e.target.value as Order['status'])}
                                                 className={cn(
                                                     "text-[10px] px-3 py-1.5 rounded-lg font-bold uppercase cursor-pointer outline-none border transition-all text-center mx-auto block min-w-[110px]",
                                                     order.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20' :
-                                                        order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
-                                                            order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
-                                                                'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
+                                                        order.status === 'CONFIRMED' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
+                                                            order.status === 'SHIPPED' ? 'bg-purple-500/10 border-purple-500/20 text-purple-500 hover:bg-purple-500/20' :
+                                                                order.status === 'DELIVERED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
+                                                                    'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
                                                 )}
                                             >
                                                 <option value="PENDING" className="bg-rich-black text-gray-300">قيد الانتظار</option>
-                                                <option value="PROCESSING" className="bg-rich-black text-blue-300">جاري التجهيز</option>
-                                                <option value="COMPLETED" className="bg-rich-black text-green-300">تم التوصيل</option>
+                                                <option value="CONFIRMED" className="bg-rich-black text-blue-300">تم التأكيد</option>
+                                                <option value="SHIPPED" className="bg-rich-black text-purple-300">تم الشحن</option>
+                                                <option value="DELIVERED" className="bg-rich-black text-green-300">تم التوصيل</option>
                                                 <option value="CANCELLED" className="bg-rich-black text-red-300">ملغي</option>
                                             </select>
                                         </td>
@@ -409,7 +449,6 @@ export default function AdminOrdersPage() {
                                     <p className="text-white font-medium">
                                         {[
                                             selectedOrder.guestCity,
-                                            selectedOrder.guestDistrict,
                                             selectedOrder.guestAddress
                                         ].filter(Boolean).join(' - ')}
                                     </p>

@@ -133,7 +133,7 @@ function ProductsContent() {
                                             setSelectedCategory(cat);
                                         }}
                                         className={cn(
-                                            "text-right px-3 py-2 transition-all rounded-sm text-sm",
+                                            "text-right px-4 py-2 transition-all rounded-full text-sm",
                                             selectedCategory === cat
                                                 ? "bg-gold-500 text-rich-black font-bold"
                                                 : "text-gray-400 hover:text-gold-300 hover:bg-gold-500/5"

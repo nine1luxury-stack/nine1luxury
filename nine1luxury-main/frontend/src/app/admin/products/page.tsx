@@ -11,12 +11,15 @@ import {
     Upload,
     ChevronRight,
     ChevronLeft,
-    X
+    X,
+    Download
 } from "lucide-react";
 import Image from "next/image";
 import { useProducts } from "@/context/ProductContext";
 import { formatPrice, cn } from "@/lib/utils";
 import { Product, ProductVariant } from "@/lib/api";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export default function AdminProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -252,6 +255,34 @@ export default function AdminProductsPage() {
         }
     };
 
+    const downloadPDF = () => {
+        const doc = new jsPDF('p', 'mm', 'a4');
+        doc.setFontSize(20);
+        doc.text("Products Report", 105, 15, { align: "center" });
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+
+        const tableData = filteredProducts.map(p => [
+            p.name,
+            p.model || "-",
+            p.category,
+            `${p.price} EGP`,
+            p.variants?.reduce((acc: number, v: ProductVariant) => acc + (v.stock || 0), 0) || 0,
+            p.isActive !== false ? "Active" : "Inactive"
+        ]);
+
+        autoTable(doc, {
+            head: [['Product', 'Model', 'Category', 'Price', 'Stock', 'Status']],
+            body: tableData,
+            startY: 30,
+            theme: 'grid',
+            headStyles: { fillColor: [174, 132, 57] },
+            styles: { font: "helvetica", halign: 'center' },
+        });
+
+        doc.save(`products-${new Date().getTime()}.pdf`);
+    };
+
     const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory === "الكل" || product.category === selectedCategory;
@@ -266,17 +297,26 @@ export default function AdminProductsPage() {
                     <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider">إدارة المنتجات</h1>
                     <p className="text-gray-400 text-sm mt-1">عرض وتعديل وإضافة منتجات جديدة للمتجر.</p>
                 </div>
-                <button
-                    onClick={() => setIsAddModalOpen(true)}
-                    className="bg-gold-500 text-rich-black px-6 py-3 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-gold-300 transition-all shadow-lg shadow-gold-500/10"
-                >
-                    <Plus className="w-4 h-4" />
-                    <span>إضافة منتج جديد</span>
-                </button>
+                <div className="flex gap-4">
+                    <button
+                        onClick={downloadPDF}
+                        className="bg-surface-dark text-white border border-white/5 px-6 py-3 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-white/5 transition-all shadow-lg"
+                    >
+                        <Download className="w-4 h-4 text-gold-500" />
+                        <span>تحميل PDF</span>
+                    </button>
+                    <button
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="bg-gold-500 text-rich-black px-6 py-3 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-gold-300 transition-all shadow-lg shadow-gold-500/10"
+                    >
+                        <Plus className="w-4 h-4" />
+                        <span>إضافة منتج جديد</span>
+                    </button>
+                </div>
             </div>
 
             {/* Filters & Search */}
-            <div className="flex flex-col lg:flex-row gap-4 bg-surface-dark/50 border border-white/5 p-4 rounded-2xl">
+            <div className="flex flex-col lg:flex-row gap-4 bg-surface-dark/50 border border-white/5 p-4 rounded-3xl">
                 <div className="relative flex-1">
                     <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <input
@@ -284,7 +324,7 @@ export default function AdminProductsPage() {
                         placeholder="ابحث باسم المنتج فقط..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-rich-black border border-white/5 rounded-xl pr-12 pl-4 py-3 text-sm focus:border-gold-500 outline-none transition-colors"
+                        className="w-full bg-rich-black border border-white/5 rounded-full pr-12 pl-4 py-3 text-sm focus:border-gold-500 outline-none transition-colors"
                     />
                 </div>
                 <div className="flex gap-2">
@@ -293,7 +333,7 @@ export default function AdminProductsPage() {
                             key={cat}
                             onClick={() => setSelectedCategory(cat)}
                             className={cn(
-                                "px-6 py-3 rounded-xl text-xs font-bold transition-all border",
+                                "px-6 py-3 rounded-full text-xs font-bold transition-all border",
                                 selectedCategory === cat
                                     ? "bg-gold-500 border-gold-500 text-rich-black"
                                     : "bg-rich-black border-white/5 text-gray-400 hover:border-gold-500/30"
@@ -755,14 +795,12 @@ export default function AdminProductsPage() {
 
                             <div className="p-6 space-y-6 overflow-y-auto custom-scrollbar">
                                 <div className="flex gap-4">
-                                    <div className="relative w-24 h-32 bg-rich-black rounded-lg overflow-hidden shrink-0 border border-white/10">
-                                        <Image
-                                            src={viewingProduct.images?.[0]?.url || viewingProduct.image || ''}
-                                            alt={viewingProduct.name}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
+                                    <Image
+                                        src={viewingProduct.images?.[0]?.url || ''}
+                                        alt={viewingProduct.name}
+                                        fill
+                                        className="object-cover"
+                                    />
                                     <div>
                                         <h3 className="text-lg font-bold text-white">{viewingProduct.name}</h3>
                                         <p className="text-xs text-gray-500 font-mono mt-1">{viewingProduct.model}</p>

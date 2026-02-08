@@ -1,12 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AlertTriangle, Search, MoreVertical, Edit, Save, RefreshCcw, CheckCircle, AlertCircle, Plus, ShoppingBag, Package } from "lucide-react";
+import { AlertTriangle, Search, MoreVertical, Edit, Save, RefreshCcw, CheckCircle, AlertCircle, Plus, ShoppingBag, Package, Download } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { productsApi, Product, ProductVariant, ReturnRequest } from "@/lib/api";
 import Image from "next/image";
 import { Modal } from "@/components/ui/Modal";
 import { cn } from "@/lib/utils";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 
 
@@ -190,6 +192,60 @@ export default function InventoryPage() {
         ));
     };
 
+    const downloadInventoryPDF = () => {
+        const doc = new jsPDF('p', 'mm', 'a4');
+        doc.setFontSize(20);
+        doc.text("Inventory Report", 105, 15, { align: "center" });
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+
+        const tableData = filteredProducts.map(p => [
+            p.name,
+            p.category,
+            getStockLevel(p),
+            p.reorderPoint || 10,
+            getStockLevel(p) <= (p.reorderPoint || 10) ? "Low Stock" : "OK"
+        ]);
+
+        autoTable(doc, {
+            head: [['Product', 'Category', 'Stock', 'Reorder Point', 'Status']],
+            body: tableData,
+            startY: 30,
+            theme: 'grid',
+            headStyles: { fillColor: [174, 132, 57] },
+            styles: { font: "helvetica", halign: 'center' },
+        });
+
+        doc.save(`inventory-${new Date().getTime()}.pdf`);
+    };
+
+    const downloadReturnsPDF = () => {
+        const doc = new jsPDF('p', 'mm', 'a4');
+        doc.setFontSize(20);
+        doc.text("Returns Report", 105, 15, { align: "center" });
+        doc.setFontSize(10);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 22, { align: "center" });
+
+        const tableData = returns.map(r => [
+            String(r.id),
+            r.orderItem?.product?.name || "Unknown",
+            r.type,
+            r.status,
+            r.quantity
+        ]);
+
+        autoTable(doc, {
+            head: [['ID', 'Product', 'Type', 'Status', 'Qty']],
+            body: tableData,
+            startY: 30,
+            theme: 'grid',
+            headStyles: { fillColor: [174, 132, 57] },
+            styles: { font: "helvetica", halign: 'center' },
+        });
+
+        doc.save(`returns-${new Date().getTime()}.pdf`);
+    };
+
     const getStockLevel = (product: Product) => {
         if (product.variants && product.variants.length > 0) {
             return product.variants.reduce((acc: number, v) => acc + (v.stock || 0), 0);
@@ -243,6 +299,14 @@ export default function InventoryPage() {
                             طلبات الاسترجاع
                         </button>
                     </div>
+
+                    <button
+                        onClick={activeTab === 'INVENTORY' ? downloadInventoryPDF : downloadReturnsPDF}
+                        className="bg-surface-dark text-white border border-white/5 px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition-colors shadow-lg hover:bg-white/5 h-[42px]"
+                    >
+                        <Download className="w-4 h-4 text-gold-500" />
+                        <span>PDF</span>
+                    </button>
 
                     {activeTab === 'RETURNS' && (
                         <button
@@ -494,7 +558,8 @@ export default function InventoryPage() {
                         </table>
                     </div>
                 </div>
-            )}
+            )
+            }
 
             {/* Edit Modal (Only for Inventory) */}
             <Modal
@@ -728,6 +793,6 @@ export default function InventoryPage() {
                     </div>
                 </div>
             </Modal>
-        </div>
+        </div >
     );
 }
