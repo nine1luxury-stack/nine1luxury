@@ -20,7 +20,7 @@ export default function CheckoutPage() {
         city: "القاهرة",
     });
 
-    const [errors, setErrors] = useState<{[key: string]: string}>({});
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -68,7 +68,7 @@ export default function CheckoutPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         // Name validation
         if (formData.name.trim().split(/\s+/).length < 2) {
             setErrors({ name: "يرجى إدخال الاسم ثنائياً على الأقل" });
@@ -84,12 +84,13 @@ export default function CheckoutPage() {
                 guestAddress: formData.address,
                 guestCity: formData.city,
                 totalAmount: finalTotal,
+                shippingCost: shippingCost,
                 items: cart.map(item => ({
                     productId: item.id,
                     name: item.name,
                     size: item.size,
                     color: item.color,
-                    variantId: item.variantId, 
+                    variantId: item.variantId,
                     quantity: item.quantity,
                     price: item.price,
                 }))
@@ -125,7 +126,7 @@ export default function CheckoutPage() {
                 <div className="pt-48 pb-24 text-center container mx-auto px-4">
                     <div className="max-w-md mx-auto bg-surface-dark/40 border border-gold-500/10 p-12 rounded-2xl">
                         <div className="w-20 h-20 bg-gold-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                             <Send className="w-10 h-10 text-gold-500" />
+                            <Send className="w-10 h-10 text-gold-500" />
                         </div>
                         <h2 className="text-3xl font-playfair font-bold text-white mb-4">تم استلام طلبك بنجاح!</h2>
                         <p className="text-gray-400 mb-8">
@@ -179,41 +180,41 @@ export default function CheckoutPage() {
 
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="space-y-2">
-                                        <label className="text-xs text-gray-500 uppercase font-bold">رقم الهاتف</label>
-                                     <div className="relative">
-                                         <Phone className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                                         <input
-                                             required
-                                             type="tel"
-                                             name="phone"
-                                             dir="ltr"
-                                             value={formData.phone}
-                                             onChange={handleInputChange}
-                                             className="w-full bg-rich-black border border-white/10 px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none text-right"
-                                             placeholder="رقم الموبايل (واتساب)"
-                                         />
-                                     </div>
-                                 </div>
+                                    <label className="text-xs text-gray-500 uppercase font-bold">رقم الهاتف</label>
+                                    <div className="relative">
+                                        <Phone className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                        <input
+                                            required
+                                            type="tel"
+                                            name="phone"
+                                            dir="ltr"
+                                            value={formData.phone}
+                                            onChange={handleInputChange}
+                                            className="w-full bg-rich-black border border-white/10 px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none text-right"
+                                            placeholder="رقم الموبايل (واتساب)"
+                                        />
+                                    </div>
+                                </div>
 
-                                 <div className="space-y-2">
-                                        <label className="text-xs text-gray-500 uppercase font-bold">الاسم بالكامل</label>
-                                     <div className="relative">
-                                         <User className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                                          <input
-                                             required
-                                             name="name"
-                                             value={formData.name}
-                                             onChange={handleInputChange}
-                                             className={`w-full bg-rich-black border px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none ${errors.name ? 'border-red-500' : 'border-white/10'}`}
-                                             placeholder="أدخل اسمك بالكامل"
-                                          />
-                                          {errors.name && <p className="text-red-500 text-xs mt-1 absolute right-0">{errors.name}</p>}
-                                      </div>
-                                  </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs text-gray-500 uppercase font-bold">الاسم بالكامل</label>
+                                    <div className="relative">
+                                        <User className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                        <input
+                                            required
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleInputChange}
+                                            className={`w-full bg-rich-black border px-12 py-4 text-white focus:border-gold-500 transition-colors outline-none ${errors.name ? 'border-red-500' : 'border-white/10'}`}
+                                            placeholder="أدخل اسمك بالكامل"
+                                        />
+                                        {errors.name && <p className="text-red-500 text-xs mt-1 absolute right-0">{errors.name}</p>}
+                                    </div>
+                                </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                           <label className="text-xs text-gray-500 uppercase font-bold">المحافظة</label>
+                                        <label className="text-xs text-gray-500 uppercase font-bold">المحافظة</label>
                                         <select
                                             name="city"
                                             value={formData.city}
@@ -226,7 +227,7 @@ export default function CheckoutPage() {
                                         </select>
                                     </div>
                                     <div className="space-y-2">
-                                           <label className="text-xs text-gray-500 uppercase font-bold">العنوان</label>
+                                        <label className="text-xs text-gray-500 uppercase font-bold">العنوان</label>
                                         <input
                                             required
                                             name="address"
@@ -325,7 +326,7 @@ export default function CheckoutPage() {
                                             في حالة وجود أي مشكلة في المقاس أو الخامة، يمكنك طلب الاستبدال فوراً.
                                         </p>
                                     </div>
-                                    
+
                                     <div className="w-1/2 mx-auto h-px bg-white/5" />
 
                                     <div className="space-y-2">

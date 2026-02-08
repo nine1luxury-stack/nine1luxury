@@ -24,6 +24,7 @@ model order {
   guestAddress  String?
   guestCity     String?
   totalAmount   Float
+  shippingCost  Float       @default(0)
   status        String      @default("PENDING")
   paymentMethod String
   depositAmount Float?

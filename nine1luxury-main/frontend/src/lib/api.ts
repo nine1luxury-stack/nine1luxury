@@ -43,6 +43,7 @@ export interface Order {
     guestAddress?: string;
     guestCity?: string;
     totalAmount: number;
+    shippingCost?: number;
     status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
     paymentMethod: 'CASH_ON_DELIVERY' | 'INSTAPAY' | 'VODAFONE_CASH';
     depositAmount?: number;

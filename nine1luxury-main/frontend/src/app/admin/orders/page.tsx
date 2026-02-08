@@ -122,7 +122,7 @@ export default function AdminOrdersPage() {
             }
         };
         fetchOrders();
-        
+
         // Polling for real-time updates every 10 seconds
         const interval = setInterval(fetchOrders, 10000);
         return () => clearInterval(interval);
@@ -326,9 +326,9 @@ export default function AdminOrdersPage() {
                                                 className={cn(
                                                     "text-[10px] px-3 py-1.5 rounded-lg font-bold uppercase cursor-pointer outline-none border transition-all text-center mx-auto block min-w-[110px]",
                                                     order.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20' :
-                                                    order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
-                                                    order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
-                                                    'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
+                                                        order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
+                                                            order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
+                                                                'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
                                                 )}
                                             >
                                                 <option value="PENDING" className="bg-rich-black text-gray-300">قيد الانتظار</option>
@@ -344,7 +344,7 @@ export default function AdminOrdersPage() {
                                         </td>
                                         <td className="px-6 py-6 text-left" onClick={(e) => e.stopPropagation()}>
                                             <div className="flex items-center justify-end gap-3">
-                                                 {order.guestPhone && (
+                                                {order.guestPhone && (
                                                     <a
                                                         href={`https://wa.me/20${order.guestPhone.startsWith('0') ? order.guestPhone.slice(1) : order.guestPhone}`}
                                                         target="_blank"
@@ -473,8 +473,8 @@ export default function AdminOrdersPage() {
                                 <span className="text-white font-medium">{formatPrice(selectedOrder.totalAmount)}</span>
                             </div>
                             <div className="flex justify-between items-center mb-2">
-                                <span className="text-gray-400 text-sm">الشحن</span>
-                                <span className="text-white font-medium">مجاني</span>
+                                <span className="text-gray-400 text-sm">الشحن ({selectedOrder.guestCity})</span>
+                                <span className="text-white font-medium">{formatPrice(selectedOrder.shippingCost || 0)}</span>
                             </div>
                             <div className="border-t border-white/10 my-2 pt-2 flex justify-between items-center">
                                 <span className="text-gold-500 font-bold">الإجمالي الكلي</span>
