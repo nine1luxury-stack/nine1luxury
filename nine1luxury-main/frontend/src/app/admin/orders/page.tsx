@@ -17,6 +17,7 @@ import {
 import { formatPrice, cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/Modal";
 import { ordersApi, Order, OrderItem } from "@/lib/api";
+import { useProducts } from "@/context/ProductContext";
 import { CreateOrderModal } from "@/components/admin/orders/CreateOrderModal";
 import { createArabicPDF, reshapeArabic, autoTable } from "@/lib/pdf-utils";
 
@@ -28,6 +29,7 @@ export default function AdminOrdersPage() {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const { refreshProducts } = useProducts();
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
     // Return Modal State
@@ -174,6 +176,11 @@ export default function AdminOrdersPage() {
 
             if (!res.ok) {
                 throw new Error("فشل تحديث الحالة");
+            }
+
+            // Refresh products to show updated stock if status moved to/from DELIVERED
+            if (newStatus === 'DELIVERED' || previousOrders.find(o => o.id === orderId)?.status === 'DELIVERED') {
+                refreshProducts();
             }
         } catch (e) {
             console.error(e);

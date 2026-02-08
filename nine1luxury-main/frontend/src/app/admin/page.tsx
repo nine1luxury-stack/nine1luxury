@@ -12,13 +12,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, cn } from "@/lib/utils";
 import { useEffect, useState, useMemo } from "react";
-import { Order } from "@/lib/api";
+import { Order, OrderItem } from "@/lib/api";
 
 import { useProducts } from "@/context/ProductContext";
 
 export default function AdminDashboard() {
     const [orders, setOrders] = useState<Order[]>([]);
-    const { products } = useProducts();
+    const { products, refreshProducts } = useProducts();
 
     const fetchOrders = async () => {
         try {
@@ -50,6 +50,11 @@ export default function AdminDashboard() {
             });
 
             if (!res.ok) throw new Error("فشل تحديث الحالة");
+
+            // Refresh products to show updated stock if status moved to/from DELIVERED
+            if (newStatus === 'DELIVERED' || previousOrders.find(o => o.id === orderId)?.status === 'DELIVERED') {
+                refreshProducts();
+            }
         } catch (e) {
             console.error(e);
             alert("حدث خطأ أثناء تحديث الحالة");
@@ -66,7 +71,7 @@ export default function AdminDashboard() {
         const newOrdersCount = pendingOrders.length;
 
         // Simple unique customer count based on guestName
-        const uniqueCustomers = new Set(orders.map(o => o.guestName || o.User?.name)).size;
+        const uniqueCustomers = new Set(orders.map(o => o.guestName || o.user?.name)).size;
 
         return [
             {
@@ -215,7 +220,7 @@ export default function AdminDashboard() {
                                             <td className="px-4 py-5 text-sm">
                                                 <div className="flex flex-col">
                                                     <span className="text-gold-300 font-bold">{formatPrice(order.totalAmount)}</span>
-                                                    <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{order.paymentMethod === 'COD' ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
+                                                    <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{order.paymentMethod === 'CASH_ON_DELIVERY' ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
                                                 </div>
                                             </td>
                                             <td className="px-4 py-5 text-center">

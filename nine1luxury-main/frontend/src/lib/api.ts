@@ -48,6 +48,10 @@ export interface Order {
     paymentMethod: 'CASH_ON_DELIVERY' | 'INSTAPAY' | 'VODAFONE_CASH';
     depositAmount?: number;
     items: OrderItem[];
+    user?: {
+        name: string;
+        email: string;
+    };
     createdAt: string;
     updatedAt: string;
 }
