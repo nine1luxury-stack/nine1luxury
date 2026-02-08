@@ -315,7 +315,7 @@ export default function CheckoutPage() {
                                 <div className="p-6 border border-gold-500/10 bg-gold-500/5 text-center space-y-2 rounded-lg">
                                     <p className="text-sm text-gold-300 font-bold uppercase mb-1">طريقة الدفع</p>
                                     <p className="text-xs text-gray-400 leading-relaxed">
-                                        يتم تحويل قيمة الشحن فقط (مقدماً) لجدية الحجز، وباقي المبلغ عند الاستلام والمعاينة.
+                                        يتم تحويل قيمة الشحن (مقدماً) لجدية الحجز، وباقي المبلغ عند الاستلام.
                                     </p>
                                 </div>
 

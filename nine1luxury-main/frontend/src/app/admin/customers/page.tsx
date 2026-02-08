@@ -106,20 +106,22 @@ export default function AdminCustomersPage() {
         doc.setFontSize(10);
         doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
+        // Reverse column order for RTL: Total Spent, Orders, Phone, Customer
         const tableData = filteredCustomers.map(c => [
-            reshapeArabic(c.name),
-            c.phone || "-",
+            `${c.totalSpent} ج.م`,
             c.totalOrders,
-            `${c.totalSpent} ج.م`
+            c.phone || "-",
+            reshapeArabic(c.name)
         ]);
 
         autoTable(doc, {
-            head: [[reshapeArabic('العميل'), reshapeArabic('الهاتف'), reshapeArabic('الطلبات'), reshapeArabic('إجمالي المشتريات')]],
+            head: [[reshapeArabic('إجمالي المشتريات'), reshapeArabic('الطلبات'), reshapeArabic('الهاتف'), reshapeArabic('العميل')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
-            styles: { font: "Amiri", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'right' },
+            bodyStyles: { font: 'Amiri', halign: 'right' },
+            styles: { font: "Amiri", halign: 'right' },
         });
 
         doc.save(`customers-${new Date().getTime()}.pdf`);

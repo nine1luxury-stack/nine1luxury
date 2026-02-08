@@ -158,23 +158,25 @@ export default function AdminBookingsPage() {
         doc.setFontSize(10);
         doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
+        // Reverse column order for RTL: Status, Shipping, City, Size, Model, Phone, Customer
         const tableData = filteredBookings.map(b => [
-            reshapeArabic(b.name),
-            b.phone,
-            reshapeArabic(b.productModel || "-"),
-            b.productSize || "-",
-            reshapeArabic(b.city || "-"),
+            reshapeArabic(getStatusLabel(b.status)),
             `${b.shippingAmount} ج.م`,
-            reshapeArabic(getStatusLabel(b.status))
+            reshapeArabic(b.city || "-"),
+            b.productSize || "-",
+            reshapeArabic(b.productModel || "-"),
+            b.phone,
+            reshapeArabic(b.name)
         ]);
 
         autoTable(doc, {
-            head: [[reshapeArabic('العميل'), reshapeArabic('الهاتف'), reshapeArabic('الموديل'), reshapeArabic('المقاس'), reshapeArabic('المدينة'), reshapeArabic('الشحن'), reshapeArabic('الحالة')]],
+            head: [[reshapeArabic('الحالة'), reshapeArabic('الشحن'), reshapeArabic('المدينة'), reshapeArabic('المقاس'), reshapeArabic('الموديل'), reshapeArabic('الهاتف'), reshapeArabic('العميل')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
-            styles: { font: "Amiri", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'right' },
+            bodyStyles: { font: 'Amiri', halign: 'right' },
+            styles: { font: "Amiri", halign: 'right' },
         });
 
         doc.save(`bookings-${new Date().getTime()}.pdf`);

@@ -122,20 +122,22 @@ export default function ExpensesPage() {
         doc.setFontSize(10);
         doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
+        // Reverse column order for RTL: Date, Amount, Category, Description
         const tableData = expenses.map(e => [
-            reshapeArabic(e.description || "بدون وصف"),
-            reshapeArabic(getCategoryName(e.category)),
+            new Date(e.date).toLocaleDateString('ar-EG'),
             `${Number(e.amount).toLocaleString()} ج.م`,
-            new Date(e.date).toLocaleDateString('ar-EG')
+            reshapeArabic(getCategoryName(e.category)),
+            reshapeArabic(e.description || "بدون وصف")
         ]);
 
         autoTable(doc, {
-            head: [[reshapeArabic('الوصف'), reshapeArabic('الفئة'), reshapeArabic('المبلغ'), reshapeArabic('التاريخ')]],
+            head: [[reshapeArabic('التاريخ'), reshapeArabic('المبلغ'), reshapeArabic('الفئة'), reshapeArabic('الوصف')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
-            styles: { font: "Amiri", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'right' },
+            bodyStyles: { font: 'Amiri', halign: 'right' },
+            styles: { font: "Amiri", halign: 'right' },
         });
 
         doc.save(`expenses-${new Date().getTime()}.pdf`);

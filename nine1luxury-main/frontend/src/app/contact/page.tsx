@@ -208,7 +208,7 @@ export default function ContactPage() {
                                         onChange={handleInputChange}
                                         rows={6}
                                         className="w-full bg-rich-black border border-white/10 px-4 py-4 text-white focus:border-gold-500 transition-colors outline-none resize-none"
-                                        placeholder="اكتب رسالتك هنا..."
+                                        placeholder="اكتب رسالتك..."
                                     />
                                 </div>
 

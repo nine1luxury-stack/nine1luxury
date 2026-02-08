@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useProducts } from "@/context/ProductContext";
+import { formatPrice, cn } from "@/lib/utils";
 import { Product, ProductVariant } from "@/lib/api";
 import { createArabicPDF, reshapeArabic, autoTable } from "@/lib/pdf-utils";
 
@@ -260,22 +261,24 @@ export default function AdminProductsPage() {
         doc.setFontSize(10);
         doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
+        // Reverse column order for RTL: Status, Stock, Price, Category, Model, Product
         const tableData = filteredProducts.map(p => [
-            reshapeArabic(p.name),
-            p.model || "-",
-            reshapeArabic(p.category),
-            `${p.price} ج.م`,
+            reshapeArabic(p.isActive !== false ? "نشط" : "غير نشط"),
             p.variants?.reduce((acc: number, v: ProductVariant) => acc + (v.stock || 0), 0) || 0,
-            reshapeArabic(p.isActive !== false ? "نشط" : "غير نشط")
+            `${p.price} ج.م`,
+            reshapeArabic(p.category),
+            reshapeArabic(p.model || "-"),
+            reshapeArabic(p.name)
         ]);
 
         autoTable(doc, {
-            head: [[reshapeArabic('المنتج'), reshapeArabic('الموديل'), reshapeArabic('القسم'), reshapeArabic('السعر'), reshapeArabic('المخزون'), reshapeArabic('الحالة')]],
+            head: [[reshapeArabic('الحالة'), reshapeArabic('المخزون'), reshapeArabic('السعر'), reshapeArabic('القسم'), reshapeArabic('الموديل'), reshapeArabic('المنتج')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
-            styles: { font: "Amiri", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'right' },
+            bodyStyles: { font: 'Amiri', halign: 'right' },
+            styles: { font: "Amiri", halign: 'right' },
         });
 
         doc.save(`products-${new Date().getTime()}.pdf`);

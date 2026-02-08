@@ -408,7 +408,7 @@ export default function ProductDetailsPage() {
                                                     setIsSizeChartTableOpen(true);
                                                 }
                                             }}
-                                            className="text-[10px] text-gold-300/60 uppercase tracking-widest hover:text-gold-300 underline"
+                                            className="text-sm font-bold text-gold-500 hover:text-gold-300 underline underline-offset-4"
                                         >
                                             جدول المقاسات
                                         </button>

@@ -198,21 +198,23 @@ export default function InventoryPage() {
         doc.setFontSize(10);
         doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
+        // Reverse column order for RTL: Status, Reorder Point, Stock, Category, Product
         const tableData = filteredProducts.map(p => [
-            reshapeArabic(p.name),
-            reshapeArabic(p.category || ""),
-            getStockLevel(p),
+            reshapeArabic(getStockLevel(p) <= (p.reorderPoint || 10) ? "مطلوب شراء" : "متوفر"),
             p.reorderPoint || 10,
-            reshapeArabic(getStockLevel(p) <= (p.reorderPoint || 10) ? "مطلوب شراء" : "متوفر")
+            getStockLevel(p),
+            reshapeArabic(p.category || ""),
+            reshapeArabic(p.name)
         ]);
 
         autoTable(doc, {
-            head: [[reshapeArabic('المنتج'), reshapeArabic('الفئة'), reshapeArabic('المخزون'), reshapeArabic('حد الطلب'), reshapeArabic('الحالة')]],
+            head: [[reshapeArabic('الحالة'), reshapeArabic('حد الطلب'), reshapeArabic('المخزون'), reshapeArabic('الفئة'), reshapeArabic('المنتج')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
-            styles: { font: "Amiri", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'right' },
+            bodyStyles: { font: 'Amiri', halign: 'right' },
+            styles: { font: "Amiri", halign: 'right' },
         });
 
         doc.save(`inventory-${new Date().getTime()}.pdf`);
@@ -225,21 +227,23 @@ export default function InventoryPage() {
         doc.setFontSize(10);
         doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
+        // Reverse column order for RTL: Quantity, Status, Type, Product, ID
         const tableData = returns.map(r => [
-            String(r.id).substring(0, 8),
-            reshapeArabic(r.orderItem?.product?.name || "غير معروف"),
-            reshapeArabic(r.type === 'VALID' ? 'صالح' : r.type === 'DAMAGED' ? 'تالف' : 'أخرى'),
+            r.quantity,
             reshapeArabic(r.status === 'APPROVED' ? 'مكتمل' : 'معلق'),
-            r.quantity
+            reshapeArabic(r.type === 'VALID' ? 'صالح' : r.type === 'DAMAGED' ? 'تالف' : 'أخرى'),
+            reshapeArabic(r.orderItem?.product?.name || "غير معروف"),
+            String(r.id).substring(0, 8)
         ]);
 
         autoTable(doc, {
-            head: [[reshapeArabic('المعرف'), reshapeArabic('المنتج'), reshapeArabic('النوع'), reshapeArabic('الحالة'), reshapeArabic('الكمية')]],
+            head: [[reshapeArabic('الكمية'), reshapeArabic('الحالة'), reshapeArabic('النوع'), reshapeArabic('المنتج'), reshapeArabic('المعرف')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
-            styles: { font: "Amiri", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'right' },
+            bodyStyles: { font: 'Amiri', halign: 'right' },
+            styles: { font: "Amiri", halign: 'right' },
         });
 
         doc.save(`returns-${new Date().getTime()}.pdf`);

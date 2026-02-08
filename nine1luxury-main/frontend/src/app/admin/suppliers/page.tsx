@@ -108,20 +108,22 @@ export default function SuppliersPage() {
         doc.setFontSize(10);
         doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
+        // Reverse column order for RTL: Date, Description, Phone, Supplier
         const tableData = suppliers.map(s => [
-            reshapeArabic(s.name),
-            s.phone || "-",
+            new Date(s.createdAt).toLocaleDateString('ar-EG'),
             reshapeArabic(s.description || "-"),
-            new Date(s.createdAt).toLocaleDateString('ar-EG')
+            s.phone || "-",
+            reshapeArabic(s.name)
         ]);
 
         autoTable(doc, {
-            head: [[reshapeArabic('المورد'), reshapeArabic('الهاتف'), reshapeArabic('الوصف'), reshapeArabic('تاريخ الانضمام')]],
+            head: [[reshapeArabic('تاريخ الانضمام'), reshapeArabic('الوصف'), reshapeArabic('الهاتف'), reshapeArabic('المورد')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
-            styles: { font: "Amiri", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'right' },
+            bodyStyles: { font: 'Amiri', halign: 'right' },
+            styles: { font: "Amiri", halign: 'right' },
         });
 
         doc.save(`suppliers-${new Date().getTime()}.pdf`);
@@ -290,7 +292,7 @@ export default function SuppliersPage() {
                             value={formData.description}
                             onChange={e => setFormData({ ...formData, description: e.target.value })}
                             className="w-full bg-rich-black border border-white/10 rounded p-2 text-white h-24 resize-none"
-                            placeholder="اكتب وصفاً للمورد هنا..."
+                            placeholder="اكتب وصفاً للمورد..."
                         />
                     </div>
 

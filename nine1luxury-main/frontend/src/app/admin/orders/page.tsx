@@ -118,22 +118,24 @@ export default function AdminOrdersPage() {
         doc.setFontSize(10);
         doc.text(reshapeArabic(`تاريخ الإنشاء: ${new Date().toLocaleString('ar-EG')}`), 105, 22, { align: "center" });
 
+        // Reverse column order for RTL: Date, Status, Total, Phone, Customer, ID
         const tableData = filteredOrders.map(o => [
-            String(o.id).substring(0, 8),
-            reshapeArabic(o.guestName || "غير مسجل"),
-            o.guestPhone || "N/A",
-            `${o.totalAmount} ج.م`,
+            new Date(o.createdAt).toLocaleDateString('ar-EG'),
             reshapeArabic(o.status === 'PENDING' ? 'معلق' : o.status === 'CONFIRMED' ? 'مؤكد' : o.status === 'SHIPPED' ? 'مشحون' : o.status === 'DELIVERED' ? 'تم التوصيل' : 'ملغي'),
-            new Date(o.createdAt).toLocaleDateString('ar-EG')
+            `${o.totalAmount} ج.م`,
+            o.guestPhone || "N/A",
+            reshapeArabic(o.guestName || "غير مسجل"),
+            String(o.id).substring(0, 8)
         ]);
 
         autoTable(doc, {
-            head: [[reshapeArabic('المعرف'), reshapeArabic('العميل'), reshapeArabic('الهاتف'), reshapeArabic('الإجمالي'), reshapeArabic('الحالة'), reshapeArabic('التاريخ')]],
+            head: [[reshapeArabic('التاريخ'), reshapeArabic('الحالة'), reshapeArabic('الإجمالي'), reshapeArabic('الهاتف'), reshapeArabic('العميل'), reshapeArabic('المعرف')]],
             body: tableData,
             startY: 30,
             theme: 'grid',
-            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'center' },
-            styles: { font: "Amiri", halign: 'center' },
+            headStyles: { fillColor: [174, 132, 57], font: 'Amiri', halign: 'right' },
+            bodyStyles: { font: 'Amiri', halign: 'right' },
+            styles: { font: "Amiri", halign: 'right' },
         });
 
         doc.save(`orders-${new Date().getTime()}.pdf`);

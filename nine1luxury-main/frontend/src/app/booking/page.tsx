@@ -60,11 +60,11 @@ export default function BookingPage() {
         });
     };
 
-    const [errors, setErrors] = useState<{[key: string]: string}>({});
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const validateForm = () => {
-        const newErrors: {[key: string]: string} = {};
-        
+        const newErrors: { [key: string]: string } = {};
+
         if (!formData.name || formData.name.trim().split(/\s+/).length < 2) {
             newErrors.name = "يرجى إدخال الاسم ثنائياً على الأقل (الأول واللقب)";
         }
@@ -84,7 +84,7 @@ export default function BookingPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) return;
 
         setIsSubmitting(true);
@@ -127,7 +127,7 @@ export default function BookingPage() {
                     priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-rich-black/80 via-transparent to-rich-black" />
-                
+
                 <div className="relative z-10 text-center space-y-4 px-4">
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
@@ -165,7 +165,7 @@ export default function BookingPage() {
                                 <h2 className="text-3xl font-playfair font-bold text-white uppercase">لماذا Nine1Luxury؟</h2>
                                 <div className="h-1 w-20 bg-gold-500" />
                             </div>
-                            
+
                             <div className="space-y-6">
                                 {[
                                     { title: "جودة ممتازة", desc: "نحرص على تقديم أفضل الخامات العالمية." },
@@ -212,7 +212,7 @@ export default function BookingPage() {
                                         className="bg-surface-dark border border-white/5 p-8 md:p-12 rounded-3xl shadow-2xl relative overflow-hidden"
                                     >
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 blur-3xl -mr-16 -mt-16" />
-                                        
+
                                         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
@@ -239,7 +239,7 @@ export default function BookingPage() {
                                                         value={formData.name}
                                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                                         className={`w-full bg-rich-black border rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none transition-all ${errors.name ? 'border-red-500' : 'border-white/10'}`}
-                                                        placeholder="ادخل اسمك هنا"
+                                                        placeholder="ادخل اسمك"
                                                     />
                                                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                                                 </div>
