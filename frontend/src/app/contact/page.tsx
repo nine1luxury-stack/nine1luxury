@@ -86,7 +86,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                         <h1 className="text-4xl md:text-6xl font-playfair font-bold text-white uppercase mb-4">
                             تواصل معنا
                         </h1>
-                        <div className="h-px w-24 bg-gold-500 mx-auto mb-6" />
+                        <div className="h-[2px] w-28 mx-auto mb-6 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
                         <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed">
                             نحن هنا للإجابة على استفساراتك ومساعدتك. تواصل معنا عبر أي من الوسائل التالية.
                         </p>
