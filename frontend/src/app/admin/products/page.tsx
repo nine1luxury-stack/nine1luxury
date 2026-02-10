@@ -21,7 +21,6 @@ import { Product, ProductVariant } from "@/lib/api";
 export default function AdminProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("الكل");
-    const [selectedType, setSelectedType] = useState("الكل");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     // Use Global Context
@@ -235,8 +234,7 @@ export default function AdminProductsPage() {
     const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory === "الكل" || product.category === selectedCategory;
-        const matchesType = selectedType === "الكل" || product.type === selectedType;
-        return matchesSearch && matchesCategory && matchesType;
+        return matchesSearch && matchesCategory;
     });
 
     return (
@@ -282,23 +280,6 @@ export default function AdminProductsPage() {
                             )}
                         >
                             {cat}
-                        </button>
-                    ))}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                    <span className="text-xs text-gray-500 w-full mb-1">النوع:</span>
-                    {productTypes.map(type => (
-                        <button
-                            key={type}
-                            onClick={() => setSelectedType(type)}
-                            className={cn(
-                                "px-4 py-2 rounded-xl text-[10px] font-bold transition-all border",
-                                selectedType === type
-                                    ? "bg-white text-rich-black border-white"
-                                    : "bg-rich-black border-white/5 text-gray-400 hover:border-white/30"
-                            )}
-                        >
-                            {type}
                         </button>
                     ))}
                 </div>
@@ -818,7 +799,7 @@ export default function AdminProductsPage() {
                     </div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 
 }
