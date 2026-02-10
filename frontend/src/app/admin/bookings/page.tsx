@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-    Trash2, 
+import {
+    Trash2,
     Search,
     Check,
     X,
@@ -10,7 +10,8 @@ import {
     Package,
     Maximize2,
     MapPin,
-    Banknote
+    Banknote,
+    Plus
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -33,6 +34,19 @@ export default function AdminBookingsPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState("ALL");
     const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+    // Add New Booking State
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [newBookingData, setNewBookingData] = useState({
+        name: "",
+        phone: "",
+        city: "",
+        productModel: "",
+        productSize: "",
+        shippingAmount: "",
+        notes: ""
+    });
 
     const fetchBookings = async () => {
         try {
@@ -57,7 +71,7 @@ export default function AdminBookingsPage() {
     const handleUpdateStatus = async (id: string, newStatus: string) => {
         setUpdatingId(id);
         const previousBookings = [...bookings];
-        
+
         // Optimistic Update
         setBookings(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
 
@@ -96,8 +110,48 @@ export default function AdminBookingsPage() {
         }
     };
 
+    const handleAddBooking = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSaving(true);
+
+        try {
+            const res = await fetch("/api/bookings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...newBookingData,
+                    shippingAmount: Number(newBookingData.shippingAmount) || 0
+                })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                alert("تم إضافة الحجز بنجاح");
+                setIsAddModalOpen(false);
+                setNewBookingData({
+                    name: "",
+                    phone: "",
+                    city: "",
+                    productModel: "",
+                    productSize: "",
+                    shippingAmount: "",
+                    notes: ""
+                });
+                fetchBookings();
+            } else {
+                alert(data.error || "فشل إضافة الحجز");
+            }
+        } catch (error) {
+            console.error("Failed to add booking", error);
+            alert("حدث خطأ أثناء الاتصال بالسيرفر");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     const filteredBookings = bookings.filter(booking => {
-        const matchesSearch = 
+        const matchesSearch =
             booking.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             booking.phone.includes(searchQuery) ||
             booking.productModel?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -136,22 +190,31 @@ export default function AdminBookingsPage() {
                     <h1 className="text-3xl font-bold text-white mb-2">إدارة طلبات الحجز</h1>
                     <p className="text-gray-400">تابع طلبات حجز الموديلات الفاخرة</p>
                 </div>
-                
-                <div className="flex items-center gap-4 bg-surface-dark border border-white/5 p-2 rounded-2xl">
-                    <div className="flex bg-rich-black rounded-xl p-1">
-                        {["ALL", "PENDING", "CONFIRMED", "CANCELLED"].map((status) => (
-                            <button
-                                key={status}
-                                onClick={() => setStatusFilter(status)}
-                                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                                    statusFilter === status 
-                                    ? "bg-gold-500 text-rich-black shadow-lg" 
-                                    : "text-gray-400 hover:text-white"
-                                }`}
-                            >
-                                {status === "ALL" ? "الكل" : getStatusLabel(status)}
-                            </button>
-                        ))}
+
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="bg-gold-500 text-rich-black px-6 py-3 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-gold-300 transition-all shadow-lg"
+                    >
+                        <Plus className="w-4 h-4" />
+                        <span>إضافة حجز جديد</span>
+                    </button>
+
+                    <div className="flex bg-surface-dark border border-white/5 p-1 rounded-2xl">
+                        <div className="flex bg-rich-black rounded-xl p-1">
+                            {["ALL", "PENDING", "CONFIRMED", "CANCELLED"].map((status) => (
+                                <button
+                                    key={status}
+                                    onClick={() => setStatusFilter(status)}
+                                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${statusFilter === status
+                                            ? "bg-gold-500 text-rich-black shadow-lg"
+                                            : "text-gray-400 hover:text-white"
+                                        }`}
+                                >
+                                    {status === "ALL" ? "الكل" : getStatusLabel(status)}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -287,6 +350,122 @@ export default function AdminBookingsPage() {
                     </table>
                 </div>
             </div>
+
+            {/* Add Booking Modal */}
+            <AnimatePresence>
+                {isAddModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-surface-dark border border-white/10 w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden"
+                        >
+                            <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/2">
+                                <h2 className="text-xl font-bold text-white">إضافة حجز جديد</h2>
+                                <button onClick={() => setIsAddModalOpen(false)} className="text-gray-400 hover:text-white">
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleAddBooking} className="p-6 space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="col-span-2">
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">اسم العميل</label>
+                                        <input
+                                            required
+                                            type="text"
+                                            value={newBookingData.name}
+                                            onChange={e => setNewBookingData({ ...newBookingData, name: e.target.value })}
+                                            className="w-full bg-rich-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                            placeholder="أدخل اسم العميل"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">رقم الهاتف</label>
+                                        <input
+                                            required
+                                            type="tel"
+                                            value={newBookingData.phone}
+                                            onChange={e => setNewBookingData({ ...newBookingData, phone: e.target.value })}
+                                            className="w-full bg-rich-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                            placeholder="01xxxxxxxxx"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">المدينة</label>
+                                        <input
+                                            required
+                                            type="text"
+                                            value={newBookingData.city}
+                                            onChange={e => setNewBookingData({ ...newBookingData, city: e.target.value })}
+                                            className="w-full bg-rich-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                            placeholder="أدخل المدينة"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">الموديل</label>
+                                        <input
+                                            required
+                                            type="text"
+                                            value={newBookingData.productModel}
+                                            onChange={e => setNewBookingData({ ...newBookingData, productModel: e.target.value })}
+                                            className="w-full bg-rich-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                            placeholder="كود الموديل"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">المقاس</label>
+                                        <input
+                                            type="text"
+                                            value={newBookingData.productSize}
+                                            onChange={e => setNewBookingData({ ...newBookingData, productSize: e.target.value })}
+                                            className="w-full bg-rich-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                            placeholder="مثلاً: L, XL"
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">سعر الطلب/الشحن</label>
+                                        <input
+                                            type="number"
+                                            value={newBookingData.shippingAmount}
+                                            onChange={e => setNewBookingData({ ...newBookingData, shippingAmount: e.target.value })}
+                                            className="w-full bg-rich-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                            placeholder="0"
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-widest">ملاحظات</label>
+                                        <textarea
+                                            value={newBookingData.notes}
+                                            onChange={e => setNewBookingData({ ...newBookingData, notes: e.target.value })}
+                                            className="w-full bg-rich-black border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold-500 outline-none h-24 resize-none"
+                                            placeholder="أي ملاحظات إضافية..."
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="pt-4 flex gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAddModalOpen(false)}
+                                        className="flex-1 px-4 py-3 rounded-xl border border-white/10 text-gray-400 font-bold hover:bg-white/5 transition-colors"
+                                    >
+                                        إلغاء
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isSaving}
+                                        className="flex-1 px-4 py-3 rounded-xl bg-gold-500 text-rich-black font-bold hover:bg-gold-300 transition-colors shadow-lg disabled:opacity-50"
+                                    >
+                                        {isSaving ? "جاري الحفظ..." : "حفظ الحجز"}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
