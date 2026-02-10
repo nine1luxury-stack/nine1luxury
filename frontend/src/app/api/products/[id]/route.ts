@@ -51,6 +51,7 @@ export async function PATCH(
             if (data.price !== undefined) updateData.price = parseFloat(data.price);
             if (data.discount !== undefined) updateData.discount = data.discount === null ? null : parseFloat(data.discount);
             if (data.category !== undefined) updateData.category = data.category;
+            if (data.type !== undefined) updateData.type = data.type;
             if (data.featured !== undefined) updateData.featured = data.featured;
             if (data.isActive !== undefined) updateData.isActive = data.isActive;
             if (data.reorderPoint !== undefined) updateData.reorderPoint = Number(data.reorderPoint);

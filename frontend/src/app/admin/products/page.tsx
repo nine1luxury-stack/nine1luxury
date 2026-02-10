@@ -21,12 +21,14 @@ import { Product, ProductVariant } from "@/lib/api";
 export default function AdminProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("الكل");
+    const [selectedType, setSelectedType] = useState("الكل");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     // Use Global Context
     const { products, addProduct, deleteProduct, updateProduct } = useProducts();
 
     const categories = ["الكل", "هوديز", "تيشرتات", "بناطيل", "سويت شيرتات"];
+    const productTypes = ["الكل", "قطن", "ميلتون", "ليكرا", "وتر بروف"];
     const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"];
     // availableColors removed in favor of dynamic hex input
 
@@ -37,6 +39,7 @@ export default function AdminProductsPage() {
         model: string;
         price: string;
         category: string;
+        type: string;
         description: string;
         image: string;
         sizes: string[];
@@ -46,6 +49,7 @@ export default function AdminProductsPage() {
         model: '',
         price: '',
         category: 'تيشرتات',
+        type: 'قطن',
         description: '',
         image: '',
         sizes: [],
@@ -97,6 +101,7 @@ export default function AdminProductsPage() {
             model: product.model || '',
             price: product.price.toString(),
             category: product.category,
+            type: product.type || 'قطن',
             description: product.description,
             image: product.images?.[0]?.url || product.image || '',
             sizes: sizes,
@@ -230,7 +235,8 @@ export default function AdminProductsPage() {
     const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory === "الكل" || product.category === selectedCategory;
-        return matchesSearch && matchesCategory;
+        const matchesType = selectedType === "الكل" || product.type === selectedType;
+        return matchesSearch && matchesCategory && matchesType;
     });
 
     return (
@@ -262,19 +268,37 @@ export default function AdminProductsPage() {
                         className="w-full bg-rich-black border border-white/5 rounded-xl pr-12 pl-4 py-3 text-sm focus:border-gold-500 outline-none transition-colors"
                     />
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
+                    <span className="text-xs text-gray-500 w-full mb-1">القسم:</span>
                     {categories.map(cat => (
                         <button
                             key={cat}
                             onClick={() => setSelectedCategory(cat)}
                             className={cn(
-                                "px-6 py-3 rounded-xl text-xs font-bold transition-all border",
+                                "px-4 py-2 rounded-xl text-[10px] font-bold transition-all border",
                                 selectedCategory === cat
                                     ? "bg-gold-500 border-gold-500 text-rich-black"
                                     : "bg-rich-black border-white/5 text-gray-400 hover:border-gold-500/30"
                             )}
                         >
                             {cat}
+                        </button>
+                    ))}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    <span className="text-xs text-gray-500 w-full mb-1">النوع:</span>
+                    {productTypes.map(type => (
+                        <button
+                            key={type}
+                            onClick={() => setSelectedType(type)}
+                            className={cn(
+                                "px-4 py-2 rounded-xl text-[10px] font-bold transition-all border",
+                                selectedType === type
+                                    ? "bg-white text-rich-black border-white"
+                                    : "bg-rich-black border-white/5 text-gray-400 hover:border-white/30"
+                            )}
+                        >
+                            {type}
                         </button>
                     ))}
                 </div>
@@ -482,230 +506,243 @@ export default function AdminProductsPage() {
                                             placeholder="0.00"
                                         />
                                     </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">القسم</label>
-                                        <select
-                                            value={newProduct.category}
-                                            onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}
-                                            className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none appearance-none"
-                                        >
-                                            {categories.filter(c => c !== 'الكل').map(c => (
-                                                <option key={c} value={c}>{c}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                {/* Sizes */}
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">المقاسات المتاحة</label>
-                                    <div className="flex flex-wrap gap-2">
-                                        {availableSizes.map(size => (
-                                            <button
-                                                key={size}
-                                                type="button"
-                                                onClick={() => toggleSize(size)}
-                                                className={cn(
-                                                    "w-10 h-10 rounded-lg text-xs font-bold transition-all border",
-                                                    newProduct.sizes.includes(size)
-                                                        ? "bg-gold-500 border-gold-500 text-rich-black"
-                                                        : "bg-rich-black border-white/10 text-gray-400 hover:border-gold-500/50"
-                                                )}
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">القسم</label>
+                                            <select
+                                                value={newProduct.category}
+                                                onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}
+                                                className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none appearance-none"
                                             >
-                                                {size}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Colors */}
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">الألوان المتاحة</label>
-
-                                    <div className="bg-rich-black/50 border border-white/5 p-4 rounded-xl space-y-4">
-                                        <div className="flex flex-col gap-4">
-                                            <div className="flex items-center gap-3">
-                                                {/* Circular Color Picker */}
-                                                <div className="relative group shrink-0">
-                                                    <input
-                                                        type="color"
-                                                        id="colorPicker"
-                                                        value={/^#[0-9A-F]{6}$/i.test(colorInput) ? colorInput : '#000000'}
-                                                        className="w-12 h-12 rounded-full cursor-pointer overflow-hidden border-2 border-white/10 p-0 bg-transparent transition-transform hover:scale-105 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-full"
-                                                        onChange={(e) => setColorInput(e.target.value)}
-                                                    />
-                                                </div>
-
-                                                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                    <input
-                                                        type="text"
-                                                        placeholder="اسم اللون (مثال: أحمر)"
-                                                        id="colorNameInput"
-                                                        className="w-full bg-rich-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:border-gold-500/50 outline-none transition-all placeholder:text-gray-600"
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        placeholder="#000000"
-                                                        value={colorInput}
-                                                        onChange={(e) => setColorInput(e.target.value)}
-                                                        className="w-full bg-rich-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm uppercase font-mono focus:border-gold-500/50 outline-none transition-all placeholder:text-gray-600"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    let val = colorInput.trim();
-                                                    if (!val.startsWith('#')) val = '#' + val;
-                                                    const nameInput = document.querySelector('#colorNameInput') as HTMLInputElement;
-                                                    const name = nameInput?.value?.trim() || val;
-
-                                                    if (/^#[0-9A-F]{6}$/i.test(val)) {
-                                                        if (!newProduct.colors.some(c => c.hex === val)) {
-                                                            setNewProduct(prev => ({
-                                                                ...prev,
-                                                                colors: [...prev.colors, { name, hex: val }]
-                                                            }));
-                                                            setColorInput('');
-                                                            if (nameInput) nameInput.value = '';
-                                                        }
-                                                    } else {
-                                                        alert('يرجى إدخال كود لون صحيح (HEX)');
-                                                    }
-                                                }}
-                                                className="w-full bg-gold-500 text-rich-black py-3 rounded-lg text-sm font-bold hover:bg-gold-300 transition-colors shadow-lg shadow-gold-500/10"
+                                                {categories.filter(c => c !== 'الكل').map(c => (
+                                                    <option key={c} value={c}>{c}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">النوع</label>
+                                            <select
+                                                value={newProduct.type}
+                                                onChange={e => setNewProduct({ ...newProduct, type: e.target.value })}
+                                                className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none appearance-none"
                                             >
-                                                إضافة اللون
-                                            </button>
+                                                {productTypes.filter(t => t !== 'الكل').map(t => (
+                                                    <option key={t} value={t}>{t}</option>
+                                                ))}
+                                            </select>
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-wrap gap-3">
-                                        {newProduct.colors.map(color => (
-                                            <button
-                                                key={color.hex}
-                                                type="button"
-                                                onClick={() => {
-                                                    setNewProduct(prev => ({
-                                                        ...prev,
-                                                        colors: prev.colors.filter(c => c.hex !== color.hex)
-                                                    }));
-                                                }}
-                                                className="group relative w-10 h-10 rounded-full border border-white/10 transition-all hover:scale-110"
-                                                style={{ backgroundColor: color.hex }}
-                                                title={color.name}
-                                            >
-                                                <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 text-white rounded-full text-[10px] break-words p-1 leading-none text-center">{color.name}</span>
-                                            </button>
-                                        ))}
+                                    {/* Sizes */}
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">المقاسات المتاحة</label>
+                                        <div className="flex flex-wrap gap-2">
+                                            {availableSizes.map(size => (
+                                                <button
+                                                    key={size}
+                                                    type="button"
+                                                    onClick={() => toggleSize(size)}
+                                                    className={cn(
+                                                        "w-10 h-10 rounded-lg text-xs font-bold transition-all border",
+                                                        newProduct.sizes.includes(size)
+                                                            ? "bg-gold-500 border-gold-500 text-rich-black"
+                                                            : "bg-rich-black border-white/10 text-gray-400 hover:border-gold-500/50"
+                                                    )}
+                                                >
+                                                    {size}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">صور المنتج</label>
 
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                                        {productGallery.map((img, idx) => (
-                                            <div key={idx} className="relative aspect-[3/4] bg-rich-black rounded-xl overflow-hidden border border-white/10 group">
-                                                <Image
-                                                    src={img instanceof File ? URL.createObjectURL(img) : img}
-                                                    alt={`Product ${idx}`}
-                                                    fill
-                                                    className="object-cover"
-                                                />
+                                    {/* Colors */}
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">الألوان المتاحة</label>
+
+                                        <div className="bg-rich-black/50 border border-white/5 p-4 rounded-xl space-y-4">
+                                            <div className="flex flex-col gap-4">
+                                                <div className="flex items-center gap-3">
+                                                    {/* Circular Color Picker */}
+                                                    <div className="relative group shrink-0">
+                                                        <input
+                                                            type="color"
+                                                            id="colorPicker"
+                                                            value={/^#[0-9A-F]{6}$/i.test(colorInput) ? colorInput : '#000000'}
+                                                            className="w-12 h-12 rounded-full cursor-pointer overflow-hidden border-2 border-white/10 p-0 bg-transparent transition-transform hover:scale-105 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-full"
+                                                            onChange={(e) => setColorInput(e.target.value)}
+                                                        />
+                                                    </div>
+
+                                                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="اسم اللون (مثال: أحمر)"
+                                                            id="colorNameInput"
+                                                            className="w-full bg-rich-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:border-gold-500/50 outline-none transition-all placeholder:text-gray-600"
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            placeholder="#000000"
+                                                            value={colorInput}
+                                                            onChange={(e) => setColorInput(e.target.value)}
+                                                            className="w-full bg-rich-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm uppercase font-mono focus:border-gold-500/50 outline-none transition-all placeholder:text-gray-600"
+                                                        />
+                                                    </div>
+                                                </div>
+
                                                 <button
                                                     type="button"
                                                     onClick={() => {
-                                                        const newGallery = [...productGallery];
-                                                        newGallery.splice(idx, 1);
-                                                        setProductGallery(newGallery);
+                                                        let val = colorInput.trim();
+                                                        if (!val.startsWith('#')) val = '#' + val;
+                                                        const nameInput = document.querySelector('#colorNameInput') as HTMLInputElement;
+                                                        const name = nameInput?.value?.trim() || val;
+
+                                                        if (/^#[0-9A-F]{6}$/i.test(val)) {
+                                                            if (!newProduct.colors.some(c => c.hex === val)) {
+                                                                setNewProduct(prev => ({
+                                                                    ...prev,
+                                                                    colors: [...prev.colors, { name, hex: val }]
+                                                                }));
+                                                                setColorInput('');
+                                                                if (nameInput) nameInput.value = '';
+                                                            }
+                                                        } else {
+                                                            alert('يرجى إدخال كود لون صحيح (HEX)');
+                                                        }
                                                     }}
-                                                    className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    className="w-full bg-gold-500 text-rich-black py-3 rounded-lg text-sm font-bold hover:bg-gold-300 transition-colors shadow-lg shadow-gold-500/10"
                                                 >
-                                                    <Trash2 className="w-4 h-4" />
+                                                    إضافة اللون
                                                 </button>
                                             </div>
-                                        ))}
-
-                                        <label className="relative aspect-[3/4] bg-rich-black/50 rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500/50 transition-all group">
-                                            <Upload className="w-8 h-8 text-gray-600 group-hover:text-gold-500 transition-colors" />
-                                            <span className="text-xs text-gray-600 mt-2 group-hover:text-gold-500 transition-colors">إضافة صورة</span>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                multiple
-                                                className="hidden"
-                                                onChange={(e) => {
-                                                    const files = Array.from(e.target.files || []);
-                                                    setProductGallery(prev => [...prev, ...files]);
-                                                }}
-                                            />
-                                        </label>
-                                    </div>
-                                </div>
-
-                                {/* Size Chart Image */}
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">صورة جدول المقاسات (اختياري)</label>
-
-                                    {sizeChartImage ? (
-                                        <div className="relative aspect-video bg-rich-black rounded-xl overflow-hidden border border-white/10 group">
-                                            <Image
-                                                src={sizeChartImage instanceof File ? URL.createObjectURL(sizeChartImage) : sizeChartImage}
-                                                alt="Size Chart"
-                                                fill
-                                                className="object-contain"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => setSizeChartImage(null)}
-                                                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500/80 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                                            >
-                                                <X className="w-4 h-4" />
-                                            </button>
                                         </div>
-                                    ) : (
-                                        <label className="relative aspect-video bg-rich-black/50 rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500/50 transition-all group">
-                                            <Upload className="w-8 h-8 text-gray-600 group-hover:text-gold-500 transition-colors" />
-                                            <span className="text-xs text-gray-600 mt-2 group-hover:text-gold-500 transition-colors">رفع صورة جدول المقاسات</span>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                className="hidden"
-                                                onChange={(e) => {
-                                                    const file = e.target.files?.[0];
-                                                    if (file) setSizeChartImage(file);
-                                                }}
-                                            />
-                                        </label>
-                                    )}
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">وصف المنتج</label>
-                                    <textarea
-                                        value={newProduct.description}
-                                        onChange={e => setNewProduct({ ...newProduct, description: e.target.value })}
-                                        className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none h-24 resize-none"
-                                        placeholder="وصف مختصر للمنتج..."
-                                    />
-                                </div>
 
-                                <div className="pt-4 flex gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsAddModalOpen(false)}
-                                        className="flex-1 px-4 py-3 rounded-xl border border-white/10 text-gray-400 font-bold hover:bg-white/5 transition-colors"
-                                    >
-                                        إلغاء
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        disabled={isUploading}
-                                        className="flex-1 px-4 py-3 rounded-xl bg-gold-500 text-rich-black font-bold hover:bg-gold-300 transition-colors shadow-lg shadow-gold-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {isUploading ? 'جاري الحفظ...' : (editingProduct ? 'حفظ التعديلات' : 'إضافة المنتج')}
-                                    </button>
-                                </div>
+                                        <div className="flex flex-wrap gap-3">
+                                            {newProduct.colors.map(color => (
+                                                <button
+                                                    key={color.hex}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setNewProduct(prev => ({
+                                                            ...prev,
+                                                            colors: prev.colors.filter(c => c.hex !== color.hex)
+                                                        }));
+                                                    }}
+                                                    className="group relative w-10 h-10 rounded-full border border-white/10 transition-all hover:scale-110"
+                                                    style={{ backgroundColor: color.hex }}
+                                                    title={color.name}
+                                                >
+                                                    <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 text-white rounded-full text-[10px] break-words p-1 leading-none text-center">{color.name}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">صور المنتج</label>
+
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                            {productGallery.map((img, idx) => (
+                                                <div key={idx} className="relative aspect-[3/4] bg-rich-black rounded-xl overflow-hidden border border-white/10 group">
+                                                    <Image
+                                                        src={img instanceof File ? URL.createObjectURL(img) : img}
+                                                        alt={`Product ${idx}`}
+                                                        fill
+                                                        className="object-cover"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const newGallery = [...productGallery];
+                                                            newGallery.splice(idx, 1);
+                                                            setProductGallery(newGallery);
+                                                        }}
+                                                        className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            ))}
+
+                                            <label className="relative aspect-[3/4] bg-rich-black/50 rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500/50 transition-all group">
+                                                <Upload className="w-8 h-8 text-gray-600 group-hover:text-gold-500 transition-colors" />
+                                                <span className="text-xs text-gray-600 mt-2 group-hover:text-gold-500 transition-colors">إضافة صورة</span>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    multiple
+                                                    className="hidden"
+                                                    onChange={(e) => {
+                                                        const files = Array.from(e.target.files || []);
+                                                        setProductGallery(prev => [...prev, ...files]);
+                                                    }}
+                                                />
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {/* Size Chart Image */}
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">صورة جدول المقاسات (اختياري)</label>
+
+                                        {sizeChartImage ? (
+                                            <div className="relative aspect-video bg-rich-black rounded-xl overflow-hidden border border-white/10 group">
+                                                <Image
+                                                    src={sizeChartImage instanceof File ? URL.createObjectURL(sizeChartImage) : sizeChartImage}
+                                                    alt="Size Chart"
+                                                    fill
+                                                    className="object-contain"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setSizeChartImage(null)}
+                                                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500/80 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                                >
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <label className="relative aspect-video bg-rich-black/50 rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500/50 transition-all group">
+                                                <Upload className="w-8 h-8 text-gray-600 group-hover:text-gold-500 transition-colors" />
+                                                <span className="text-xs text-gray-600 mt-2 group-hover:text-gold-500 transition-colors">رفع صورة جدول المقاسات</span>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                    onChange={(e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (file) setSizeChartImage(file);
+                                                    }}
+                                                />
+                                            </label>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">وصف المنتج</label>
+                                        <textarea
+                                            value={newProduct.description}
+                                            onChange={e => setNewProduct({ ...newProduct, description: e.target.value })}
+                                            className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none h-24 resize-none"
+                                            placeholder="وصف مختصر للمنتج..."
+                                        />
+                                    </div>
+
+                                    <div className="pt-4 flex gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsAddModalOpen(false)}
+                                            className="flex-1 px-4 py-3 rounded-xl border border-white/10 text-gray-400 font-bold hover:bg-white/5 transition-colors"
+                                        >
+                                            إلغاء
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            disabled={isUploading}
+                                            className="flex-1 px-4 py-3 rounded-xl bg-gold-500 text-rich-black font-bold hover:bg-gold-300 transition-colors shadow-lg shadow-gold-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {isUploading ? 'جاري الحفظ...' : (editingProduct ? 'حفظ التعديلات' : 'إضافة المنتج')}
+                                        </button>
+                                    </div>
                             </form>
                         </motion.div>
                     </div>

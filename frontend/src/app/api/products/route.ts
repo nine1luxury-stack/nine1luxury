@@ -7,10 +7,12 @@ export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const category = searchParams.get('category');
+        const type = searchParams.get('type');
         const featured = searchParams.get('featured');
 
         const where: Record<string, string | boolean> = {};
         if (category) where.category = category;
+        if (type) where.type = type;
         if (featured === 'true') where.featured = true;
 
         const products = await prisma.product.findMany({
@@ -51,6 +53,7 @@ export async function POST(request: Request) {
                 price: parseFloat(data.price),
                 discount: data.discount ? parseFloat(data.discount) : null,
                 category: data.category,
+                type: data.type || null,
                 featured: data.featured || false,
                 isActive: data.isActive !== false, // Default to true
                 sizeChartImage: data.sizeChartImage || null,
