@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Plus,
@@ -26,8 +26,21 @@ export default function AdminProductsPage() {
     // Use Global Context
     const { products, addProduct, deleteProduct, updateProduct } = useProducts();
 
-    const categories = ["الكل", "هوديز", "تيشرتات", "بناطيل", "سويت شيرتات"];
-    const productTypes = ["الكل", "قطن", "ميلتون", "ليكرا", "وتر بروف"];
+    const categories = useMemo(() => {
+        const base = ["الكل", "هوديز", "تيشرتات", "بناطيل", "سويت شيرتات"];
+        const fromProducts = products.map(p => p.category);
+        return Array.from(new Set([...base, ...fromProducts]));
+    }, [products]);
+
+    const productTypes = useMemo(() => {
+        const base = ["الكل", "قطن", "ميلتون", "ليكرا", "وتر بروف"];
+        const fromProducts = products.map(p => p.type).filter(Boolean) as string[];
+        return Array.from(new Set([...base, ...fromProducts]));
+    }, [products]);
+
+    const [showCategoryInput, setShowCategoryInput] = useState(false);
+    const [showTypeInput, setShowTypeInput] = useState(false);
+
     const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"];
     // availableColors removed in favor of dynamic hex input
 
@@ -489,28 +502,66 @@ export default function AdminProductsPage() {
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">القسم</label>
-                                            <select
-                                                value={newProduct.category}
-                                                onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}
-                                                className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none appearance-none"
-                                            >
-                                                {categories.filter(c => c !== 'الكل').map(c => (
-                                                    <option key={c} value={c}>{c}</option>
-                                                ))}
-                                            </select>
+                                            <div className="flex justify-between items-center mb-1">
+                                                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider">القسم</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowCategoryInput(!showCategoryInput)}
+                                                    className="text-[10px] text-gold-500 hover:text-gold-300 underline"
+                                                >
+                                                    {showCategoryInput ? 'اختيار من القائمة' : 'إضافة قسم جديد'}
+                                                </button>
+                                            </div>
+                                            {showCategoryInput ? (
+                                                <input
+                                                    type="text"
+                                                    value={newProduct.category}
+                                                    onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}
+                                                    className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                                    placeholder="اسم القسم الجديد..."
+                                                />
+                                            ) : (
+                                                <select
+                                                    value={newProduct.category}
+                                                    onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}
+                                                    className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none appearance-none"
+                                                >
+                                                    {categories.filter(c => c !== 'الكل').map(c => (
+                                                        <option key={c} value={c}>{c}</option>
+                                                    ))}
+                                                </select>
+                                            )}
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">النوع</label>
-                                            <select
-                                                value={newProduct.type}
-                                                onChange={e => setNewProduct({ ...newProduct, type: e.target.value })}
-                                                className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none appearance-none"
-                                            >
-                                                {productTypes.filter(t => t !== 'الكل').map(t => (
-                                                    <option key={t} value={t}>{t}</option>
-                                                ))}
-                                            </select>
+                                            <div className="flex justify-between items-center mb-1">
+                                                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider">النوع</label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowTypeInput(!showTypeInput)}
+                                                    className="text-[10px] text-gold-500 hover:text-gold-300 underline"
+                                                >
+                                                    {showTypeInput ? 'اختيار من القائمة' : 'إضافة نوع جديد'}
+                                                </button>
+                                            </div>
+                                            {showTypeInput ? (
+                                                <input
+                                                    type="text"
+                                                    value={newProduct.type}
+                                                    onChange={e => setNewProduct({ ...newProduct, type: e.target.value })}
+                                                    className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                                    placeholder="اسم النوع الجديد..."
+                                                />
+                                            ) : (
+                                                <select
+                                                    value={newProduct.type}
+                                                    onChange={e => setNewProduct({ ...newProduct, type: e.target.value })}
+                                                    className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none appearance-none"
+                                                >
+                                                    {productTypes.filter(t => t !== 'الكل').map(t => (
+                                                        <option key={t} value={t}>{t}</option>
+                                                    ))}
+                                                </select>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

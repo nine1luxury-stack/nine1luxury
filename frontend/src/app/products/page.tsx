@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 
-const FILTERS = {
+const FILTERS_BASE = {
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: [
         { name: "أسود", hex: "#000000" },
@@ -17,7 +17,6 @@ const FILTERS = {
         { name: "أبيض", hex: "#FFFFFF" },
         { name: "رمادي", hex: "#4B5563" },
     ],
-    categories: ["جميع المنتجات", "تيشرتات", "هوديز", "بناطيل", "سويت شيرتات"],
 };
 
 import { useProducts } from "@/context/ProductContext";
@@ -32,13 +31,19 @@ function ProductsContent() {
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
 
+    const categories = useMemo(() => {
+        const base = ["جميع المنتجات", "تيشرتات", "هوديز", "بناطيل", "سويت شيرتات"];
+        const fromProducts = products.map(p => p.category);
+        return Array.from(new Set([...base, ...fromProducts]));
+    }, [products]);
+
     useEffect(() => {
         const categoryParam = searchParams.get("category");
-        if (categoryParam && FILTERS.categories.includes(categoryParam)) {
+        if (categoryParam && categories.includes(categoryParam)) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setSelectedCategory(categoryParam);
         }
-    }, [searchParams]);
+    }, [searchParams, categories]);
 
     const filteredProducts = useMemo(() => {
         return products
@@ -125,7 +130,7 @@ function ProductsContent() {
                         <div className="space-y-4 mb-8">
                             <h3 className="text-gold-300 font-bold uppercase tracking-widest text-sm border-b border-gold-500/10 pb-2">فئات</h3>
                             <div className="flex flex-col gap-2">
-                                {FILTERS.categories.map((cat) => (
+                                {categories.map((cat) => (
                                     <button
                                         key={cat}
                                         suppressHydrationWarning
@@ -168,7 +173,7 @@ function ProductsContent() {
                         <div className="space-y-4 mb-8">
                             <h3 className="text-gold-300 font-bold uppercase tracking-widest text-sm border-b border-gold-500/10 pb-2">المقاس</h3>
                             <div className="flex flex-wrap gap-2">
-                                {FILTERS.sizes.map((size) => (
+                                {FILTERS_BASE.sizes.map((size) => (
                                     <button
                                         key={size}
                                         suppressHydrationWarning
