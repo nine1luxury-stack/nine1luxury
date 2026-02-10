@@ -8,7 +8,7 @@ import {
     Edit2,
     Trash2,
     Eye,
-
+    Upload,
     ChevronRight,
     ChevronLeft,
     X
