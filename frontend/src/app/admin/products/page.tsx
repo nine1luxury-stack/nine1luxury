@@ -41,14 +41,7 @@ export default function AdminProductsPage() {
     const [categoryInput, setCategoryInput] = useState("");
     const [editingCatId, setEditingCatId] = useState<string | null>(null);
 
-    const productTypes = useMemo(() => {
-        const base = ["الكل", "قطن", "ميلتون", "ليكرا", "وتر بروف"];
-        const fromProducts = products.map(p => p.type).filter(Boolean) as string[];
-        return Array.from(new Set([...base, ...fromProducts]));
-    }, [products]);
-
     const [showCategoryInput, setShowCategoryInput] = useState(false);
-    const [showTypeInput, setShowTypeInput] = useState(false);
 
     const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"];
     // availableColors removed in favor of dynamic hex input
@@ -60,7 +53,6 @@ export default function AdminProductsPage() {
         model: string;
         price: string;
         category: string;
-        type: string;
         description: string;
         image: string;
         sizes: string[];
@@ -70,7 +62,6 @@ export default function AdminProductsPage() {
         model: '',
         price: '',
         category: 'تيشرتات',
-        type: 'قطن',
         description: '',
         image: '',
         sizes: [],
@@ -122,7 +113,6 @@ export default function AdminProductsPage() {
             model: product.model || '',
             price: product.price.toString(),
             category: product.category,
-            type: product.type || 'قطن',
             description: product.description,
             image: product.images?.[0]?.url || product.image || '',
             sizes: sizes,
@@ -574,37 +564,7 @@ export default function AdminProductsPage() {
                                                 </select>
                                             )}
                                         </div>
-                                        <div>
-                                            <div className="flex justify-between items-center mb-1">
-                                                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider">النوع</label>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowTypeInput(!showTypeInput)}
-                                                    className="text-[10px] text-gold-500 hover:text-gold-300 underline"
-                                                >
-                                                    {showTypeInput ? 'اختيار من القائمة' : 'إضافة نوع جديد'}
-                                                </button>
-                                            </div>
-                                            {showTypeInput ? (
-                                                <input
-                                                    type="text"
-                                                    value={newProduct.type}
-                                                    onChange={e => setNewProduct({ ...newProduct, type: e.target.value })}
-                                                    className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none"
-                                                    placeholder="اسم النوع الجديد..."
-                                                />
-                                            ) : (
-                                                <select
-                                                    value={newProduct.type}
-                                                    onChange={e => setNewProduct({ ...newProduct, type: e.target.value })}
-                                                    className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none appearance-none"
-                                                >
-                                                    {productTypes.filter(t => t !== 'الكل').map(t => (
-                                                        <option key={t} value={t}>{t}</option>
-                                                    ))}
-                                                </select>
-                                            )}
-                                        </div>
+
                                     </div>
                                 </div>
 

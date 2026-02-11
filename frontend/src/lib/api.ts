@@ -369,7 +369,10 @@ export const categoriesApi = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name }),
         });
-        if (!res.ok) throw new Error('Failed to create category');
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.details || err.error || 'Failed to create category');
+        }
         return res.json();
     },
     async update(id: string, name: string): Promise<Category> {
@@ -378,13 +381,19 @@ export const categoriesApi = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name }),
         });
-        if (!res.ok) throw new Error('Failed to update category');
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.details || err.error || 'Failed to update category');
+        }
         return res.json();
     },
     async delete(id: string): Promise<void> {
         const res = await fetch(`/api/categories/${id}`, {
             method: 'DELETE',
         });
-        if (!res.ok) throw new Error('Failed to delete category');
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.details || err.error || 'Failed to delete category');
+        }
     }
 };
