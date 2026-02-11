@@ -234,7 +234,7 @@ export default function AdminProductsPage() {
                         </div>
                         <input
                             type="text"
-                            placeholder="ابحث بالاسم، الموديل، أو الكود..."
+                            placeholder="ابحث باسم المنتج فقط..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full bg-rich-black/50 border border-white/10 rounded-2xl pr-14 pl-5 py-4 text-sm text-white placeholder:text-gray-600 focus:border-gold-500/50 focus:bg-rich-black outline-none transition-all shadow-inner focus:ring-1 focus:ring-gold-500/20"
@@ -291,8 +291,8 @@ export default function AdminProductsPage() {
                     <table className="w-full text-right border-collapse">
                         <thead>
                             <tr className="bg-white/5 text-gray-500 text-[10px] uppercase tracking-[0.2em] font-black">
-                                <th className="px-8 py-6">المنتج</th>
-                                <th className="px-8 py-6 text-center">الموديل</th>
+                                <th className="px-8 py-6">اسم المنتج</th>
+                                <th className="px-8 py-6 text-center">كود الموديل</th>
                                 <th className="px-8 py-6 text-center">القسم</th>
                                 <th className="px-8 py-6 text-center">السعر</th>
                                 <th className="px-8 py-6 text-center">المخزون</th>
