@@ -122,7 +122,7 @@ export default function AdminOrdersPage() {
             }
         };
         fetchOrders();
-        
+
         // Polling for real-time updates every 10 seconds
         const interval = setInterval(fetchOrders, 10000);
         return () => clearInterval(interval);
@@ -316,7 +316,7 @@ export default function AdminOrdersPage() {
                                         <td className="px-6 py-6">
                                             <div className="flex flex-col">
                                                 <span className="text-gold-400 font-bold text-base">{formatPrice(order.totalAmount)}</span>
-                                                <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{order.paymentMethod === 'COD' ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
+                                                <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{(order.paymentMethod === 'COD' || order.paymentMethod === 'CASH_ON_DELIVERY') ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-6 text-center" onClick={(e) => e.stopPropagation()}>
@@ -326,9 +326,9 @@ export default function AdminOrdersPage() {
                                                 className={cn(
                                                     "text-[10px] px-3 py-1.5 rounded-lg font-bold uppercase cursor-pointer outline-none border transition-all text-center mx-auto block min-w-[110px]",
                                                     order.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20' :
-                                                    order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
-                                                    order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
-                                                    'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
+                                                        order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
+                                                            order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
+                                                                'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
                                                 )}
                                             >
                                                 <option value="PENDING" className="bg-rich-black text-gray-300">قيد الانتظار</option>
@@ -344,7 +344,7 @@ export default function AdminOrdersPage() {
                                         </td>
                                         <td className="px-6 py-6 text-left" onClick={(e) => e.stopPropagation()}>
                                             <div className="flex items-center justify-end gap-3">
-                                                 {order.guestPhone && (
+                                                {order.guestPhone && (
                                                     <a
                                                         href={`https://wa.me/20${order.guestPhone.startsWith('0') ? order.guestPhone.slice(1) : order.guestPhone}`}
                                                         target="_blank"

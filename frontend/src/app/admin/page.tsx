@@ -59,7 +59,7 @@ export default function AdminDashboard() {
 
     // Calculate dynamic stats
     const stats = useMemo(() => {
-        const completedOrders = orders.filter(o => o.status === 'COMPLETED');
+        const completedOrders = orders.filter(o => o.status === 'DELIVERED');
         const pendingOrders = orders.filter(o => o.status === 'PENDING');
 
         const totalSales = completedOrders.reduce((sum, order) => sum + Number(order.totalAmount), 0);
@@ -207,7 +207,7 @@ export default function AdminDashboard() {
                                             <td className="px-4 py-5">
                                                 <div className="flex flex-col">
                                                     <span className="text-sm text-white font-bold group-hover:text-gold-300 transition-colors">
-                                                        {order.guestName || order.user?.name || 'عميل مجهول'}
+                                                        {order.guestName || (order as any).user?.name || (order as any).User?.name || 'عميل مجهول'}
                                                     </span>
                                                     <span className="text-[10px] text-gray-600 font-mono mt-0.5">{order.guestPhone || 'بدون رقم'}</span>
                                                 </div>
@@ -215,7 +215,7 @@ export default function AdminDashboard() {
                                             <td className="px-4 py-5 text-sm">
                                                 <div className="flex flex-col">
                                                     <span className="text-gold-300 font-bold">{formatPrice(order.totalAmount)}</span>
-                                                    <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{order.paymentMethod === 'COD' ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
+                                                    <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{order.paymentMethod === 'CASH_ON_DELIVERY' ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
                                                 </div>
                                             </td>
                                             <td className="px-4 py-5 text-center">
@@ -225,9 +225,9 @@ export default function AdminDashboard() {
                                                     className={cn(
                                                         "text-[10px] px-3 py-1.5 rounded-full font-bold uppercase cursor-pointer outline-none border transition-all text-center mx-auto block",
                                                         order.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20' :
-                                                        order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
-                                                        order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
-                                                        'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
+                                                            order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
+                                                                order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
+                                                                    'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
                                                     )}
                                                 >
                                                     <option value="PENDING" className="bg-rich-black text-gray-300">قيد الانتظار</option>
