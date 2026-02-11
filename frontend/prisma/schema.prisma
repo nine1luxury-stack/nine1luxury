@@ -58,7 +58,7 @@ model product {
   price          Float
   discount       Float?
   category       String
-  type           String?
+
   featured       Boolean          @default(false)
   isActive       Boolean          @default(true)
   reorderPoint   Int              @default(10)

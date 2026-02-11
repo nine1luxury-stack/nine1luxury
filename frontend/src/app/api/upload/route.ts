@@ -15,6 +15,13 @@ export async function POST(request: Request) {
         }
 
         // Upload to Vercel Blob
+        if (!process.env.BLOB_READ_WRITE_TOKEN) {
+            return NextResponse.json(
+                { success: false, message: 'Vercel Blob token not found. Please configure BLOB_READ_WRITE_TOKEN in your environment variables.' },
+                { status: 500 }
+            );
+        }
+
         const blob = await put(file.name, file, {
             access: 'public',
         });
