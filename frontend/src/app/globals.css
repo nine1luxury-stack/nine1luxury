@@ -14,6 +14,7 @@
   --font-playfair: "Playfair Display Variable", serif;
 
   --animate-gold-shimmer: gold-shimmer 3s ease-in-out infinite;
+  --animate-spin-slow: spin 3s linear infinite;
 
   @keyframes gold-shimmer {
     0% {
@@ -27,7 +28,8 @@
 }
 
 html {
-  font-size: 115%; /* Increases base size by 15% for all rem-based units */
+  font-size: 115%;
+  /* Increases base size by 15% for all rem-based units */
 }
 
 :root {
@@ -104,6 +106,7 @@ body {
 
 /* Hide Number Input Arrows */
 @layer base {
+
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;

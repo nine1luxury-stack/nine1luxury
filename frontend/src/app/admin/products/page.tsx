@@ -276,59 +276,83 @@ export default function AdminProductsPage() {
                 </button>
             </div>
 
-            {/* Filters & Search */}
-            <div className="flex flex-col lg:flex-row gap-4 bg-surface-dark/50 border border-white/5 p-4 rounded-2xl">
-                <div className="relative flex-1">
-                    <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                    <input
-                        type="text"
-                        placeholder="ابحث باسم المنتج فقط..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-rich-black border border-white/5 rounded-xl pr-12 pl-4 py-3 text-sm focus:border-gold-500 outline-none transition-colors"
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <div className="flex justify-between items-center w-full mb-1">
-                        <span className="text-xs text-gray-500">القسم:</span>
-                        <button
-                            onClick={() => setIsCategoryModalOpen(true)}
-                            className="text-[10px] text-gold-500 hover:text-gold-300 flex items-center gap-1"
-                        >
-                            <Settings className="w-3 h-3" />
-                            إدارة الأقسام
-                        </button>
+            {/* Premium Filters & Search Toolbar */}
+            <div className="bg-surface-dark/40 backdrop-blur-md border border-white/10 rounded-3xl p-6 space-y-6 shadow-xl relative overflow-hidden">
+                {/* Decorative Background Element */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 blur-3xl -mr-16 -mt-16 rounded-full pointer-events-none" />
+
+                <div className="flex flex-col xl:flex-row gap-6 items-stretch xl:items-center relative z-10">
+                    {/* Search Component */}
+                    <div className="relative group flex-1">
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 bg-gold-500/10 rounded-lg group-focus-within:bg-gold-500 transition-all duration-300">
+                            <Search className="w-4 h-4 text-gold-500 group-focus-within:text-rich-black" />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="ابحث بالاسم، الموديل، أو الكود..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full bg-rich-black/50 border border-white/10 rounded-2xl pr-14 pl-5 py-4 text-sm text-white placeholder:text-gray-600 focus:border-gold-500/50 focus:bg-rich-black outline-none transition-all shadow-inner focus:ring-1 focus:ring-gold-500/20"
+                        />
                     </div>
-                    {categories.map(cat => (
-                        <button
-                            key={cat}
-                            onClick={() => setSelectedCategory(cat)}
-                            className={cn(
-                                "px-4 py-2 rounded-xl text-[10px] font-bold transition-all border",
-                                selectedCategory === cat
-                                    ? "bg-gold-500 border-gold-500 text-rich-black"
-                                    : "bg-rich-black border-white/5 text-gray-400 hover:border-gold-500/30"
-                            )}
-                        >
-                            {cat}
-                        </button>
-                    ))}
+
+                    {/* Quick Category Stats/Filter Label */}
+                    <div className="flex items-center gap-3 px-4 py-2 bg-white/5 rounded-2xl border border-white/5">
+                        <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold whitespace-nowrap">إجمالي المنتجات:</span>
+                        <span className="text-sm font-bold text-gold-500 font-mono">{filteredProducts.length}</span>
+                    </div>
+
+                    {/* Manage Categories Action */}
+                    <button
+                        onClick={() => setIsCategoryModalOpen(true)}
+                        className="flex items-center justify-center gap-2 px-6 py-4 bg-gold-500/5 border border-gold-500/20 rounded-2xl text-gold-500 hover:bg-gold-500 hover:text-rich-black transition-all duration-300 font-bold text-sm"
+                    >
+                        <Settings className="w-4 h-4 animate-spin-slow" />
+                        <span className="whitespace-nowrap">إدارة الأقسام</span>
+                    </button>
+                </div>
+
+                {/* Horizontal Category Scroll */}
+                <div className="relative group">
+                    <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-surface-dark/0 via-surface-dark/0 to-transparent z-10 pointer-events-none" />
+                    <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar scroll-smooth">
+                        {categories.map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setSelectedCategory(cat)}
+                                className={cn(
+                                    "px-6 py-3 rounded-2xl text-xs font-bold transition-all duration-300 whitespace-nowrap border relative overflow-hidden group/btn",
+                                    selectedCategory === cat
+                                        ? "bg-gold-500 border-gold-500 text-rich-black shadow-lg shadow-gold-500/20 scale-105"
+                                        : "bg-surface-dark border-white/5 text-gray-500 hover:border-white/20 hover:text-white hover:bg-white/5"
+                                )}
+                            >
+                                <span className="relative z-10">{cat}</span>
+                                {selectedCategory === cat && (
+                                    <motion.div
+                                        layoutId="activeTab"
+                                        className="absolute inset-0 bg-gold-300 pointer-events-none mix-blend-overlay opacity-50"
+                                    />
+                                )}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
-            {/* Products Table */}
-            <div className="bg-surface-dark border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
-                <div className="overflow-x-auto">
+            {/* Products Table Wrapper */}
+            <div className="bg-surface-dark/60 backdrop-blur-sm border border-white/5 rounded-3xl overflow-hidden shadow-2xl relative">
+                <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-right border-collapse">
                         <thead>
-                            <tr className="bg-white/5 text-gray-400 text-[10px] uppercase tracking-[0.2em] font-bold">
-                                <th className="px-6 py-5">المنتج</th>
-                                <th className="px-6 py-5">الموديل</th>
-                                <th className="px-6 py-5">القسم</th>
-                                <th className="px-6 py-5">السعر</th>
-                                <th className="px-6 py-5">المخزون</th>
-                                <th className="px-6 py-5">الحالة</th>
-                                <th className="px-6 py-5 text-left">الإجراءات</th>
+                            <tr className="bg-white/5 text-gray-500 text-[10px] uppercase tracking-[0.2em] font-black">
+                                <th className="px-8 py-6">المنتج</th>
+                                <th className="px-8 py-6 text-center">الموديل</th>
+                                <th className="px-8 py-6 text-center">القسم</th>
+                                <th className="px-8 py-6 text-center">السعر</th>
+                                <th className="px-8 py-6 text-center">المخزون</th>
+                                <th className="px-8 py-6 text-center">الحالة</th>
+                                <th className="px-8 py-6 text-left">الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
@@ -871,90 +895,129 @@ export default function AdminProductsPage() {
             {/* Category Management Modal */}
             <AnimatePresence>
                 {isCategoryModalOpen && (
-                    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
                         <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.95, opacity: 0 }}
-                            className="bg-surface-dark border border-white/10 rounded-2xl w-full max-w-md overflow-hidden"
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="bg-surface-dark border border-white/10 rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-[0_32px_64px_-12px_rgba(0,0,0,0.8)] relative"
                         >
-                            <div className="p-6 border-b border-white/10 flex justify-between items-center">
-                                <h2 className="text-xl font-bold text-white font-playfair">إدارة الأقسام</h2>
+                            {/* Decorative Header Gradient */}
+                            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-50" />
+
+                            <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/2">
+                                <div>
+                                    <h2 className="text-2xl font-bold text-white font-playfair tracking-tight">إدارة الأقسام</h2>
+                                    <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-1">تنسيق وهيكلة متجرك الخاص</p>
+                                </div>
                                 <button onClick={() => {
                                     setIsCategoryModalOpen(false);
                                     setEditingCatId(null);
                                     setCategoryInput("");
-                                }} className="text-gray-400 hover:text-white">
+                                }} className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-gray-400 hover:text-white transition-all">
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
 
-                            <div className="p-6 space-y-6">
-                                {/* Add/Edit Form */}
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={categoryInput}
-                                        onChange={(e) => setCategoryInput(e.target.value)}
-                                        placeholder="اسم القسم..."
-                                        className="flex-1 bg-rich-black border border-white/10 rounded-xl px-4 py-2 text-white text-sm focus:border-gold-500 outline-none"
-                                    />
-                                    <button
-                                        onClick={async () => {
-                                            if (!categoryInput.trim()) return;
-                                            try {
-                                                if (editingCatId) {
-                                                    await updateCategory(editingCatId, categoryInput);
-                                                } else {
-                                                    await addCategory(categoryInput);
+                            <div className="p-8 space-y-8">
+                                {/* Enhanced Add/Edit Form */}
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] pr-2">
+                                        {editingCatId ? "تعديل اسم القسم" : "إضافة قسم جديد"}
+                                    </label>
+                                    <div className="flex gap-3">
+                                        <input
+                                            type="text"
+                                            value={categoryInput}
+                                            onChange={(e) => setCategoryInput(e.target.value)}
+                                            placeholder="مثال: مجموعات شتوية..."
+                                            className="flex-1 bg-rich-black/50 border border-white/10 rounded-2xl px-6 py-4 text-white text-sm focus:border-gold-500 outline-none shadow-inner focus:bg-rich-black transition-all"
+                                        />
+                                        <button
+                                            onClick={async () => {
+                                                if (!categoryInput.trim()) return;
+                                                try {
+                                                    if (editingCatId) {
+                                                        await updateCategory(editingCatId, categoryInput);
+                                                    } else {
+                                                        await addCategory(categoryInput);
+                                                    }
+                                                    setCategoryInput("");
+                                                    setEditingCatId(null);
+                                                } catch (err: any) {
+                                                    alert(err.message);
                                                 }
-                                                setCategoryInput("");
-                                                setEditingCatId(null);
-                                            } catch (err: any) {
-                                                alert(err.message);
-                                            }
-                                        }}
-                                        className="bg-gold-500 text-rich-black px-4 py-2 rounded-xl font-bold text-xs hover:bg-gold-300"
-                                    >
-                                        {editingCatId ? "حفظ" : "إضافة"}
-                                    </button>
+                                            }}
+                                            className="bg-gold-500 text-rich-black px-8 py-4 rounded-2xl font-black text-xs hover:bg-gold-300 transition-all shadow-lg shadow-gold-500/10 active:scale-95 whitespace-nowrap"
+                                        >
+                                            {editingCatId ? "حفظ التغييرات" : "إضافة للكل"}
+                                        </button>
+                                    </div>
+                                    {editingCatId && (
+                                        <button
+                                            onClick={() => { setEditingCatId(null); setCategoryInput(""); }}
+                                            className="text-[10px] text-gray-500 hover:text-white underline pr-2"
+                                        >
+                                            إلغاء التعديل
+                                        </button>
+                                    )}
                                 </div>
 
-                                {/* Categories List */}
-                                <div className="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-2">
-                                    {dbCategories.map(cat => (
-                                        <div key={cat.id} className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5 hover:border-white/10 transition-all">
-                                            <span className="text-sm text-white">{cat.name}</span>
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    onClick={() => {
-                                                        setEditingCatId(cat.id);
-                                                        setCategoryInput(cat.name);
-                                                    }}
-                                                    className="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
-                                                >
-                                                    <Edit2 className="w-4 h-4" />
-                                                </button>
-                                                <button
-                                                    onClick={async () => {
-                                                        if (confirm("هل أنت متأكد من حذف هذا القسم؟")) {
-                                                            try {
-                                                                await deleteCategory(cat.id);
-                                                            } catch (err: any) {
-                                                                alert(err.message);
+                                {/* Categories Scrollable List */}
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-center pr-2">
+                                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">الأقسام الحالية</label>
+                                        <span className="text-[10px] text-gold-500 font-bold">{dbCategories.length} أقسام</span>
+                                    </div>
+                                    <div className="space-y-2 max-h-[350px] overflow-y-auto custom-scrollbar pr-2 pb-4">
+                                        {dbCategories.map(cat => (
+                                            <motion.div
+                                                layout
+                                                key={cat.id}
+                                                className="group flex items-center justify-between bg-white/2 p-4 rounded-2xl border border-white/5 hover:border-gold-500/20 hover:bg-white/5 transition-all duration-300"
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-gold-500/40 group-hover:bg-gold-500 transition-colors" />
+                                                    <span className="text-sm font-medium text-white/90 group-hover:text-white">{cat.name}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <button
+                                                        onClick={() => {
+                                                            setEditingCatId(cat.id);
+                                                            setCategoryInput(cat.name);
+                                                        }}
+                                                        className="p-2.5 text-blue-400 hover:bg-blue-400/10 rounded-xl transition-all"
+                                                        title="تعديل"
+                                                    >
+                                                        <Edit2 className="w-4 h-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={async () => {
+                                                            if (confirm("هل أنت متأكد من حذف هذا القسم؟ سيتم حذف التصنيف من المنتجات المرتبطة.")) {
+                                                                try {
+                                                                    await deleteCategory(cat.id);
+                                                                } catch (err: any) {
+                                                                    alert(err.message);
+                                                                }
                                                             }
-                                                        }
-                                                    }}
-                                                    className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </button>
+                                                        }}
+                                                        className="p-2.5 text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
+                                                        title="حذف"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                        {dbCategories.length === 0 && (
+                                            <div className="text-center py-12 bg-white/2 rounded-3xl border border-dashed border-white/10">
+                                                <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                    <Settings className="w-6 h-6 text-gray-500" />
+                                                </div>
+                                                <p className="text-gray-500 text-xs font-medium">قائمة الأقسام فارغة حالياً.</p>
                                             </div>
-                                        </div>
-                                    ))}
-                                    {dbCategories.length === 0 && (
-                                        <p className="text-center text-gray-500 text-sm py-4">لا توجد أقسام مسجلة في قاعدة البيانات.</p>
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
