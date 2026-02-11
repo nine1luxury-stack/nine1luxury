@@ -27,7 +27,6 @@ const menuItems = [
     { name: "الحجوزات", icon: Calendar, href: "/admin/bookings" },
     { name: "الموردين", icon: Truck, href: "/admin/suppliers" },
     { name: "المصروفات", icon: Banknote, href: "/admin/expenses" },
-    { name: "العملاء", icon: Users, href: "/admin/customers" },
 ];
 
 export function AdminSidebar() {
@@ -35,7 +34,7 @@ export function AdminSidebar() {
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     return (
-        <aside 
+        <aside
             className={cn(
                 "bg-surface-dark border-l border-white/5 flex flex-col h-screen sticky top-0 transition-all duration-300",
                 isCollapsed ? "w-20" : "w-64"
@@ -44,7 +43,7 @@ export function AdminSidebar() {
             <div className="p-4 flex items-center justify-between border-b border-white/5 mb-2">
                 {!isCollapsed && (
                     <Link href="/" className="flex items-center justify-center w-full">
-                         <div className="relative w-52 h-24">
+                        <div className="relative w-52 h-24">
                             <Image
                                 src="/logo-main.png"
                                 alt="nine1luxury"
@@ -55,12 +54,12 @@ export function AdminSidebar() {
                         </div>
                     </Link>
                 )}
-                <button 
+                <button
                     suppressHydrationWarning
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     className={cn(
                         "p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors",
-                         isCollapsed && "mx-auto"
+                        isCollapsed && "mx-auto"
                     )}
                 >
                     {isCollapsed ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
@@ -91,7 +90,7 @@ export function AdminSidebar() {
             </nav>
 
             <div className="p-3 border-t border-white/5">
-                <button 
+                <button
                     suppressHydrationWarning
                     className={cn(
                         "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-red-500 hover:bg-red-500/10 transition-colors",

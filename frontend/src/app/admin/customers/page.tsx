@@ -43,7 +43,7 @@ export default function AdminCustomersPage() {
         try {
             const method = editingId ? 'PUT' : 'POST';
             const url = editingId ? `/api/customers/${editingId}` : '/api/customers';
-            
+
             const res = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
@@ -69,12 +69,8 @@ export default function AdminCustomersPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (id.startsWith('guest-') || id.startsWith('user-')) {
-            alert("لا يمكن حذف العملاء المسجلين تلقائياً من الطلبات");
-            return;
-        }
-        if (!confirm('هل أنت متأكد من حذف هذا العميل؟')) return;
-        
+        if (!confirm('هل أنت متأكد من حذف هذا العميل؟ (سيتم حذف السجل اليدوي فقط إن وجد)')) return;
+
         try {
             const res = await fetch(`/api/customers/${id}`, { method: 'DELETE' });
             if (res.ok) {
@@ -89,12 +85,8 @@ export default function AdminCustomersPage() {
     };
 
     const handleEdit = (customer: Customer) => {
-        if (customer.id.startsWith('guest-') || customer.id.startsWith('user-')) {
-            alert("لا يمكن تعديل بيانات العملاء المسجلين تلقائياً");
-            setActiveMenu(null);
-            return;
-        }
         setFormData({ name: customer.name, phone: customer.phone || '' });
+        // Use phone as ID for automatic customers to allow the backend to upsert in the manual table
         setEditingId(customer.id);
         setIsModalOpen(true);
         setActiveMenu(null);
@@ -205,7 +197,7 @@ export default function AdminCustomersPage() {
                                         <td className="px-6 py-6 text-right">
                                             <div className="flex flex-col">
                                                 <span className="text-gray-400 text-sm font-medium">
-                                                    {customer.lastOrderDate 
+                                                    {customer.lastOrderDate
                                                         ? new Date(customer.lastOrderDate).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' })
                                                         : 'لا يوجد'}
                                                 </span>
@@ -221,9 +213,8 @@ export default function AdminCustomersPage() {
                                             </button>
 
                                             {activeMenu === customer.id && (
-                                                <div className={`absolute left-6 w-40 bg-surface-dark border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden ${
-                                                    index >= filteredCustomers.length - 2 && filteredCustomers.length > 2 ? "bottom-full mb-2" : "top-full mt-1"
-                                                }`}>
+                                                <div className={`absolute left-6 w-40 bg-surface-dark border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden ${index >= filteredCustomers.length - 2 && filteredCustomers.length > 2 ? "bottom-full mb-2" : "top-full mt-1"
+                                                    }`}>
                                                     <button
                                                         onClick={() => handleEdit(customer)}
                                                         className="w-full text-right px-4 py-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2"

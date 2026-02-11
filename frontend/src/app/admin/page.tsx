@@ -90,16 +90,6 @@ export default function AdminDashboard() {
                 href: "/admin/orders"
             },
 
-            {
-                name: "العملاء",
-                value: uniqueCustomers,
-                change: "الكل",
-                isUp: true,
-                icon: Users,
-                color: "text-purple-500",
-                bg: "bg-purple-500/10",
-                href: "/admin/customers"
-            },
         ];
     }, [orders]);
 

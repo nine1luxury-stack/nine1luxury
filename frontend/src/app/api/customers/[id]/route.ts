@@ -8,10 +8,23 @@ export async function PUT(
     try {
         const { id } = await context.params;
         const data = await request.json();
-        
-        // Only allow updating manual customers (ID is UUID, not guest- or user-)
+
         if (id.startsWith('guest-') || id.startsWith('user-')) {
-            return NextResponse.json({ error: 'Cannot edit automatic customers' }, { status: 400 });
+            // "Promote" guest to manual customer or update existing manual record by phone
+            const customer = await prisma.customer.upsert({
+                where: { phone: data.phone },
+                update: {
+                    name: data.name,
+                },
+                create: {
+                    name: data.name,
+                    phone: data.phone,
+                    totalOrders: 0,
+                    totalSpent: 0,
+                    lastOrderDate: new Date(),
+                }
+            });
+            return NextResponse.json(customer);
         }
 
         const customer = await prisma.customer.update({
@@ -35,9 +48,9 @@ export async function DELETE(
 ) {
     try {
         const { id } = await context.params;
-        
+
         if (id.startsWith('guest-') || id.startsWith('user-')) {
-             return NextResponse.json({ error: 'Cannot delete automatic customers' }, { status: 400 });
+            return NextResponse.json({ error: 'Cannot delete automatic customers' }, { status: 400 });
         }
 
         await prisma.customer.delete({
