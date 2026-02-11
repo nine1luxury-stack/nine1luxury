@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
     try {
         const { name } = await request.json();
-        const { id } = params;
+        const { id } = await context.params;
 
         // Update all products with this category name to keep strings in sync
         const oldCategory = await prisma.category.findUnique({ where: { id } });
@@ -28,9 +28,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = params;
+        const { id } = await context.params;
         await prisma.category.delete({ where: { id } });
         return NextResponse.json({ success: true });
     } catch (error: any) {
