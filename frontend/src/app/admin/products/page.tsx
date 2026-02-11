@@ -140,10 +140,10 @@ export default function AdminProductsPage() {
 
         try {
             // 1. Process images from productGallery state (assuming URLs now)
-            const finalGalleryUrls: string[] = productGallery.filter(item => typeof item === 'string') as string[];
+            const finalGalleryUrls: string[] = productGallery.filter((item): item is string => typeof item === 'string');
 
             // 2. Process size chart image (assuming URL now)
-            let finalSizeChartUrl: string | null = typeof sizeChartImage === 'string' ? sizeChartImage : null;
+            const finalSizeChartUrl: string | null = typeof sizeChartImage === 'string' ? sizeChartImage : null;
 
             // 3. Determine main image (use first color's image or fallback)
             // If we have colors, picking the first one as "main" if newProduct.image is empty or needs update
@@ -189,9 +189,9 @@ export default function AdminProductsPage() {
             setNewProduct({ name: '', model: '', price: '', category: 'تيشرتات', description: '', image: '', sizes: [], colors: [] });
             setProductGallery([]);
             setSizeChartImage(null);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Product save error:', error);
-            const errorMessage = error?.message || 'حدث خطأ أثناء حفظ المنتج';
+            const errorMessage = error instanceof Error ? error.message : 'حدث خطأ أثناء حفظ المنتج';
             alert(errorMessage);
         } finally {
             setIsUploading(false);
@@ -672,16 +672,45 @@ export default function AdminProductsPage() {
 
                                 {/* Size Chart Image */}
                                 <div className="mb-6">
-                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">رابط صورة جدول المقاسات (اختياري)</label>
-                                    <div className="flex gap-2">
-                                        <input
-                                            type="text"
-                                            placeholder="أدخل رابط جدول المقاسات (URL)..."
-                                            className="flex-1 bg-rich-black border border-white/10 rounded-lg px-4 py-2 text-white focus:border-gold-500 outline-none text-sm"
-                                            value={typeof sizeChartImage === 'string' ? sizeChartImage : ''}
-                                            onChange={(e) => setSizeChartImage(e.target.value)}
-                                        />
-                                    </div>
+                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">صورة جدول المقاسات (اختياري)</label>
+
+                                    {sizeChartImage ? (
+                                        <div className="relative aspect-video bg-rich-black rounded-xl overflow-hidden border border-white/10 group">
+                                            <Image
+                                                src={typeof sizeChartImage === 'string' ? sizeChartImage : URL.createObjectURL(sizeChartImage)}
+                                                alt="Size Chart"
+                                                fill
+                                                className="object-contain"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setSizeChartImage(null)}
+                                                className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500/80 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <label className="relative aspect-video bg-rich-black/50 rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold-500/50 transition-all group">
+                                            <Upload className="w-8 h-8 text-gray-600 group-hover:text-gold-500 transition-colors" />
+                                            <span className="text-xs text-gray-600 mt-2 group-hover:text-gold-500 transition-colors">رفع صورة جدول المقاسات</span>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        const reader = new FileReader();
+                                                        reader.onloadend = () => {
+                                                            setSizeChartImage(reader.result as string);
+                                                        };
+                                                        reader.readAsDataURL(file);
+                                                    }
+                                                }}
+                                            />
+                                        </label>
+                                    )}
                                 </div>
 
                                 <div>
@@ -838,8 +867,9 @@ export default function AdminProductsPage() {
                                                     }
                                                     setCategoryInput("");
                                                     setEditingCatId(null);
-                                                } catch (err: any) {
-                                                    alert(err.message);
+                                                } catch (err: unknown) {
+                                                    const message = err instanceof Error ? err.message : "حدث خطأ غير متوقع";
+                                                    alert(message);
                                                 }
                                             }}
                                             className="bg-gold-500 text-rich-black px-8 py-4 rounded-2xl font-black text-xs hover:bg-gold-300 transition-all shadow-lg shadow-gold-500/10 active:scale-95 whitespace-nowrap"
@@ -890,8 +920,9 @@ export default function AdminProductsPage() {
                                                             if (confirm("هل أنت متأكد من حذف هذا القسم؟ سيتم حذف التصنيف من المنتجات المرتبطة.")) {
                                                                 try {
                                                                     await deleteCategory(cat.id);
-                                                                } catch (err: any) {
-                                                                    alert(err.message);
+                                                                } catch (err: unknown) {
+                                                                    const message = err instanceof Error ? err.message : "حدث خطأ غير متوقع";
+                                                                    alert(message);
                                                                 }
                                                             }
                                                         }}
