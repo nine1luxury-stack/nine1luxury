@@ -90,7 +90,7 @@ export default function AdminOrdersPage() {
         const headers = ["Order ID", "Customer Name", "Phone", "Total", "Status", "Date"];
         const rows = orders.map(order => [
             order.id,
-            order.guestName || "N/A",
+            order.guestName || order.user?.name || "N/A",
             order.guestPhone || "N/A",
             order.totalAmount,
             order.status,
@@ -217,8 +217,8 @@ export default function AdminOrdersPage() {
                 <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-4">
                     {[
                         { label: "كل الطلبات", count: orders.length, active: true },
-                        { label: "قيد المعالجة", count: orders.filter(o => o.status === 'PROCESSING').length },
-                        { label: "تم التوصيل", count: orders.filter(o => o.status === 'COMPLETED').length },
+                        { label: "قيد المعالجة", count: orders.filter(o => o.status === 'CONFIRMED' || o.status === 'SHIPPED').length },
+                        { label: "تم التوصيل", count: orders.filter(o => o.status === 'DELIVERED').length },
                     ].map((filter) => (
                         <div
                             key={filter.label}
@@ -325,14 +325,15 @@ export default function AdminOrdersPage() {
                                                 className={cn(
                                                     "text-[10px] px-3 py-1.5 rounded-lg font-bold uppercase cursor-pointer outline-none border transition-all text-center mx-auto block min-w-[110px]",
                                                     order.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20' :
-                                                        order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
-                                                            order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
+                                                        (order.status === 'CONFIRMED' || order.status === 'SHIPPED') ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
+                                                            order.status === 'DELIVERED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
                                                                 'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
                                                 )}
                                             >
                                                 <option value="PENDING" className="bg-rich-black text-gray-300">قيد الانتظار</option>
-                                                <option value="PROCESSING" className="bg-rich-black text-blue-300">جاري التجهيز</option>
-                                                <option value="COMPLETED" className="bg-rich-black text-green-300">تم التوصيل</option>
+                                                <option value="CONFIRMED" className="bg-rich-black text-blue-300">جاري التجهيز</option>
+                                                <option value="SHIPPED" className="bg-rich-black text-blue-200">تم الشحن</option>
+                                                <option value="DELIVERED" className="bg-rich-black text-green-300">تم التوصيل</option>
                                                 <option value="CANCELLED" className="bg-rich-black text-red-300">ملغي</option>
                                             </select>
                                         </td>
@@ -408,7 +409,6 @@ export default function AdminOrdersPage() {
                                     <p className="text-white font-medium">
                                         {[
                                             selectedOrder.guestCity,
-                                            selectedOrder.guestDistrict,
                                             selectedOrder.guestAddress
                                         ].filter(Boolean).join(' - ')}
                                     </p>

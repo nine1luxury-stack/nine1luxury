@@ -25,7 +25,13 @@ export async function GET(request: Request) {
             }
         });
 
-        return NextResponse.json(products);
+        const formattedProducts = products.map((product: any) => ({
+            ...product,
+            images: product.images || product.productimage,
+            variants: product.variants || product.productvariant,
+        }));
+
+        return NextResponse.json(formattedProducts);
     } catch (error: any) {
         console.error('Error fetching products:', error);
         return NextResponse.json({
@@ -79,7 +85,13 @@ export async function POST(request: Request) {
         });
 
 
-        return NextResponse.json(product);
+        const formattedProduct = {
+            ...product,
+            images: (product as any).images || (product as any).productimage,
+            variants: (product as any).variants || (product as any).productvariant,
+        };
+
+        return NextResponse.json(formattedProduct);
     } catch (error: any) {
         console.error('Error creating product:', error);
         return NextResponse.json({

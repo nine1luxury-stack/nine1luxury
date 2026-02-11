@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, cn } from "@/lib/utils";
 import { useEffect, useState, useMemo } from "react";
-import { Order } from "@/lib/api";
+import { Order, OrderItem } from "@/lib/api";
 
 import { useProducts } from "@/context/ProductContext";
 
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
         const newOrdersCount = pendingOrders.length;
 
         // Simple unique customer count based on guestName
-        const uniqueCustomers = new Set(orders.map(o => o.guestName || o.User?.name)).size;
+        const uniqueCustomers = new Set(orders.map(o => o.guestName || o.user?.name)).size;
 
         return [
             {
@@ -220,18 +220,19 @@ export default function AdminDashboard() {
                                             <td className="px-4 py-5 text-center">
                                                 <select
                                                     value={order.status}
-                                                    onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
+                                                    onChange={(e) => handleStatusUpdate(order.id, e.target.value as any)}
                                                     className={cn(
                                                         "text-[10px] px-3 py-1.5 rounded-full font-bold uppercase cursor-pointer outline-none border transition-all text-center mx-auto block",
                                                         order.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20' :
-                                                            order.status === 'PROCESSING' ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
-                                                                order.status === 'COMPLETED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
+                                                            (order.status === 'CONFIRMED' || order.status === 'SHIPPED') ? 'bg-blue-500/10 border-blue-500/20 text-blue-500 hover:bg-blue-500/20' :
+                                                                order.status === 'DELIVERED' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20' :
                                                                     'bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20'
                                                     )}
                                                 >
                                                     <option value="PENDING" className="bg-rich-black text-gray-300">قيد الانتظار</option>
-                                                    <option value="PROCESSING" className="bg-rich-black text-blue-300">جاري التجهيز</option>
-                                                    <option value="COMPLETED" className="bg-rich-black text-green-300">تم التسليم</option>
+                                                    <option value="CONFIRMED" className="bg-rich-black text-blue-300">جاري التجهيز</option>
+                                                    <option value="SHIPPED" className="bg-rich-black text-blue-200">تم الشحن</option>
+                                                    <option value="DELIVERED" className="bg-rich-black text-green-300">تم التسليم</option>
                                                     <option value="CANCELLED" className="bg-rich-black text-red-300">ملغي</option>
                                                 </select>
                                             </td>

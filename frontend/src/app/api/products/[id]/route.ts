@@ -125,8 +125,8 @@ export async function PATCH(
 
         const formattedProduct = {
             ...freshProduct,
-            images: (freshProduct as any).images,
-            variants: (freshProduct as any).variants,
+            images: (freshProduct as any).images || (freshProduct as any).productimage,
+            variants: (freshProduct as any).variants || (freshProduct as any).productvariant,
         };
 
         return NextResponse.json(formattedProduct);
