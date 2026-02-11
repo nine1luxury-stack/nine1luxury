@@ -316,7 +316,6 @@ export default function AdminOrdersPage() {
                                         <td className="px-6 py-6">
                                             <div className="flex flex-col">
                                                 <span className="text-gold-400 font-bold text-base">{formatPrice(order.totalAmount)}</span>
-                                                <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{(order.paymentMethod === 'COD' || order.paymentMethod === 'CASH_ON_DELIVERY') ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-6 text-center" onClick={(e) => e.stopPropagation()}>

@@ -24,8 +24,8 @@ export async function GET(
 
         const formattedProduct = {
             ...product,
-            images: (product as any).productimage,
-            variants: (product as any).productvariant,
+            images: product.images,
+            variants: product.variants,
         };
 
         return NextResponse.json(formattedProduct);

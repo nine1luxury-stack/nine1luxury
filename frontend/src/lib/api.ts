@@ -51,9 +51,10 @@ export interface Order {
     guestCity?: string;
     totalAmount: number;
     status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
-    paymentMethod: 'CASH_ON_DELIVERY' | 'INSTAPAY' | 'VODAFONE_CASH';
+    paymentMethod: 'CASH_ON_DELIVERY' | 'INSTAPAY' | 'VODAFONE_CASH' | 'COD';
     depositAmount?: number;
     items: OrderItem[];
+    user?: { name: string; email: string };
     createdAt: string;
     updatedAt: string;
 }

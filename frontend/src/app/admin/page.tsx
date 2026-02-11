@@ -207,7 +207,7 @@ export default function AdminDashboard() {
                                             <td className="px-4 py-5">
                                                 <div className="flex flex-col">
                                                     <span className="text-sm text-white font-bold group-hover:text-gold-300 transition-colors">
-                                                        {order.guestName || (order as any).user?.name || (order as any).User?.name || 'عميل مجهول'}
+                                                        {order.guestName || order.user?.name || 'عميل مجهول'}
                                                     </span>
                                                     <span className="text-[10px] text-gray-600 font-mono mt-0.5">{order.guestPhone || 'بدون رقم'}</span>
                                                 </div>
@@ -215,7 +215,6 @@ export default function AdminDashboard() {
                                             <td className="px-4 py-5 text-sm">
                                                 <div className="flex flex-col">
                                                     <span className="text-gold-300 font-bold">{formatPrice(order.totalAmount)}</span>
-                                                    <span className="text-[9px] text-gray-600 uppercase tracking-tighter">{order.paymentMethod === 'CASH_ON_DELIVERY' ? 'دفع عند الاستلام' : 'دفع أونلاين'}</span>
                                                 </div>
                                             </td>
                                             <td className="px-4 py-5 text-center">
