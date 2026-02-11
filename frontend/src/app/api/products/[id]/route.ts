@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function GET(
     request: Request,
@@ -12,8 +13,8 @@ export async function GET(
         const product = await prisma.product.findUnique({
             where: { id },
             include: {
-                productimage: true,
-                productvariant: true,
+                images: true,
+                variants: true,
             },
         });
 
@@ -118,14 +119,14 @@ export async function PATCH(
 
             return tx.product.findUnique({
                 where: { id },
-                include: { productimage: true, productvariant: true }
+                include: { images: true, variants: true }
             });
         });
 
         const formattedProduct = {
             ...freshProduct,
-            images: (freshProduct as any).productimage,
-            variants: (freshProduct as any).productvariant,
+            images: (freshProduct as any).images,
+            variants: (freshProduct as any).variants,
         };
 
         return NextResponse.json(formattedProduct);
