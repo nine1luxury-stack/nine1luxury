@@ -11,7 +11,8 @@ import {
     Upload,
     ChevronRight,
     ChevronLeft,
-    X
+    X,
+    Settings
 } from "lucide-react";
 import Image from "next/image";
 import { useProducts } from "@/context/ProductContext";
@@ -24,13 +25,21 @@ export default function AdminProductsPage() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     // Use Global Context
-    const { products, addProduct, deleteProduct, updateProduct } = useProducts();
+    const {
+        products, addProduct, deleteProduct, updateProduct,
+        categories: dbCategories, addCategory, updateCategory, deleteCategory
+    } = useProducts();
 
     const categories = useMemo(() => {
         const base = ["الكل", "هوديز", "تيشرتات", "بناطيل", "سويت شيرتات"];
+        const fromDb = dbCategories.map(c => c.name);
         const fromProducts = products.map(p => p.category);
-        return Array.from(new Set([...base, ...fromProducts]));
-    }, [products]);
+        return Array.from(new Set([...base, ...fromDb, ...fromProducts]));
+    }, [products, dbCategories]);
+
+    const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+    const [categoryInput, setCategoryInput] = useState("");
+    const [editingCatId, setEditingCatId] = useState<string | null>(null);
 
     const productTypes = useMemo(() => {
         const base = ["الكل", "قطن", "ميلتون", "ليكرا", "وتر بروف"];
@@ -279,8 +288,17 @@ export default function AdminProductsPage() {
                         className="w-full bg-rich-black border border-white/5 rounded-xl pr-12 pl-4 py-3 text-sm focus:border-gold-500 outline-none transition-colors"
                     />
                 </div>
-                <div className="flex flex-wrap gap-2">
-                    <span className="text-xs text-gray-500 w-full mb-1">القسم:</span>
+                <div className="flex flex-col gap-2">
+                    <div className="flex justify-between items-center w-full mb-1">
+                        <span className="text-xs text-gray-500">القسم:</span>
+                        <button
+                            onClick={() => setIsCategoryModalOpen(true)}
+                            className="text-[10px] text-gold-500 hover:text-gold-300 flex items-center gap-1"
+                        >
+                            <Settings className="w-3 h-3" />
+                            إدارة الأقسام
+                        </button>
+                    </div>
                     {categories.map(cat => (
                         <button
                             key={cat}
@@ -850,7 +868,99 @@ export default function AdminProductsPage() {
                     </div>
                 )}
             </AnimatePresence>
-        </div >
-    );
+            {/* Category Management Modal */}
+            <AnimatePresence>
+                {isCategoryModalOpen && (
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            className="bg-surface-dark border border-white/10 rounded-2xl w-full max-w-md overflow-hidden"
+                        >
+                            <div className="p-6 border-b border-white/10 flex justify-between items-center">
+                                <h2 className="text-xl font-bold text-white font-playfair">إدارة الأقسام</h2>
+                                <button onClick={() => {
+                                    setIsCategoryModalOpen(false);
+                                    setEditingCatId(null);
+                                    setCategoryInput("");
+                                }} className="text-gray-400 hover:text-white">
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
 
+                            <div className="p-6 space-y-6">
+                                {/* Add/Edit Form */}
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={categoryInput}
+                                        onChange={(e) => setCategoryInput(e.target.value)}
+                                        placeholder="اسم القسم..."
+                                        className="flex-1 bg-rich-black border border-white/10 rounded-xl px-4 py-2 text-white text-sm focus:border-gold-500 outline-none"
+                                    />
+                                    <button
+                                        onClick={async () => {
+                                            if (!categoryInput.trim()) return;
+                                            try {
+                                                if (editingCatId) {
+                                                    await updateCategory(editingCatId, categoryInput);
+                                                } else {
+                                                    await addCategory(categoryInput);
+                                                }
+                                                setCategoryInput("");
+                                                setEditingCatId(null);
+                                            } catch (err: any) {
+                                                alert(err.message);
+                                            }
+                                        }}
+                                        className="bg-gold-500 text-rich-black px-4 py-2 rounded-xl font-bold text-xs hover:bg-gold-300"
+                                    >
+                                        {editingCatId ? "حفظ" : "إضافة"}
+                                    </button>
+                                </div>
+
+                                {/* Categories List */}
+                                <div className="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-2">
+                                    {dbCategories.map(cat => (
+                                        <div key={cat.id} className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5 hover:border-white/10 transition-all">
+                                            <span className="text-sm text-white">{cat.name}</span>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        setEditingCatId(cat.id);
+                                                        setCategoryInput(cat.name);
+                                                    }}
+                                                    className="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
+                                                >
+                                                    <Edit2 className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={async () => {
+                                                        if (confirm("هل أنت متأكد من حذف هذا القسم؟")) {
+                                                            try {
+                                                                await deleteCategory(cat.id);
+                                                            } catch (err: any) {
+                                                                alert(err.message);
+                                                            }
+                                                        }
+                                                    }}
+                                                    className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {dbCategories.length === 0 && (
+                                        <p className="text-center text-gray-500 text-sm py-4">لا توجد أقسام مسجلة في قاعدة البيانات.</p>
+                                    )}
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
 }

@@ -23,7 +23,7 @@ import { useProducts } from "@/context/ProductContext";
 
 function ProductsContent() {
     // Use Global Context instead of local API fetch
-    const { products } = useProducts();
+    const { products, categories: dbCategories } = useProducts();
     const searchParams = useSearchParams();
 
     const [selectedCategory, setSelectedCategory] = useState("جميع المنتجات");
@@ -33,9 +33,10 @@ function ProductsContent() {
 
     const categories = useMemo(() => {
         const base = ["جميع المنتجات", "تيشرتات", "هوديز", "بناطيل", "سويت شيرتات"];
+        const fromDb = dbCategories.map(c => c.name);
         const fromProducts = products.map(p => p.category);
-        return Array.from(new Set([...base, ...fromProducts]));
-    }, [products]);
+        return Array.from(new Set([...base, ...fromDb, ...fromProducts]));
+    }, [products, dbCategories]);
 
     useEffect(() => {
         const categoryParam = searchParams.get("category");

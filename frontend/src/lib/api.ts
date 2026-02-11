@@ -1,4 +1,11 @@
 
+export interface Category {
+    id: string;
+    name: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
 export interface Product {
     id: string;
     name: string;
@@ -347,5 +354,37 @@ export const expensesApi = {
             method: 'DELETE',
         });
         if (!res.ok) throw new Error('Failed to delete expense');
+    }
+};
+
+export const categoriesApi = {
+    async getAll(): Promise<Category[]> {
+        const res = await fetch('/api/categories', { cache: 'no-store' });
+        if (!res.ok) return [];
+        return res.json();
+    },
+    async create(name: string): Promise<Category> {
+        const res = await fetch('/api/categories', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name }),
+        });
+        if (!res.ok) throw new Error('Failed to create category');
+        return res.json();
+    },
+    async update(id: string, name: string): Promise<Category> {
+        const res = await fetch(`/api/categories/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name }),
+        });
+        if (!res.ok) throw new Error('Failed to update category');
+        return res.json();
+    },
+    async delete(id: string): Promise<void> {
+        const res = await fetch(`/api/categories/${id}`, {
+            method: 'DELETE',
+        });
+        if (!res.ok) throw new Error('Failed to delete category');
     }
 };

@@ -1,21 +1,27 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { Product, productsApi } from "@/lib/api";
+import { Product, Category, productsApi, categoriesApi } from "@/lib/api";
 
 interface ProductContextType {
     products: Product[];
+    categories: Category[];
     loading: boolean;
     refreshProducts: () => Promise<void>;
     addProduct: (product: Partial<Product>) => Promise<void>;
     deleteProduct: (id: string) => Promise<void>;
     updateProduct: (id: string, product: Partial<Product>) => Promise<void>;
+    refreshCategories: () => Promise<void>;
+    addCategory: (name: string) => Promise<void>;
+    updateCategory: (id: string, name: string) => Promise<void>;
+    deleteCategory: (id: string) => Promise<void>;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 export function ProductProvider({ children }: { children: React.ReactNode }) {
     const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchProducts = async () => {
@@ -24,19 +30,32 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
             setProducts(data);
         } catch (error) {
             console.error("Failed to fetch products", error);
-        } finally {
-            setLoading(false);
         }
     };
 
+    const fetchCategories = async () => {
+        try {
+            const data = await categoriesApi.getAll();
+            setCategories(data);
+        } catch (error) {
+            console.error("Failed to fetch categories", error);
+        }
+    };
+
+    const loadData = async () => {
+        setLoading(true);
+        await Promise.all([fetchProducts(), fetchCategories()]);
+        setLoading(false);
+    };
+
     useEffect(() => {
-        fetchProducts();
+        loadData();
     }, []);
 
     const addProduct = async (newProduct: Partial<Product>) => {
         try {
             await productsApi.create(newProduct);
-            await fetchProducts(); // Need to fetch to get the new ID from server
+            await fetchProducts();
         } catch (error) {
             console.error("Failed to add product", error);
             throw error;
@@ -46,12 +65,11 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     const deleteProduct = async (id: string) => {
         const previousProducts = [...products];
         try {
-            // Optimistic update
             setProducts(prev => prev.filter(p => p.id !== id));
             await productsApi.delete(id);
         } catch (error) {
             console.error("Failed to delete product", error);
-            setProducts(previousProducts); // Rollback
+            setProducts(previousProducts);
             alert("فشل حذف المنتج من السيرفر");
         }
     };
@@ -59,26 +77,58 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     const updateProduct = async (id: string, updatedFields: Partial<Product>) => {
         const previousProducts = [...products];
         try {
-             // Optimistic Update
-             setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedFields } : p));
-             await productsApi.update(id, updatedFields);
-             // No need to fetch again if we trust our local merge, but Fetching ensures sync
-             // await fetchProducts(); 
+            setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedFields } : p));
+            await productsApi.update(id, updatedFields);
         } catch (error) {
             console.error("Failed to update product", error);
-            setProducts(previousProducts); // Rollback
+            setProducts(previousProducts);
             alert("فشل تحديث بيانات المنتج");
         }
     };
 
+    const addCategory = async (name: string) => {
+        try {
+            await categoriesApi.create(name);
+            await fetchCategories();
+        } catch (error) {
+            console.error("Failed to add category", error);
+            throw error;
+        }
+    };
+
+    const updateCategory = async (id: string, name: string) => {
+        try {
+            await categoriesApi.update(id, name);
+            await Promise.all([fetchCategories(), fetchProducts()]); // Products might have changed category names
+        } catch (error) {
+            console.error("Failed to update category", error);
+            throw error;
+        }
+    };
+
+    const deleteCategory = async (id: string) => {
+        try {
+            await categoriesApi.delete(id);
+            await fetchCategories();
+        } catch (error) {
+            console.error("Failed to delete category", error);
+            throw error;
+        }
+    };
+
     return (
-        <ProductContext.Provider value={{ 
-            products, 
+        <ProductContext.Provider value={{
+            products,
+            categories,
             loading,
             refreshProducts: fetchProducts,
-            addProduct, 
-            deleteProduct, 
-            updateProduct 
+            addProduct,
+            deleteProduct,
+            updateProduct,
+            refreshCategories: fetchCategories,
+            addCategory,
+            updateCategory,
+            deleteCategory
         }}>
             {children}
         </ProductContext.Provider>
