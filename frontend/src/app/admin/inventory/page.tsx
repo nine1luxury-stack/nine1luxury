@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { AlertTriangle, Search, MoreVertical, Edit, Save, RefreshCcw, CheckCircle, AlertCircle, Plus, ShoppingBag, Package } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { productsApi, Product, ProductVariant, ReturnRequest } from "@/lib/api";
+import { useProducts } from "@/context/ProductContext";
 import Image from "next/image";
 import { Modal } from "@/components/ui/Modal";
 import { cn } from "@/lib/utils";
@@ -13,13 +14,13 @@ import { cn } from "@/lib/utils";
 export default function InventoryPage() {
     const [activeTab, setActiveTab] = useState<'INVENTORY' | 'RETURNS'>('INVENTORY');
 
-    // Inventory State
-    const [products, setProducts] = useState<Product[]>([]);
+    // Inventory State from Context
+    const { products, loading: loadingProducts, refreshProducts, updateProduct } = useProducts();
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState<'ALL' | 'LOW_STOCK' | 'STAGNANT'>('ALL');
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
-    // Returns State
+    // Local state for Returns (since it's not in global context yet)
     const [returns, setReturns] = useState<ReturnRequest[]>([]);
     const [loadingReturns, setLoadingReturns] = useState(false);
 
@@ -32,7 +33,7 @@ export default function InventoryPage() {
     const [baseDamagedStock, setBaseDamagedStock] = useState(0);
     const [isSaving, setIsSaving] = useState(false);
     const [isAddReturnModalOpen, setIsAddReturnModalOpen] = useState(false);
-    
+
     // Form State for new Return
     const [newReturn, setNewReturn] = useState({
         orderId: '',
@@ -44,13 +45,8 @@ export default function InventoryPage() {
     const [isSubmittingReturn, setIsSubmittingReturn] = useState(false);
 
     const loadInventory = useCallback(async () => {
-        try {
-            const data = await productsApi.getAll();
-            setProducts(data);
-        } catch (e) {
-            console.error(e);
-        }
-    }, []);
+        await refreshProducts();
+    }, [refreshProducts]);
 
     const loadReturns = useCallback(async () => {
         setLoadingReturns(true);
@@ -91,7 +87,7 @@ export default function InventoryPage() {
                 body: JSON.stringify({ status })
             });
             if (!res.ok) throw new Error("فشل تحديث حالة المرتجع");
-            
+
             // Background sync
             loadReturns();
             if (status === 'APPROVED') {
@@ -109,7 +105,7 @@ export default function InventoryPage() {
         setNewReorderPoint(product.reorderPoint || 10);
         const variants = product.variants ? JSON.parse(JSON.stringify(product.variants)) : [];
         setEditingVariants(variants);
-        
+
         // If no variants, we might want to edit "base" stock
         if (variants.length === 0) {
             setBaseStock(0);
@@ -124,26 +120,7 @@ export default function InventoryPage() {
         if (!selectedProduct) return;
         setIsSaving(true);
         try {
-            const payload: {
-                reorderPoint: number;
-                variants?: {
-                    update?: Array<{
-                        where: { id: string };
-                        data: {
-                            stock: number;
-                            damagedStock: number;
-                            washStock: number;
-                            repackageStock: number;
-                        };
-                    }>;
-                    create?: Array<{
-                        color: string;
-                        size: string;
-                        stock: number;
-                        damagedStock: number;
-                    }>;
-                };
-            } = {
+            const payload: any = {
                 reorderPoint: Number(newReorderPoint),
             };
 
@@ -172,10 +149,13 @@ export default function InventoryPage() {
             }
 
             console.log('Sending update payload:', JSON.stringify(payload, null, 2));
-            await productsApi.update(selectedProduct.id, payload);
+
+            // Use global context update to keep all pages synced
+            await updateProduct(selectedProduct.id, payload);
 
             setIsEditModalOpen(false);
-            loadInventory();
+            // Products context will handle the state update, but we can refresh to be safe
+            await refreshProducts();
         } catch (e: unknown) {
             console.error(e);
             alert(`حدث خطأ أثناء حفظ التعديلات: ${e instanceof Error ? e.message : 'Error'}`);
@@ -243,7 +223,7 @@ export default function InventoryPage() {
                             طلبات الاسترجاع
                         </button>
                     </div>
-                
+
                     {activeTab === 'RETURNS' && (
                         <button
                             onClick={() => setIsAddReturnModalOpen(true)}
@@ -441,13 +421,13 @@ export default function InventoryPage() {
                                                 <div className={cn(
                                                     "inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold border",
                                                     ret.type === 'VALID' ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" :
-                                                    ret.type === 'DAMAGED' ? "bg-rose-500/10 text-rose-500 border-rose-500/20" :
-                                                    ret.type === 'WASH' ? "bg-sky-500/10 text-sky-500 border-sky-500/20" :
-                                                    "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                                                        ret.type === 'DAMAGED' ? "bg-rose-500/10 text-rose-500 border-rose-500/20" :
+                                                            ret.type === 'WASH' ? "bg-sky-500/10 text-sky-500 border-sky-500/20" :
+                                                                "bg-amber-500/10 text-amber-500 border-amber-500/20"
                                                 )}>
                                                     {ret.type === 'VALID' ? 'صالح للبيع' :
-                                                     ret.type === 'DAMAGED' ? 'تالف' :
-                                                     ret.type === 'WASH' ? 'يحتاج غسيل' : 'إعادة تغليف'}
+                                                        ret.type === 'DAMAGED' ? 'تالف' :
+                                                            ret.type === 'WASH' ? 'يحتاج غسيل' : 'إعادة تغليف'}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-6">
@@ -455,15 +435,15 @@ export default function InventoryPage() {
                                                     <div className={cn(
                                                         "w-1.5 h-1.5 rounded-full ring-4 shadow-sm",
                                                         ret.status === 'APPROVED' ? "bg-emerald-500 ring-emerald-500/10" :
-                                                        ret.status === 'REJECTED' ? "bg-rose-500 ring-rose-500/10" : "bg-amber-500 ring-amber-500/10"
+                                                            ret.status === 'REJECTED' ? "bg-rose-500 ring-rose-500/10" : "bg-amber-500 ring-amber-500/10"
                                                     )}></div>
                                                     <span className={cn(
                                                         "text-[10px] font-bold uppercase",
                                                         ret.status === 'APPROVED' ? "text-emerald-500" :
-                                                        ret.status === 'REJECTED' ? "text-rose-500" : "text-amber-500"
+                                                            ret.status === 'REJECTED' ? "text-rose-500" : "text-amber-500"
                                                     )}>
                                                         {ret.status === 'APPROVED' ? 'تمت التسوية' :
-                                                         ret.status === 'REJECTED' ? 'مرفوض' : 'قيد المراجعة'}
+                                                            ret.status === 'REJECTED' ? 'مرفوض' : 'قيد المراجعة'}
                                                     </span>
                                                 </div>
                                             </td>
@@ -627,8 +607,8 @@ export default function InventoryPage() {
                 <div className="space-y-4">
                     <div className="space-y-2">
                         <label className="text-sm text-gray-400">رقم الطلب</label>
-                        <input 
-                            placeholder="65ba... (رقم الطلب من قائمة الطلبات)" 
+                        <input
+                            placeholder="65ba... (رقم الطلب من قائمة الطلبات)"
                             value={newReturn.orderId}
                             onChange={(e) => setNewReturn({ ...newReturn, orderId: e.target.value })}
                             className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none"
@@ -637,7 +617,7 @@ export default function InventoryPage() {
 
                     <div className="space-y-2">
                         <label className="text-sm text-gray-400">المنتج</label>
-                        <select 
+                        <select
                             value={newReturn.productId}
                             onChange={(e) => setNewReturn({ ...newReturn, productId: e.target.value })}
                             className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none appearance-none"
@@ -652,7 +632,7 @@ export default function InventoryPage() {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <label className="text-sm text-gray-400">الحالة</label>
-                            <select 
+                            <select
                                 value={newReturn.type}
                                 onChange={(e) => setNewReturn({ ...newReturn, type: e.target.value })}
                                 className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none appearance-none"
@@ -665,8 +645,8 @@ export default function InventoryPage() {
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm text-gray-400">الكمية</label>
-                            <input 
-                                type="number" 
+                            <input
+                                type="number"
                                 min="1"
                                 value={newReturn.quantity}
                                 onChange={(e) => setNewReturn({ ...newReturn, quantity: Number(e.target.value) })}
@@ -677,21 +657,21 @@ export default function InventoryPage() {
 
                     <div className="space-y-2">
                         <label className="text-sm text-gray-400">ملاحظات</label>
-                        <textarea 
+                        <textarea
                             rows={3}
-                            placeholder="سبب الاسترجاع أو تفاصيل إضافية..." 
+                            placeholder="سبب الاسترجاع أو تفاصيل إضافية..."
                             className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none resize-none"
                         />
                     </div>
 
                     <div className="flex justify-end gap-2 pt-4">
-                        <button 
+                        <button
                             onClick={() => setIsAddReturnModalOpen(false)}
                             className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
                         >
                             إلغاء
                         </button>
-                        <button 
+                        <button
                             onClick={async () => {
                                 if (!newReturn.orderId || !newReturn.productId) {
                                     alert("يرجى إدخال رقم الطلب واختيار المنتج");

@@ -76,9 +76,13 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
 
     const updateProduct = async (id: string, updatedFields: Partial<Product>) => {
         const previousProducts = [...products];
+        // Optimistic update for simple fields
+        setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedFields } : p));
+
         try {
-            setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedFields } : p));
-            await productsApi.update(id, updatedFields);
+            const updatedProduct = await productsApi.update(id, updatedFields);
+            // Verify structure and update with authoritative server data
+            setProducts(prev => prev.map(p => p.id === id ? updatedProduct : p));
         } catch (error) {
             console.error("Failed to update product", error);
             setProducts(previousProducts);
