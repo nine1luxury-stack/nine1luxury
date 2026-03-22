@@ -1,28 +1,82 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Save, Store, Globe, Bell, Mail } from "lucide-react";
-import { useState } from "react";
+import { Save, Store, Globe, Bell, Mail, Type } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function AdminSettingsPage() {
     const [isLoading, setIsLoading] = useState(false);
+    const [isFetching, setIsFetching] = useState(true);
     const [settings, setSettings] = useState({
         storeName: "nine1luxury",
         storeEmail: "support@nine1luxury.com",
         currency: "EGP",
         maintenanceMode: false,
         emailNotifications: true,
-        orderNotifications: true
+        orderNotifications: true,
+        promoBanner: "",
+        bookingBanner: ""
     });
 
-    const handleSave = () => {
+    useEffect(() => {
+        const loadSettings = async () => {
+            try {
+                const res = await fetch('/api/settings');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Object.keys(data).length > 0) {
+                        setSettings(prev => ({
+                            ...prev,
+                            ...data,
+                            maintenanceMode: data.maintenanceMode === 'true',
+                            emailNotifications: data.emailNotifications === 'true',
+                            orderNotifications: data.orderNotifications === 'true'
+                        }));
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load settings:", error);
+            } finally {
+                setIsFetching(false);
+            }
+        };
+        loadSettings();
+    }, []);
+
+    const handleSave = async () => {
         setIsLoading(true);
-        // Simulate API call
-        setTimeout(() => {
+        try {
+            const res = await fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    storeName: settings.storeName,
+                    storeEmail: settings.storeEmail,
+                    currency: settings.currency,
+                    maintenanceMode: String(settings.maintenanceMode),
+                    emailNotifications: String(settings.emailNotifications),
+                    orderNotifications: String(settings.orderNotifications),
+                    promoBanner: settings.promoBanner,
+                    bookingBanner: settings.bookingBanner
+                })
+            });
+            
+            if (res.ok) {
+                alert("تم حفظ الإعدادات بنجاح!");
+            } else {
+                alert("حدث خطأ أثناء حفظ الإعدادات");
+            }
+        } catch (error) {
+            console.error("Failed to save settings:", error);
+            alert("حدث خطأ أثناء حفظ الإعدادات");
+        } finally {
             setIsLoading(false);
-            alert("تم حفظ الإعدادات بنجاح!");
-        }, 1000);
+        }
     };
+
+    if (isFetching) {
+        return <div className="text-white">جاري تحميل الإعدادات...</div>;
+    }
 
     return (
         <div className="space-y-8">
@@ -71,6 +125,30 @@ export default function AdminSettingsPage() {
                                     value={settings.storeEmail}
                                     onChange={(e) => setSettings({ ...settings, storeEmail: e.target.value })}
                                     className="w-full bg-rich-black border border-white/10 rounded-xl px-12 py-3 text-white focus:border-gold-500 outline-none"
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-2 pt-4 border-t border-white/5">
+                            <label className="text-xs text-gray-500 font-bold uppercase">الشريط الترويجي (الصفحة الرئيسية)</label>
+                            <div className="relative">
+                                <Type className="absolute right-4 top-3 w-4 h-4 text-gray-400" />
+                                <textarea
+                                    value={settings.promoBanner || ""}
+                                    onChange={(e) => setSettings({ ...settings, promoBanner: e.target.value })}
+                                    placeholder="أدخل النص الترويجي هنا ليعرض أسفل 'إصدارات مختارة'"
+                                    className="w-full bg-rich-black border border-white/10 rounded-xl px-12 py-3 text-white focus:border-gold-500 outline-none min-h-[80px]"
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-2 pt-4 border-t border-white/5">
+                            <label className="text-xs text-gray-500 font-bold uppercase">الشريط الترويجي (صفحة الحجز)</label>
+                            <div className="relative">
+                                <Type className="absolute right-4 top-3 w-4 h-4 text-gray-400" />
+                                <textarea
+                                    value={settings.bookingBanner || ""}
+                                    onChange={(e) => setSettings({ ...settings, bookingBanner: e.target.value })}
+                                    placeholder="أدخل النص الترويجي لصفحة الحجز"
+                                    className="w-full bg-rich-black border border-white/10 rounded-xl px-12 py-3 text-white focus:border-gold-500 outline-none min-h-[80px]"
                                 />
                             </div>
                         </div>

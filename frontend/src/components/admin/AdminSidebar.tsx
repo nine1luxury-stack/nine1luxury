@@ -16,6 +16,8 @@ import {
     Banknote,
     Warehouse,
     Calendar,
+    Settings,
+    Ticket,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +29,8 @@ const menuItems = [
     { name: "الحجوزات", icon: Calendar, href: "/admin/bookings" },
     { name: "الموردين", icon: Truck, href: "/admin/suppliers" },
     { name: "المصروفات", icon: Banknote, href: "/admin/expenses" },
+    { name: "الكوبونات", icon: Ticket, href: "/admin/coupons" },
+    { name: "الإعدادات", icon: Settings, href: "/admin/settings" },
 ];
 
 export function AdminSidebar() {

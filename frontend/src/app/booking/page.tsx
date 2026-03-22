@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, Phone, MessageSquare, CheckCircle, Loader2, Package, Maximize2, MapPin, Banknote } from "lucide-react";
 import Image from "next/image";
+import { PromoBanner } from "@/components/layout/PromoBanner";
 
 const EGYPT_CITIES = [
     { name: "القاهرة", shipping: 80 },
@@ -118,7 +119,7 @@ export default function BookingPage() {
             <Header />
 
             {/* Hero Section */}
-            <section className="relative h-[45vh] flex items-center justify-center overflow-hidden">
+            <section className="relative min-h-[55vh] pt-32 pb-24 flex items-center justify-center overflow-hidden">
                 <Image
                     src="/luxury_fitting_room.png"
                     alt="Luxury Fitting Room"
@@ -128,7 +129,7 @@ export default function BookingPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-rich-black/80 via-transparent to-rich-black" />
                 
-                <div className="relative z-10 text-center space-y-4 px-4">
+                <div className="relative z-10 text-center space-y-6 px-4">
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -148,10 +149,14 @@ export default function BookingPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="text-gray-400 max-w-2xl mx-auto text-lg font-amiri"
+                        className="text-gray-400 max-w-2xl mx-auto text-lg font-amiri pb-8"
                     >
                         احجز قطعتك الفريدة الآن وسنقوم بتوصيلها إليك أينما كنت.
                     </motion.p>
+                </div>
+                
+                <div className="absolute bottom-0 left-0 w-full z-20">
+                    <PromoBanner settingKey="bookingBanner" />
                 </div>
             </section>
 

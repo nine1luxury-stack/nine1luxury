@@ -22,7 +22,7 @@ export default function LoginPage() {
 
         try {
             // Mock login logic
-            if (formData.password === '123456') {
+            if (formData.password === '12345') {
                 const mockUser = {
                     id: '1',
                     name: 'Ebeed',

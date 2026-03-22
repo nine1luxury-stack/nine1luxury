@@ -8,6 +8,7 @@ import { X, SlidersHorizontal, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
+import { PromoBanner } from "@/components/layout/PromoBanner";
 
 const FILTERS_BASE = {
     sizes: ["S", "M", "L", "XL", "XXL"],
@@ -75,15 +76,17 @@ function ProductsContent() {
 
             <div className="pt-32 pb-24 container mx-auto px-4">
                 {/* Page Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                    <div className="space-y-2">
-                        <h1 className="text-4xl md:text-5xl font-bold text-white uppercase">
-                            المتجر الكامل
-                        </h1>
-                        <p className="text-gold-300/60 uppercase font-medium">
-                            تصفح مجموعتنا الحصرية من الملابس الفاخرة
-                        </p>
-                    </div>
+                <div className="flex flex-col items-center justify-center text-center mb-12 space-y-3">
+                    <h1 className="text-4xl md:text-5xl font-bold text-white uppercase">
+                        المتجر الكامل
+                    </h1>
+                    <p className="text-gold-300/60 uppercase font-medium">
+                        تصفح مجموعتنا الحصرية من الملابس الفاخرة
+                    </p>
+                </div>
+
+                <div className="mb-12">
+                    <PromoBanner />
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-12">

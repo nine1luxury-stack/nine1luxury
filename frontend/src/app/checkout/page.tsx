@@ -20,6 +20,11 @@ export default function CheckoutPage() {
         city: "القاهرة",
     });
 
+    const [promoCode, setPromoCode] = useState("");
+    const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
+    const [couponError, setCouponError] = useState("");
+    const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+
     const [errors, setErrors] = useState<{[key: string]: string}>({});
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -64,7 +69,49 @@ export default function CheckoutPage() {
     };
 
     const shippingCost = SHIPPING_RATES[formData.city] || 80;
-    const finalTotal = totalPrice + shippingCost;
+    
+    // Calculate Coupon discount
+    const cartQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+    let discountAmount = 0;
+    if (appliedCoupon && cartQuantity >= appliedCoupon.minQuantity) {
+        if (appliedCoupon.type === "PERCENTAGE") {
+            discountAmount = (totalPrice * appliedCoupon.value) / 100;
+        } else {
+            // FIXED_AMOUNT (global or item-based. we treat it as global absolute discount)
+            discountAmount = appliedCoupon.value;
+        }
+    } else if (appliedCoupon && cartQuantity < appliedCoupon.minQuantity) {
+        // user removed items, coupon no longer valid
+        setAppliedCoupon(null);
+        setCouponError(`هذا الكوبون صالح فقط عند شراء ${appliedCoupon.minQuantity} قطع أو أكثر`);
+    }
+
+    const finalTotal = totalPrice - discountAmount + shippingCost;
+
+    const handleApplyCoupon = async () => {
+        if (!promoCode.trim()) return;
+        setIsApplyingCoupon(true);
+        setCouponError("");
+        try {
+            const res = await fetch("/api/coupons/apply", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code: promoCode, cartQuantity })
+            });
+            const data = await res.json();
+            if (res.ok && data.valid) {
+                setAppliedCoupon(data.coupon);
+                setPromoCode(""); // clear input after showing success
+            } else {
+                setCouponError(data.error || "كوبون غير صحيح");
+                setAppliedCoupon(null);
+            }
+        } catch (error) {
+            setCouponError("فشل في تطبيق الكوبون");
+        } finally {
+            setIsApplyingCoupon(false);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -84,6 +131,7 @@ export default function CheckoutPage() {
                 guestAddress: formData.address,
                 guestCity: formData.city,
                 totalAmount: finalTotal,
+                paymentMethod: appliedCoupon ? `CASH_ON_DELIVERY (Coupon: ${appliedCoupon.code})` : 'CASH_ON_DELIVERY',
                 items: cart.map(item => ({
                     productId: item.id,
                     name: item.name,
@@ -294,10 +342,45 @@ export default function CheckoutPage() {
                                 </div>
 
                                 <div className="mt-10 pt-6 border-t border-gold-500/10 space-y-4">
-                                    <div className="flex justify-between text-gray-400">
+                                    {/* Coupon application form */}
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={promoCode}
+                                            onChange={(e) => {
+                                                setPromoCode(e.target.value);
+                                                setCouponError("");
+                                            }}
+                                            className="flex-1 bg-rich-black border border-white/10 px-4 py-3 text-white focus:border-gold-500 outline-none uppercase"
+                                            placeholder="أدخل كود الخصم (إن وجد)"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={handleApplyCoupon}
+                                            disabled={isApplyingCoupon || !promoCode}
+                                            className="bg-surface-dark border border-white/10 hover:border-gold-500 hover:text-gold-500 text-white px-6 py-3 font-bold transition-colors disabled:opacity-50"
+                                        >
+                                            {isApplyingCoupon ? "..." : "تطبيق"}
+                                        </button>
+                                    </div>
+                                    {couponError && <p className="text-red-500 text-xs">{couponError}</p>}
+                                    {appliedCoupon && (
+                                        <div className="text-sm bg-green-500/10 text-green-500 px-4 py-2 border border-green-500/20 flex justify-between items-center">
+                                            <span>تم تطبيق كود: <span className="font-bold">{appliedCoupon.code}</span></span>
+                                            <button onClick={() => setAppliedCoupon(null)} className="text-xs hover:text-white underline">إزالة</button>
+                                        </div>
+                                    )}
+
+                                    <div className="flex justify-between text-gray-400 mt-4">
                                         <span>السعر الفرعي</span>
                                         <span>{formatPrice(totalPrice)}</span>
                                     </div>
+                                    {appliedCoupon && (
+                                        <div className="flex justify-between text-gold-500">
+                                            <span>الخصم ({appliedCoupon.code})</span>
+                                            <span className="font-bold">- {formatPrice(discountAmount)}</span>
+                                        </div>
+                                    )}
                                     <div className="flex justify-between text-gray-400">
                                         <span>تكلفة الشحن ({formData.city})</span>
                                         <span className="text-gold-300 font-bold">{formatPrice(shippingCost)}</span>

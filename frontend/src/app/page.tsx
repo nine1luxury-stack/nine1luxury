@@ -6,6 +6,7 @@ import { Hero } from "@/components/layout/Hero";
 import { ProductCard } from "@/components/product/ProductCard";
 
 import Link from "next/link";
+import { PromoBanner } from "@/components/layout/PromoBanner";
 
 import { useProducts } from "@/context/ProductContext";
 
@@ -19,8 +20,6 @@ export default function Home() {
   // If no explicit featured products, just take the first 3 recent ones
   const displayProducts = featuredProducts.length > 0 ? featuredProducts : activeProducts.slice(0, 3);
 
-
-
   return (
     <main className="min-h-screen bg-rich-black">
       <Header />
@@ -33,14 +32,16 @@ export default function Home() {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col items-center mb-20 text-center">
+          <div className="flex flex-col items-center mb-16 text-center">
             <h2 className="text-sm uppercase text-gold-500 font-bold mb-4">
               إصدارات مختارة
             </h2>
             <h3 className="text-4xl md:text-6xl font-playfair font-bold text-white mb-6 uppercase">
               المجموعة المميزة
             </h3>
-            <div className="h-0.5 w-24 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+            <div className="h-0.5 w-24 bg-gradient-to-r from-transparent via-gold-500 to-transparent mb-8" />
+            
+            <PromoBanner />
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
