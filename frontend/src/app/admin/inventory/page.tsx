@@ -64,15 +64,31 @@ export default function InventoryPage() {
     }, []);
 
     useEffect(() => {
+        let isMounted = true;
+        let timeoutId: NodeJS.Timeout;
+
+        const loopInventory = async () => {
+            if (!isMounted) return;
+            await loadInventory();
+            if (isMounted) timeoutId = setTimeout(loopInventory, 15000);
+        };
+
+        const loopReturns = async () => {
+            if (!isMounted) return;
+            await loadReturns();
+            if (isMounted) timeoutId = setTimeout(loopReturns, 15000);
+        };
+
         if (activeTab === 'INVENTORY') {
-            loadInventory();
-            const interval = setInterval(loadInventory, 15000);
-            return () => clearInterval(interval);
+            loopInventory();
         } else {
-            loadReturns();
-            const interval = setInterval(loadReturns, 15000);
-            return () => clearInterval(interval);
+            loopReturns();
         }
+
+        return () => {
+            isMounted = false;
+            if (timeoutId) clearTimeout(timeoutId);
+        };
     }, [activeTab, loadInventory, loadReturns]);
 
     const handleUpdateReturnStatus = async (id: string, status: string) => {
