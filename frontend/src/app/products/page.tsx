@@ -51,7 +51,11 @@ function ProductsContent() {
         return products
             .filter((product) => {
                 const categoryMatch = selectedCategory === "جميع المنتجات" || product.category === selectedCategory;
-                const priceMatch = Number(product.price) <= priceRange;
+                
+                const currentPrice = product.discount 
+                    ? product.price * (1 - product.discount / 100) 
+                    : product.price;
+                const priceMatch = currentPrice <= priceRange;
 
                 // Size filter: check if product has any of the selected sizes
                 const sizeMatch = selectedSizes.length === 0 ||

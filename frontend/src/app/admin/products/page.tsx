@@ -57,6 +57,7 @@ export default function AdminProductsPage() {
         image: string;
         sizes: string[];
         colors: { name: string; hex: string }[];
+        discount: string;
     }>({
         name: '',
         model: '',
@@ -65,7 +66,8 @@ export default function AdminProductsPage() {
         description: '',
         image: '',
         sizes: [],
-        colors: []
+        colors: [],
+        discount: ''
     });
 
     // State for all product images: Array of File objects or URL strings
@@ -116,7 +118,8 @@ export default function AdminProductsPage() {
             description: product.description,
             image: product.images?.[0]?.url || product.image || '',
             sizes: sizes,
-            colors: colors
+            colors: colors,
+            discount: product.discount?.toString() || ''
         });
 
         // Pre-fill gallery from existing product images
@@ -155,6 +158,7 @@ export default function AdminProductsPage() {
                 model: newProduct.model,
                 description: newProduct.description,
                 price: Number(newProduct.price),
+                discount: newProduct.discount ? Number(newProduct.discount) : undefined,
                 category: newProduct.category,
                 featured: false,
                 sizeChartImage: finalSizeChartUrl || undefined,
@@ -186,7 +190,7 @@ export default function AdminProductsPage() {
 
             setIsAddModalOpen(false);
             setEditingProduct(null);
-            setNewProduct({ name: '', model: '', price: '', category: 'تيشرتات', description: '', image: '', sizes: [], colors: [] });
+            setNewProduct({ name: '', model: '', price: '', category: 'تيشرتات', description: '', image: '', sizes: [], colors: [], discount: '' });
             setProductGallery([]);
             setSizeChartImage(null);
         } catch (error: unknown) {
@@ -475,7 +479,7 @@ export default function AdminProductsPage() {
                                         placeholder="مثال: A-101"
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">السعر</label>
                                         <input
@@ -487,7 +491,18 @@ export default function AdminProductsPage() {
                                             placeholder="0.00"
                                         />
                                     </div>
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">الخصم (%)</label>
+                                        <input
+                                            type="number"
+                                            value={newProduct.discount}
+                                            onChange={e => setNewProduct({ ...newProduct, discount: e.target.value })}
+                                            className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                            placeholder="0"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 gap-4">
                                         <div>
                                             <div className="flex justify-between items-center mb-1">
                                                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider">القسم</label>
@@ -520,7 +535,6 @@ export default function AdminProductsPage() {
                                             )}
                                         </div>
 
-                                    </div>
                                 </div>
 
                                 {/* Sizes */}
@@ -776,7 +790,16 @@ export default function AdminProductsPage() {
                                         <h3 className="text-lg font-bold text-white">{viewingProduct.name}</h3>
                                         <p className="text-xs text-gray-500 font-mono mt-1">{viewingProduct.model}</p>
                                         <span className="inline-block mt-2 text-[10px] bg-white/5 px-2 py-1 rounded text-gray-400 font-bold uppercase">{viewingProduct.category}</span>
-                                        <p className="text-gold-500 font-bold mt-2">{formatPrice(viewingProduct.price)}</p>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <span className="text-gold-500 font-bold">
+                                                {formatPrice(viewingProduct.discount ? viewingProduct.price * (1 - viewingProduct.discount / 100) : viewingProduct.price)}
+                                            </span>
+                                            {viewingProduct.discount && (
+                                                <span className="text-xs text-gray-500 line-through">
+                                                    {formatPrice(viewingProduct.price)}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
