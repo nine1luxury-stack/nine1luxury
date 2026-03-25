@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { Product, Category, productsApi, categoriesApi } from "@/lib/api";
 
 interface ProductContextType {
@@ -24,76 +24,78 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchProducts = async (params: { all?: boolean, limit?: number } = { limit: 50 }) => {
+    const fetchProducts = useCallback(async (params: { all?: boolean, limit?: number } = { limit: 50 }) => {
         try {
             const data = await productsApi.getAll(params);
             setProducts(data);
         } catch (error) {
             console.error("Failed to fetch products", error);
         }
-    };
+    }, []);
 
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         try {
             const data = await categoriesApi.getAll();
             setCategories(data);
         } catch (error) {
             console.error("Failed to fetch categories", error);
         }
-    };
+    }, []);
 
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         setLoading(true);
-        // Load categories first as they are small and critical for filters
-        await fetchCategories();
-        // Load an initial batch of products to show something fast
-        await fetchProducts({ limit: 50 });
-        setLoading(false);
-    };
+        try {
+            // Load both in parallel for faster initial load
+            await Promise.all([
+                fetchCategories(),
+                fetchProducts({ limit: 50 })
+            ]);
+        } finally {
+            setLoading(false);
+        }
+    }, [fetchCategories, fetchProducts]);
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [loadData]);
 
-    const addProduct = async (newProduct: Partial<Product>) => {
+    const addProduct = useCallback(async (newProduct: Partial<Product>) => {
         try {
             await productsApi.create(newProduct);
-            await fetchProducts({ all: true }); // Refresh all after change
+            await fetchProducts({ all: true });
         } catch (error) {
             console.error("Failed to add product", error);
             throw error;
         }
-    };
+    }, [fetchProducts]);
 
-    const deleteProduct = async (id: string) => {
-        const previousProducts = [...products];
+    const deleteProduct = useCallback(async (id: string) => {
+        setProducts(prev => prev.filter(p => p.id !== id));
         try {
-            setProducts(prev => prev.filter(p => p.id !== id));
             await productsApi.delete(id);
         } catch (error) {
             console.error("Failed to delete product", error);
-            setProducts(previousProducts);
+            // Re-fetch to sync state if delete failed
+            await fetchProducts();
             alert("فشل حذف المنتج من السيرفر");
         }
-    };
+    }, [fetchProducts]);
 
-    const updateProduct = async (id: string, updatedFields: Partial<Product>) => {
-        const previousProducts = [...products];
-        // Optimistic update for simple fields
+    const updateProduct = useCallback(async (id: string, updatedFields: Partial<Product>) => {
+        // Optimistic update
         setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedFields } : p));
 
         try {
             const updatedProduct = await productsApi.update(id, updatedFields);
-            // Verify structure and update with authoritative server data
             setProducts(prev => prev.map(p => p.id === id ? updatedProduct : p));
         } catch (error) {
             console.error("Failed to update product", error);
-            setProducts(previousProducts);
+            await fetchProducts(); // Rollback/Sync
             alert("فشل تحديث بيانات المنتج");
         }
-    };
+    }, [fetchProducts]);
 
-    const addCategory = async (name: string) => {
+    const addCategory = useCallback(async (name: string) => {
         try {
             await categoriesApi.create(name);
             await fetchCategories();
@@ -101,19 +103,19 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
             console.error("Failed to add category", error);
             throw error;
         }
-    };
+    }, [fetchCategories]);
 
-    const updateCategory = async (id: string, name: string) => {
+    const updateCategory = useCallback(async (id: string, name: string) => {
         try {
             await categoriesApi.update(id, name);
-            await Promise.all([fetchCategories(), fetchProducts()]); // Products might have changed category names
+            await Promise.all([fetchCategories(), fetchProducts()]);
         } catch (error) {
             console.error("Failed to update category", error);
             throw error;
         }
-    };
+    }, [fetchCategories, fetchProducts]);
 
-    const deleteCategory = async (id: string) => {
+    const deleteCategory = useCallback(async (id: string) => {
         try {
             await categoriesApi.delete(id);
             await fetchCategories();
@@ -121,22 +123,36 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
             console.error("Failed to delete category", error);
             throw error;
         }
-    };
+    }, [fetchCategories]);
+
+    const contextValue = useMemo(() => ({
+        products,
+        categories,
+        loading,
+        refreshProducts: fetchProducts,
+        addProduct,
+        deleteProduct,
+        updateProduct,
+        refreshCategories: fetchCategories,
+        addCategory,
+        updateCategory,
+        deleteCategory
+    }), [
+        products, 
+        categories, 
+        loading, 
+        fetchProducts, 
+        addProduct, 
+        deleteProduct, 
+        updateProduct, 
+        fetchCategories, 
+        addCategory, 
+        updateCategory, 
+        deleteCategory
+    ]);
 
     return (
-        <ProductContext.Provider value={{
-            products,
-            categories,
-            loading,
-            refreshProducts: fetchProducts,
-            addProduct,
-            deleteProduct,
-            updateProduct,
-            refreshCategories: fetchCategories,
-            addCategory,
-            updateCategory,
-            deleteCategory
-        }}>
+        <ProductContext.Provider value={contextValue}>
             {children}
         </ProductContext.Provider>
     );

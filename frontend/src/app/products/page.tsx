@@ -139,26 +139,35 @@ function ProductsContent() {
                         </div>
 
                         {/* Categories */}
-                        <div className="space-y-4 mb-8">
-                            <h3 className="text-gold-300 font-bold uppercase tracking-widest text-sm border-b border-gold-500/10 pb-2">فئات</h3>
-                            <div className="flex flex-col gap-2">
-                                {categories.map((cat) => (
-                                    <button
-                                        key={cat}
-                                        suppressHydrationWarning
-                                        onClick={() => {
-                                            setSelectedCategory(cat);
-                                        }}
-                                        className={cn(
-                                            "text-right px-3 py-2 transition-all rounded-sm text-sm",
-                                            selectedCategory === cat
-                                                ? "bg-gold-500 text-rich-black font-bold"
-                                                : "text-gray-400 hover:text-gold-300 hover:bg-gold-500/5"
-                                        )}
-                                    >
-                                        {cat}
-                                    </button>
-                                ))}
+                        <div className="space-y-6 mb-10">
+                            <h3 className="text-white font-black uppercase tracking-[0.3em] text-[10px] border-b border-white/5 pb-4">التصنيفات</h3>
+                            <div className="flex flex-col gap-1">
+                                {categories.map((cat) => {
+                                    const count = products.filter(p => cat === "جميع المنتجات" || p.category === cat).length;
+                                    return (
+                                        <button
+                                            key={cat}
+                                            suppressHydrationWarning
+                                            onClick={() => {
+                                                setSelectedCategory(cat);
+                                            }}
+                                            className={cn(
+                                                "flex justify-between items-center px-4 py-3 transition-all duration-300 rounded-xl group",
+                                                selectedCategory === cat
+                                                    ? "bg-gold-500 text-rich-black font-bold shadow-lg shadow-gold-500/20"
+                                                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                                            )}
+                                        >
+                                            <span className="text-sm font-bold">{cat}</span>
+                                            <span className={cn(
+                                                "text-[10px] font-black px-2 py-1 rounded-lg",
+                                                selectedCategory === cat ? "bg-black/20 text-black" : "bg-white/5 text-gray-500 group-hover:bg-white/10"
+                                            )}>
+                                                {count}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 
@@ -231,7 +240,7 @@ function ProductsContent() {
                                             exit={{ opacity: 0, y: 10 }}
                                             transition={{ duration: 0.3 }}
                                         >
-                                            <ProductCard {...product} image={product.images[0]?.url || ''} />
+                                            <ProductCard {...product} />
                                         </motion.div>
                                     ))}
                                 </AnimatePresence>

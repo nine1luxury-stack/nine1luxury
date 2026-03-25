@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/layout/Hero";
 import { ProductCard } from "@/components/product/ProductCard";
+import { motion } from "framer-motion";
 
 import Link from "next/link";
 import { PromoBanner } from "@/components/layout/PromoBanner";
@@ -51,11 +52,23 @@ export default function Home() {
             <PromoBanner />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+          <motion.div 
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            variants={{
+              show: {
+                transition: {
+                  staggerChildren: 0.1
+                }
+              }
+            }}
+            className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-8"
+          >
             {displayProducts.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
-          </div>
+          </motion.div>
 
           <div className="mt-20 text-center">
             <Link
