@@ -8,17 +8,24 @@ import { ProductCard } from "@/components/product/ProductCard";
 import Link from "next/link";
 import { PromoBanner } from "@/components/layout/PromoBanner";
 
-import { useProducts } from "@/context/ProductContext";
+import { productsApi, Product } from "@/lib/api";
+import { useState, useEffect } from "react";
 
 export default function Home() {
-  const { products } = useProducts();
+  const [displayProducts, setDisplayProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Get featured products (e.g. first 3 or explicitly marked featured)
-  const activeProducts = products.filter(p => p.isActive !== false);
-  const featuredProducts = activeProducts.filter(p => p.featured).slice(0, 3);
-
-  // If no explicit featured products, just take the first 3 recent ones
-  const displayProducts = featuredProducts.length > 0 ? featuredProducts : activeProducts.slice(0, 3);
+  useEffect(() => {
+    productsApi.getAll({ featured: true, limit: 12 })
+      .then(data => {
+        setDisplayProducts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <main className="min-h-screen bg-rich-black">

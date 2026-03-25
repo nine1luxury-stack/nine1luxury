@@ -85,15 +85,15 @@ export function ProductCard({ id, name, price, discount, image, images, category
                 </Link>
 
                 <div className="flex items-center justify-between">
-                    <div className="flex flex-col">
-                        {discount && (
-                            <span className="text-xs text-gray-500 line-through">
-                                {formatPrice(price)}
-                            </span>
-                        )}
+                    <div className="flex items-center gap-3">
                         <span className="text-2xl font-playfair font-bold text-gold-300">
                             {formatPrice(discountedPrice)}
                         </span>
+                        {discount && (
+                            <span className="text-sm text-gray-500 line-through">
+                                {formatPrice(price)}
+                            </span>
+                        )}
                     </div>
 
 

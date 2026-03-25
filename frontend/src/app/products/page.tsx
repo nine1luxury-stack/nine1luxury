@@ -24,8 +24,12 @@ import { useProducts } from "@/context/ProductContext";
 
 function ProductsContent() {
     // Use Global Context instead of local API fetch
-    const { products, categories: dbCategories } = useProducts();
+    const { products, categories: dbCategories, refreshProducts } = useProducts();
     const searchParams = useSearchParams();
+
+    useEffect(() => {
+        refreshProducts({ all: true });
+    }, [refreshProducts]);
 
     const [selectedCategory, setSelectedCategory] = useState("جميع المنتجات");
     const [priceRange, setPriceRange] = useState(10000);

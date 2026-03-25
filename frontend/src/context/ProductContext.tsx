@@ -7,7 +7,7 @@ interface ProductContextType {
     products: Product[];
     categories: Category[];
     loading: boolean;
-    refreshProducts: () => Promise<void>;
+    refreshProducts: (params?: { all?: boolean, limit?: number }) => Promise<void>;
     addProduct: (product: Partial<Product>) => Promise<void>;
     deleteProduct: (id: string) => Promise<void>;
     updateProduct: (id: string, product: Partial<Product>) => Promise<void>;
@@ -24,9 +24,9 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchProducts = async () => {
+    const fetchProducts = async (params: { all?: boolean, limit?: number } = { limit: 50 }) => {
         try {
-            const data = await productsApi.getAll();
+            const data = await productsApi.getAll(params);
             setProducts(data);
         } catch (error) {
             console.error("Failed to fetch products", error);
@@ -44,7 +44,10 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
 
     const loadData = async () => {
         setLoading(true);
-        await Promise.all([fetchProducts(), fetchCategories()]);
+        // Load categories first as they are small and critical for filters
+        await fetchCategories();
+        // Load an initial batch of products to show something fast
+        await fetchProducts({ limit: 50 });
         setLoading(false);
     };
 
@@ -55,7 +58,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     const addProduct = async (newProduct: Partial<Product>) => {
         try {
             await productsApi.create(newProduct);
-            await fetchProducts();
+            await fetchProducts({ all: true }); // Refresh all after change
         } catch (error) {
             console.error("Failed to add product", error);
             throw error;

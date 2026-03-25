@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { useProducts } from "@/context/ProductContext";
 import { useCart } from "@/context/CartContext";
 import { formatPrice, cn } from "@/lib/utils";
+import { productsApi, Product } from "@/lib/api";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -19,13 +20,39 @@ import {
 
 export default function ProductDetailsPage() {
     const { id } = useParams();
+    const idString = Array.isArray(id) ? id[0] : id;
     const router = useRouter();
     const { addToCart } = useCart();
     const { products } = useProducts();
 
-    const product = useMemo(() =>
-        products.find(p => p.id === id),
-        [id, products]);
+    const [localProduct, setLocalProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    const product = useMemo(() => {
+        const inContext = products.find(p => p.id === idString);
+        return inContext || localProduct;
+    }, [idString, products, localProduct]);
+
+    useEffect(() => {
+        if (!idString) return;
+        
+        const inContext = products.find(p => p.id === idString);
+        if (inContext) {
+            setLoading(false);
+            return;
+        }
+
+        setLoading(true);
+        productsApi.getById(idString)
+            .then(data => {
+                setLocalProduct(data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+                setLoading(false);
+            });
+    }, [idString, products]);
 
     const [activeImage, setActiveImage] = useState(0);
     const [selectedColor, setSelectedColor] = useState("");
@@ -155,6 +182,17 @@ export default function ProductDetailsPage() {
         const variant = product.variants?.find(v => v.color === selectedColor && v.size === selectedSize);
         return variant ? variant.stock <= 0 : true;
     }, [product, selectedColor, selectedSize]);
+
+    if (loading) {
+        return (
+            <main className="min-h-screen bg-rich-black flex items-center justify-center">
+                <Header />
+                <div className="text-gold-500 animate-pulse text-xl font-bold uppercase tracking-widest">
+                    جاري التحميل...
+                </div>
+            </main>
+        );
+    }
 
     if (!product) {
         return (
@@ -304,12 +342,12 @@ export default function ProductDetailsPage() {
                             <span className="text-3xl font-playfair font-bold text-gold-300">
                                 {formatPrice(discountedPrice)}
                             </span>
-                            {product.discount && (
+                            {product.discount && product.discount > 0 && (
                                 <span className="text-xl text-gray-500 line-through">
                                     {formatPrice(product.price)}
                                 </span>
                             )}
-                            {product.discount && (
+                            {product.discount && product.discount > 0 && (
                                 <span className="bg-gold-500 text-rich-black px-2 py-1 text-xs font-bold rounded-sm">
                                     خصم {product.discount}%
                                 </span>

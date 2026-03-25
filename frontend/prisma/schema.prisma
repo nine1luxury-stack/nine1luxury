@@ -67,6 +67,10 @@ model product {
   updatedAt      DateTime         @updatedAt
   images         productimage[]
   variants       productvariant[]
+
+  @@index([category])
+  @@index([featured])
+  @@index([createdAt])
 }
 
 model productimage {

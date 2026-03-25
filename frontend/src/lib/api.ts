@@ -11,7 +11,7 @@ export interface Product {
     name: string;
     description: string;
     price: number;
-    discount?: number;
+    discount: number | null;
     category: string;
     model?: string;
     featured: boolean;
@@ -154,10 +154,12 @@ export interface ReturnRequest {
 
 // Real Products API connecting to our Next.js API Routes
 export const productsApi = {
-    async getAll(params?: { category?: string; featured?: boolean }): Promise<Product[]> {
+    async getAll(params?: { category?: string; featured?: boolean, limit?: number, all?: boolean }): Promise<Product[]> {
         const query = new URLSearchParams();
         if (params?.category) query.append('category', params.category);
         if (params?.featured !== undefined) query.append('featured', String(params.featured));
+        if (params?.limit !== undefined) query.append('limit', String(params.limit));
+        if (params?.all) query.append('all', 'true');
 
         const res = await fetch(`/api/products?${query.toString()}`, { cache: 'no-store' });
         if (!res.ok) {

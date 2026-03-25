@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Plus,
@@ -27,8 +27,14 @@ export default function AdminProductsPage() {
     // Use Global Context
     const {
         products, addProduct, deleteProduct, updateProduct,
-        categories: dbCategories, addCategory, updateCategory, deleteCategory
+        categories: dbCategories, addCategory, updateCategory, deleteCategory,
+        refreshProducts
     } = useProducts();
+
+    useEffect(() => {
+        // Force refresh all products specifically for the admin dashboard
+        refreshProducts({ all: true });
+    }, [refreshProducts]);
 
     const categories = useMemo(() => {
         const base = ["الكل", "هوديز", "تيشرتات", "بناطيل", "سويت شيرتات"];
@@ -116,7 +122,7 @@ export default function AdminProductsPage() {
             price: product.price.toString(),
             category: product.category,
             description: product.description,
-            image: product.images?.[0]?.url || product.image || '',
+            image: product.images?.[0]?.url || '',
             sizes: sizes,
             colors: colors,
             discount: product.discount?.toString() || ''
@@ -158,7 +164,7 @@ export default function AdminProductsPage() {
                 model: newProduct.model,
                 description: newProduct.description,
                 price: Number(newProduct.price),
-                discount: newProduct.discount ? Number(newProduct.discount) : undefined,
+                discount: newProduct.discount === '' ? null : Number(newProduct.discount),
                 category: newProduct.category,
                 featured: false,
                 sizeChartImage: finalSizeChartUrl || undefined,
@@ -338,9 +344,11 @@ export default function AdminProductsPage() {
                                                 <span className="text-[10px] bg-white/5 px-2 py-1 rounded text-gray-400 font-bold uppercase">{product.category}</span>
                                             </td>
                                             <td className="px-6 py-5">
-                                                <div className="flex flex-col">
+                                                <div className="flex items-center gap-2">
                                                     <span className="text-sm font-bold text-white">{formatPrice(product.price * (product.discount ? (1 - product.discount / 100) : 1))}</span>
-                                                    {product.discount && <span className="text-[10px] text-gray-500 line-through">{formatPrice(product.price)}</span>}
+                                                    {product.discount && product.discount > 0 && (
+                                                        <span className="text-[10px] text-gray-500 line-through">{formatPrice(product.price)}</span>
+                                                    )}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-5">

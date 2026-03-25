@@ -9,10 +9,14 @@ export async function GET(request: Request) {
         const { searchParams } = new URL(request.url);
         const category = searchParams.get('category');
         const featured = searchParams.get('featured');
+        const limitParam = searchParams.get('limit');
+        const all = searchParams.get('all');
 
         const where: Record<string, string | boolean> = {};
         if (category) where.category = category;
         if (featured === 'true') where.featured = true;
+
+        const limit = limitParam ? parseInt(limitParam) : (all === 'true' ? undefined : 24);
 
         const products = await prisma.product.findMany({
             where,
@@ -20,6 +24,7 @@ export async function GET(request: Request) {
                 images: true,
                 variants: true,
             },
+            take: limit,
             orderBy: {
                 createdAt: 'desc',
             }
