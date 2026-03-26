@@ -20,21 +20,35 @@ export async function GET(request: Request) {
 
         const products = await prisma.product.findMany({
             where,
-//            include: {
-//                images: true,
-//                variants: true,
-//            },
+            include: {
+                images: true,
+                variants: true,
+            },
             take: limit,
             orderBy: {
                 createdAt: 'desc',
             }
         });
 
-        const formattedProducts = products.map((product: any) => ({
-            ...product,
-            images: product.images || product.productimage,
-            variants: product.variants || product.productvariant,
-        }));
+        console.log(`API: Found ${products.length} products`);
+
+        const formattedProducts = products.map((product) => {
+            const sizes = product.variants?.map(v => v.size) || [];
+            
+            return {
+                ...product,
+                // Ensure images are always an array
+                images: (product as any).images || [],
+                // Ensure variants are always an array
+                variants: (product as any).variants || [],
+                // Also handle the potential alternate names if they exist
+                productimage: undefined,
+                productvariant: undefined
+            };
+        });
+
+        console.log(`API: Returning ${formattedProducts.length} formatted products`);
+        return NextResponse.json(formattedProducts);
 
         return NextResponse.json(formattedProducts);
     } catch (error: any) {
