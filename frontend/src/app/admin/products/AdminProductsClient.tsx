@@ -19,17 +19,19 @@ import { useProducts } from "@/context/ProductContext";
 import { formatPrice, cn } from "@/lib/utils";
 import { Product, ProductVariant } from "@/lib/api";
 
-export default function AdminProductsPage() {
+export default function AdminProductsPage({ initialProducts = [] }: { initialProducts?: Product[] }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("الكل");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     // Use Global Context
     const {
-        products, addProduct, deleteProduct, updateProduct,
+        products: contextProducts, addProduct, deleteProduct, updateProduct,
         categories: dbCategories, addCategory, updateCategory, deleteCategory,
-        refreshProducts
+        refreshProducts, loading
     } = useProducts();
+
+    const actualProducts = contextProducts.length > 0 ? contextProducts : initialProducts;
 
     useEffect(() => {
         // Force refresh all products specifically for the admin dashboard
@@ -39,9 +41,10 @@ export default function AdminProductsPage() {
     const categories = useMemo(() => {
         const base = ["الكل", "هوديز", "تيشرتات", "بناطيل", "سويت شيرتات"];
         const fromDb = dbCategories.map(c => c.name);
-        const fromProducts = products.map(p => p.category);
+        const fromProducts = actualProducts.map(p => p.category);
         return Array.from(new Set([...base, ...fromDb, ...fromProducts]));
-    }, [products, dbCategories]);
+    }, [actualProducts, dbCategories]);
+
 
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
     const [categoryInput, setCategoryInput] = useState("");
@@ -208,7 +211,7 @@ export default function AdminProductsPage() {
         }
     };
 
-    const filteredProducts = products.filter(product => {
+    const filteredProducts = actualProducts.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory === "الكل" || product.category === selectedCategory;
         return matchesSearch && matchesCategory;
@@ -312,7 +315,20 @@ export default function AdminProductsPage() {
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             <AnimatePresence mode="popLayout">
-                                {filteredProducts.length > 0 ? (
+                                {(loading && actualProducts.length === 0) ? (
+                                    <motion.tr
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                    >
+                                        <td colSpan={7} className="text-center py-20">
+                                            <div className="flex flex-col items-center justify-center space-y-4">
+                                                <div className="w-10 h-10 border-4 border-gold-500 border-t-transparent rounded-full animate-spin"></div>
+                                                <p className="text-gray-500 font-medium animate-pulse">جاري تحميل المنتجات...</p>
+                                            </div>
+                                        </td>
+                                    </motion.tr>
+                                ) : filteredProducts.length > 0 ? (
                                     filteredProducts.map((product) => (
                                         <motion.tr
                                             key={product.id}
@@ -424,7 +440,7 @@ export default function AdminProductsPage() {
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
                                     >
-                                        <td colSpan={6} className="text-center py-12">
+                                        <td colSpan={7} className="text-center py-12">
                                             <div className="flex flex-col items-center justify-center space-y-3">
                                                 <Search className="w-8 h-8 text-gray-600" />
                                                 <p className="text-gray-500 font-medium">لا توجد نتائج مطابقة للبحث</p>
