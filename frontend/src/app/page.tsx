@@ -11,27 +11,83 @@ import { PromoBanner } from "@/components/layout/PromoBanner";
 
 import { productsApi, Product } from "@/lib/api";
 import { useState, useEffect } from "react";
+import { ShoppingBag, ArrowLeft, Loader2 } from "lucide-react";
 
 export default function Home() {
   const [displayProducts, setDisplayProducts] = useState<Product[]>([]);
+  const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    productsApi.getAll({ featured: true, limit: 12 })
-      .then(data => {
-        setDisplayProducts(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
+    Promise.all([
+      productsApi.getAll({ featured: true, limit: 12 }),
+      fetch('/api/offers').then(res => res.json())
+    ])
+    .then(([productsData, offersData]) => {
+      setDisplayProducts(productsData);
+      setOffers(offersData.filter((o: any) => o.isActive).slice(0, 3));
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error(err);
+      setLoading(false);
+    });
   }, []);
 
   return (
     <main className="min-h-screen bg-rich-black">
       <Header />
       <Hero />
+
+      {/* Offers Section */}
+      <section className="py-24 bg-rich-black overflow-hidden relative" dir="rtl">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gold-500/5 rounded-full blur-[150px] -z-10" />
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6">
+            <div className="text-right">
+              <h2 className="text-sm uppercase text-gold-500 font-bold mb-3 tracking-widest">فرص حصرية</h2>
+              <h3 className="text-4xl md:text-5xl font-playfair font-bold text-white uppercase">أحدث العروض</h3>
+            </div>
+            <Link href="/offers" className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-bold hover:bg-gold-500 hover:text-rich-black transition-all hover:border-gold-500 text-sm">
+              عرض جميع العروض
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {loading ? (
+              <div className="col-span-full flex justify-center py-12">
+                <Loader2 className="w-8 h-8 text-gold-500 animate-spin" />
+              </div>
+            ) : offers.length > 0 ? (
+              offers.map((offer, idx) => (
+                <motion.div
+                  key={offer.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="group relative h-48 rounded-2xl overflow-hidden border border-white/5 bg-surface-dark/30 hover:border-gold-500/30 transition-all duration-300 shadow-xl"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-gold-500/10 via-transparent to-transparent opacity-50" />
+                  <div className="relative h-full p-8 flex flex-col justify-center items-center text-center">
+                    <h4 className="text-2xl font-bold text-white mb-4 font-playfair group-hover:text-gold-500 transition-colors">{offer.title}</h4>
+                    <Link
+                      href={`/products?category=${encodeURIComponent(offer.link)}`}
+                      className="flex items-center gap-2 text-gold-500 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors border border-gold-500/20 px-4 py-2 rounded-full hover:bg-gold-500/10"
+                    >
+                      تسوق القسم
+                      <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12 text-gray-500">
+                لا توجد عروض نشطة حالياً
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* Featured Section */}
       <section className="pt-12 pb-24 bg-rich-black relative">

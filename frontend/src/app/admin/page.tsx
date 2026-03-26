@@ -58,21 +58,35 @@ export default function AdminDashboard() {
     };
 
     // Calculate dynamic stats
+    const [offers, setOffers] = useState<any[]>([]);
+
+    const fetchOffers = async () => {
+        try {
+            const res = await fetch('/api/offers');
+            if (res.ok) {
+                const data = await res.json();
+                setOffers(data);
+            }
+        } catch (e) { console.error(e); }
+    };
+
+    useEffect(() => {
+        fetchOffers();
+    }, []);
+
     const stats = useMemo(() => {
         const completedOrders = orders.filter(o => o.status === 'DELIVERED');
         const pendingOrders = orders.filter(o => o.status === 'PENDING');
 
         const totalSales = completedOrders.reduce((sum, order) => sum + Number(order.totalAmount), 0);
         const newOrdersCount = pendingOrders.length;
-
-        // Simple unique customer count based on guestName
-        const uniqueCustomers = new Set(orders.map(o => o.guestName || o.user?.name)).size;
+        const activeOffersCount = offers.filter(o => o.isActive).length;
 
         return [
             {
                 name: "إجمالي المبيعات",
                 value: totalSales,
-                change: "+12%", // Placeholder for now
+                change: "+12%",
                 isUp: true,
                 icon: DollarSign,
                 color: "text-green-500",
@@ -89,9 +103,18 @@ export default function AdminDashboard() {
                 bg: "bg-gold-500/10",
                 href: "/admin/orders"
             },
-
+            {
+                name: "العروض النشطة",
+                value: activeOffersCount,
+                change: "جديد",
+                isUp: true,
+                icon: Users,
+                color: "text-blue-500",
+                bg: "bg-blue-500/10",
+                href: "/admin/offers"
+            },
         ];
-    }, [orders]);
+    }, [orders, offers]);
 
     // Calculate Best Sellers
     const bestSellers = useMemo(() => {

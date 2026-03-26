@@ -52,6 +52,9 @@ export function Header() {
                     <Link href="/products" className="text-white hover:text-gold-300 transition-colors font-amiri font-bold">
                         المنتجات
                     </Link>
+                    <Link href="/offers" className="text-white hover:text-gold-300 transition-colors font-amiri font-bold">
+                        العروض
+                    </Link>
                     <Link href="/booking" className="text-white hover:text-gold-300 transition-colors font-amiri font-bold">
                         الحجز
                     </Link>
@@ -136,6 +139,15 @@ export function Header() {
                                     className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase flex items-center justify-between group"
                                 >
                                     المنتجات
+                                    <ChevronLeft className="w-5 h-5 text-gold-500/50 group-hover:text-gold-500 transition-colors" />
+                                </Link>
+
+                                <Link
+                                    href="/offers"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="text-lg font-bold text-white hover:text-gold-300 transition-colors uppercase flex items-center justify-between group"
+                                >
+                                    العروض
                                     <ChevronLeft className="w-5 h-5 text-gold-500/50 group-hover:text-gold-500 transition-colors" />
                                 </Link>
 
