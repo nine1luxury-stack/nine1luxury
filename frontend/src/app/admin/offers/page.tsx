@@ -96,6 +96,7 @@ export default function AdminOffersPage() {
         });
         setEditingId(offer.id);
         setShowForm(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const deleteOffer = async (id: string) => {

@@ -19,26 +19,29 @@ import { useProducts } from "@/context/ProductContext";
 import { formatPrice, cn } from "@/lib/utils";
 import { Product, ProductVariant } from "@/lib/api";
 
-export function AdminProductsClient({ initialProducts, initialCategories }: { initialProducts: any[], initialCategories: any[] }) {
+export default function AdminProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("الكل");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    
-    // We use a local state initialized by the server to avoid hydration delay
-    const [dashboardProducts, setDashboardProducts] = useState<any[]>(initialProducts);
 
-    // Use Global Context for actions only
+    // Use Global Context
     const {
-        addProduct, deleteProduct, updateProduct,
-        categories: dbCategories, addCategory, updateCategory, deleteCategory
+        products, addProduct, deleteProduct, updateProduct,
+        categories: dbCategories, addCategory, updateCategory, deleteCategory,
+        refreshProducts
     } = useProducts();
+
+    useEffect(() => {
+        // Force refresh all products specifically for the admin dashboard
+        refreshProducts({ all: true });
+    }, [refreshProducts]);
 
     const categories = useMemo(() => {
         const base = ["الكل", "هوديز", "تيشرتات", "بناطيل", "سويت شيرتات"];
-        const fromDb = initialCategories.map((c: any) => c.name);
-        const fromProducts = dashboardProducts.map((p: any) => p.category);
+        const fromDb = dbCategories.map(c => c.name);
+        const fromProducts = products.map(p => p.category);
         return Array.from(new Set([...base, ...fromDb, ...fromProducts]));
-    }, [initialCategories, dashboardProducts]);
+    }, [products, dbCategories]);
 
     const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
     const [categoryInput, setCategoryInput] = useState("");
@@ -205,7 +208,7 @@ export function AdminProductsClient({ initialProducts, initialCategories }: { in
         }
     };
 
-    const filteredProducts = dashboardProducts.filter(product => {
+    const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory === "الكل" || product.category === selectedCategory;
         return matchesSearch && matchesCategory;

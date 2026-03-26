@@ -1,40 +1,38 @@
+"use client";
+
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/layout/Hero";
 import { ProductCard } from "@/components/product/ProductCard";
+import { motion } from "framer-motion";
+
 import Link from "next/link";
 import { PromoBanner } from "@/components/layout/PromoBanner";
-import { ArrowLeft } from "lucide-react";
-import { prisma } from "@/lib/db";
-import { Suspense } from "react";
-import { Loader2 } from "lucide-react";
 
-export const revalidate = 60; // 60 seconds Cache
+import { productsApi, Product } from "@/lib/api";
+import { useState, useEffect } from "react";
+import { ShoppingBag, ArrowLeft, Loader2 } from "lucide-react";
 
-export default async function Home() {
-  // Fetch Featured Products optimized via Prisma directly from DB layer on Server
-  const displayProducts = await prisma.product.findMany({
-    where: { isActive: true, featured: true },
-    orderBy: { createdAt: 'desc' },
-    take: 12,
-    select: {
-      id: true,
-      name: true,
-      model: true,
-      price: true,
-      discount: true,
-      category: true,
-      images: { select: { url: true } },
-      variants: { select: { size: true } }
-    }
-  });
+export default function Home() {
+  const [displayProducts, setDisplayProducts] = useState<Product[]>([]);
+  const [offers, setOffers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch Active Offers directly from DB
-  const offers = await (prisma as any).offer.findMany({
-    where: { isActive: true },
-    orderBy: { createdAt: 'desc' },
-    take: 3,
-  });
+  useEffect(() => {
+    Promise.all([
+      productsApi.getAll({ featured: true, limit: 12 }),
+      fetch('/api/offers').then(res => res.json())
+    ])
+    .then(([productsData, offersData]) => {
+      setDisplayProducts(productsData);
+      setOffers(offersData.filter((o: any) => o.isActive).slice(0, 3));
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error(err);
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <main className="min-h-screen bg-rich-black">
@@ -56,10 +54,17 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {offers.length > 0 ? (
-              offers.map((offer: any) => (
-                <div
+            {loading ? (
+              <div className="col-span-full flex justify-center py-12">
+                <Loader2 className="w-8 h-8 text-gold-500 animate-spin" />
+              </div>
+            ) : offers.length > 0 ? (
+              offers.map((offer, idx) => (
+                <motion.div
                   key={offer.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
                   className="group relative h-48 rounded-2xl overflow-hidden border border-white/5 bg-surface-dark/30 hover:border-gold-500/30 transition-all duration-300 shadow-xl"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-gold-500/10 via-transparent to-transparent opacity-50" />
@@ -73,7 +78,7 @@ export default async function Home() {
                       <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                     </Link>
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
               <div className="col-span-full text-center py-12 text-gray-500">
@@ -103,11 +108,23 @@ export default async function Home() {
             <PromoBanner />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-8">
+          <motion.div 
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            variants={{
+              show: {
+                transition: {
+                  staggerChildren: 0.1
+                }
+              }
+            }}
+            className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-8"
+          >
             {displayProducts.map((product) => (
-              <ProductCard key={product.id} {...(product as any)} />
+              <ProductCard key={product.id} {...product} />
             ))}
-          </div>
+          </motion.div>
 
           <div className="mt-20 text-center">
             <Link
@@ -119,6 +136,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Why Choose Us */}
+
 
       {/* CTA Section */}
       <section className="py-32 relative overflow-hidden">
@@ -140,4 +160,3 @@ export default async function Home() {
     </main>
   );
 }
-
