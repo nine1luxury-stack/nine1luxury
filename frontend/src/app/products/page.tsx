@@ -14,11 +14,29 @@ export default async function ProductsPage() {
                 where: {
                     isActive: true
                 },
-                include: {
+                select: {
+                    id: true,
+                    name: true,
+                    price: true,
+                    discount: true,
+                    category: true,
+                    isActive: true,
+                    createdAt: true,
                     images: {
-                        take: 1
+                        take: 1,
+                        select: {
+                            id: true,
+                            url: true
+                        }
                     },
-                    variants: true
+                    variants: {
+                        select: {
+                            id: true,
+                            size: true,
+                            color: true,
+                            stock: true
+                        }
+                    }
                 },
                 orderBy: {
                     createdAt: 'desc'

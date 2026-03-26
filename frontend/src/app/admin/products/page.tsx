@@ -14,9 +14,38 @@ export default async function AdminProductsPage() {
                 orderBy: {
                     createdAt: 'desc'
                 },
-                include: {
-                    images: true,
-                    variants: true
+                select: {
+                    id: true,
+                    name: true,
+                    price: true,
+                    discount: true,
+                    category: true,
+                    isActive: true,
+                    featured: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    model: true,
+                    description: true, // Admin might need description for editing, but let's see. 
+                    // Actually, if we want extreme speed, we should only fetch list fields and fetch details on demand.
+                    // But Admin Client likely expects them.
+                    images: {
+                        select: {
+                            id: true,
+                            url: true,
+                            color: true
+                        }
+                    },
+                    variants: {
+                        select: {
+                            id: true,
+                            size: true,
+                            color: true,
+                            colorHex: true,
+                            stock: true,
+                            damagedStock: true,
+                            sku: true
+                        }
+                    }
                 }
             }),
             prisma.category.findMany({
