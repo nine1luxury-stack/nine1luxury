@@ -19,6 +19,7 @@ import { formatPrice, cn } from "@/lib/utils";
 import { Product, ProductVariant, productsApi, categoriesApi } from "@/lib/api";
 
 export default function AdminProductsClient({ initialProducts, initialCategories }: { initialProducts: Product[], initialCategories: any[] }) {
+    console.log(`CLIENT PROPS: ${initialProducts?.length || 0} products`);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("الكل");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);

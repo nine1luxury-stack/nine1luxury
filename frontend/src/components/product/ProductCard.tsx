@@ -17,15 +17,16 @@ interface ProductCardProps {
     variants?: ProductVariant[];
     isActive?: boolean;
     createdAt?: string;
+    isNew?: boolean;
 }
 
-export function ProductCard({ id, name, price, discount, images, category, isActive, createdAt }: ProductCardProps) {
+export function ProductCard({ id, name, price, discount, images, category, isActive, createdAt, isNew: propIsNew }: ProductCardProps) {
     const displayImage = images?.[0]?.url || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800';
     const discountedPrice = (discount && discount > 0) ? price * (1 - discount / 100) : price;
     const isSoldOut = isActive === false;
 
-    // Check if product is new (created in last 7 days)
-    const isNew = createdAt ? (new Date().getTime() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000) : false;
+    // Check if product is new (created in last 7 days) - default to prop but fallback if not provided
+    const isNew = propIsNew ?? (createdAt ? (new Date(new Date().toDateString()).getTime() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000) : false);
 
     return (
         <motion.div

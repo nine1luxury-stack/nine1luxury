@@ -21,13 +21,18 @@ const FILTERS_BASE = {
 };
 
 export default function ProductsClient({ initialProducts, initialCategories }: { initialProducts: any[], initialCategories: any[] }) {
-    const products = initialProducts;
-    const dbCategories = initialCategories;
+    console.log(`PUBLIC PROPS: received ${initialProducts?.length} products`);
+    const products = initialProducts || [];
+    const dbCategories = initialCategories || [];
     const searchParams = useSearchParams();
 
     const [selectedCategory, setSelectedCategory] = useState("جميع المنتجات");
-    const [priceRange, setPriceRange] = useState(10000);
+    const [priceRange, setPriceRange] = useState(100000); // Increased default price range to 100k
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
+    useEffect(() => {
+        console.log(`CLIENT MOUNT: products list length is ${products.length}`);
+    }, [products.length]);
 
     const categories = useMemo(() => {
         const base = ["جميع المنتجات", "تيشرتات", "هوديز", "بناطيل", "سويت شيرتات"];
