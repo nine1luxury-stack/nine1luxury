@@ -55,9 +55,13 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
         }
     }, [fetchCategories, fetchProducts]);
 
+    // Removed automatic loadData from root provider to avoid redundancy and slow hydration.
+    // Pages requiring context data should call refreshProducts() explicitly or use Server Components.
+    /*
     useEffect(() => {
         loadData();
     }, [loadData]);
+    */
 
     const addProduct = useCallback(async (newProduct: Partial<Product>) => {
         try {

@@ -18,7 +18,7 @@ import { useProducts } from "@/context/ProductContext";
 
 export default function AdminDashboard() {
     const [orders, setOrders] = useState<Order[]>([]);
-    const { products } = useProducts();
+    const { products, refreshProducts, refreshCategories } = useProducts();
 
     const fetchOrders = async () => {
         try {
@@ -34,9 +34,11 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         fetchOrders();
+        refreshProducts();
+        refreshCategories();
         const interval = setInterval(fetchOrders, 15000);
         return () => clearInterval(interval);
-    }, []);
+    }, [refreshProducts, refreshCategories]);
 
     const handleStatusUpdate = async (orderId: string, newStatus: Order['status']) => {
         const previousOrders = [...orders];
