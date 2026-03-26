@@ -20,32 +20,42 @@ export async function GET(request: Request) {
 
         const products = await prisma.product.findMany({
             where,
-            include: {
-                images: true,
-                variants: true,
+            select: {
+                id: true,
+                name: true,
+                price: true,
+                discount: true,
+                category: true,
+                isActive: true,
+                createdAt: true,
+                images: {
+                    take: 1, // Only need the first image for the list
+                    select: { id: true, url: true }
+                },
+                variants: {
+                    select: { id: true, size: true, color: true, stock: true }
+                }
+                // Specifically EXCLUDED: description, sizeChartImage, model
             },
-            take: limit,
+            take: limit || 12,
             orderBy: {
                 createdAt: 'desc',
             }
         });
 
-        console.log(`API: Found ${products.length} products`);
+        console.log(`API: Fast fetch returned ${products.length} products`);
 
-        const formattedProducts = products.map((product) => {
-            const sizes = product.variants?.map(v => v.size) || [];
-            
-            return {
-                ...product,
-                // Ensure images are always an array
-                images: (product as any).images || [],
-                // Ensure variants are always an array
-                variants: (product as any).variants || [],
-                // Also handle the potential alternate names if they exist
-                productimage: undefined,
-                productvariant: undefined
-            };
-        });
+        const formattedProducts = products.map((product) => ({
+            ...product,
+            images: product.images || [],
+            variants: product.variants || [],
+            // Set defaults for UI compatibility
+            description: "",
+            model: "",
+            sizeChartImage: null
+        }));
+
+        return NextResponse.json(formattedProducts);
 
         console.log(`API: Returning ${formattedProducts.length} formatted products`);
         return NextResponse.json(formattedProducts);
