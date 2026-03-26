@@ -70,6 +70,7 @@ model product {
 
   @@index([category])
   @@index([featured])
+  @@index([isActive])
   @@index([createdAt])
 }
 

@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { ProductVariant, ProductImage } from "@/lib/api";
+import { ProductVariant, ProductImage, productsApi } from "@/lib/api";
 import { ShoppingBag, Eye } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface ProductCardProps {
     id: string;
@@ -20,10 +21,27 @@ interface ProductCardProps {
     isNew?: boolean;
 }
 
-export function ProductCard({ id, name, price, discount, images, category, isActive, createdAt, isNew: propIsNew }: ProductCardProps) {
-    const displayImage = images?.[0]?.url || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800';
+export function ProductCard({ id, name, price, discount, images: propImages, category, isActive, createdAt, isNew: propIsNew }: ProductCardProps) {
+    const [liveImages, setLiveImages] = useState<ProductImage[]>(propImages || []);
+    const [isFetchingImage, setIsFetchingImage] = useState(!propImages || propImages.length === 0);
+
+    const displayImage = liveImages[0]?.url || 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800';
     const discountedPrice = (discount && discount > 0) ? price * (1 - discount / 100) : price;
     const isSoldOut = isActive === false;
+
+    useEffect(() => {
+        // If images were not provided via SSR (to speed up initial load), fetch them now on the client
+        if (!propImages || propImages.length === 0) {
+            productsApi.getById(id)
+                .then(p => {
+                    if (p.images && p.images.length > 0) {
+                        setLiveImages(p.images);
+                    }
+                })
+                .catch(err => console.error("Lazy Image load error:", err))
+                .finally(() => setIsFetchingImage(false));
+        }
+    }, [id, propImages]);
 
     // Check if product is new (created in last 7 days) - default to prop but fallback if not provided
     const isNew = propIsNew ?? (createdAt ? (new Date(new Date().toDateString()).getTime() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000) : false);
@@ -63,7 +81,8 @@ export function ProductCard({ id, name, price, discount, images, category, isAct
                         fill
                         className={cn(
                             "object-cover transition-all duration-1000 group-hover:scale-110 group-hover:blur-[2px] group-hover:opacity-40",
-                            isSoldOut && "grayscale opacity-80"
+                            isSoldOut && "grayscale opacity-80",
+                            isFetchingImage && "blur-sm animate-pulse opacity-50"
                         )}
                         onContextMenu={(e) => e.preventDefault()}
                         draggable={false}

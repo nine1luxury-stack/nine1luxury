@@ -11,7 +11,7 @@ export function SplashScreen() {
     // Hide splash screen after 2.5 seconds
     const timer = setTimeout(() => {
       setIsVisible(false);
-    }, 2500);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -22,7 +22,7 @@ export function SplashScreen() {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black"
         >
           {/* Main Logo Animation */}

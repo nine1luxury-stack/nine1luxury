@@ -22,7 +22,7 @@ const ProductContext = createContext<ProductContextType | undefined>(undefined);
 export function ProductProvider({ children }: { children: React.ReactNode }) {
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false); // Start false — no auto-fetch
 
     const fetchProducts = useCallback(async (params: { all?: boolean, limit?: number } = { limit: 50 }) => {
         try {
@@ -55,9 +55,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
         }
     }, [fetchCategories, fetchProducts]);
 
-    useEffect(() => {
-        loadData();
-    }, [loadData]);
+    // No auto-fetch on mount — pages that need data (admin) should call refreshProducts explicitly
 
     const addProduct = useCallback(async (newProduct: Partial<Product>) => {
         try {

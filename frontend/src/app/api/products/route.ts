@@ -16,7 +16,7 @@ export async function GET(request: Request) {
         if (category) where.category = category;
         if (featured === 'true') where.featured = true;
 
-        const limit = limitParam ? parseInt(limitParam) : (all === 'true' ? undefined : 24);
+        const limit = all === 'true' ? undefined : (limitParam ? parseInt(limitParam) : 24);
 
         const products = await prisma.product.findMany({
             where,
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
                 }
                 // Specifically EXCLUDED: description, sizeChartImage, model
             },
-            take: limit || 12,
+            ...(limit ? { take: limit } : {}),
             orderBy: {
                 createdAt: 'desc',
             }
@@ -49,17 +49,12 @@ export async function GET(request: Request) {
             ...product,
             images: product.images || [],
             variants: product.variants || [],
-            // Set defaults for UI compatibility
             description: "",
             model: "",
             sizeChartImage: null
         }));
 
-        return NextResponse.json(formattedProducts);
-
         console.log(`API: Returning ${formattedProducts.length} formatted products`);
-        return NextResponse.json(formattedProducts);
-
         return NextResponse.json(formattedProducts);
     } catch (error: any) {
         console.error('Error fetching products:', error);

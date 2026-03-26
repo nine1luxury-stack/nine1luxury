@@ -45,11 +45,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     };
 
     useEffect(() => {
-        // eslint-disable-next-line
         fetchNotifications();
-        // Poll every 30 seconds for new notifications
-        const interval = setInterval(fetchNotifications, 30000);
-        return () => clearInterval(interval);
     }, []);
 
     const addNotification = async (data: Omit<Notification, 'id' | 'read' | 'timestamp' | 'time'>) => {
