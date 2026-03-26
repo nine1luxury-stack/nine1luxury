@@ -46,10 +46,10 @@ export function AdminSidebar() {
                 isCollapsed ? "w-20" : "w-64"
             )}
         >
-            <div className="p-4 flex items-center justify-between border-b border-white/5 mb-2">
+            <div className="p-4 py-2 flex items-center justify-between border-b border-white/5">
                 {!isCollapsed && (
                     <Link href="/" className="flex items-center justify-center w-full">
-                        <div className="relative w-52 h-24">
+                        <div className="relative w-40 h-14">
                             <Image
                                 src="/logo-main.png"
                                 alt="nine1luxury"
@@ -72,7 +72,7 @@ export function AdminSidebar() {
                 </button>
             </div>
 
-            <nav className="flex-1 px-3 py-4 space-y-2">
+            <nav className="flex-1 px-3 py-1 space-y-1">
                 {menuItems.map((item) => {
                     const isActive = pathname === item.href;
                     return (
@@ -80,7 +80,7 @@ export function AdminSidebar() {
                             key={item.href}
                             href={item.href}
                             className={cn(
-                                "flex items-center gap-3 px-3 py-3 rounded-lg transition-all group relative",
+                                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative",
                                 isActive
                                     ? "bg-gold-500/10 text-gold-500 border border-gold-500/20"
                                     : "text-gray-400 hover:text-white hover:bg-white/5",
