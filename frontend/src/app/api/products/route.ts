@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
-import { prisma } from '@/lib/db';
+import { prisma, withDbTimeout } from '@/lib/db';
 
 export async function GET(request: Request) {
     try {
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
 
         const limit = all === 'true' ? undefined : (limitParam ? parseInt(limitParam) : 24);
 
-        const products = await prisma.product.findMany({
+        const products = await withDbTimeout(() => prisma.product.findMany({
             where,
             select: {
                 id: true,
@@ -41,7 +41,7 @@ export async function GET(request: Request) {
             orderBy: {
                 createdAt: 'desc',
             }
-        });
+        }));
 
         console.log(`API: Fast fetch returned ${products.length} products`);
 
@@ -58,10 +58,11 @@ export async function GET(request: Request) {
         return NextResponse.json(formattedProducts);
     } catch (error: any) {
         console.error('Error fetching products:', error);
+        const isTimeout = error.message?.includes('timed out') || error.message?.includes('timeout');
         return NextResponse.json({
-            error: 'Failed to fetch products',
+            error: isTimeout ? 'Database connection timed out' : 'Failed to fetch products',
             details: error.message
-        }, { status: 500 });
+        }, { status: isTimeout ? 503 : 500 });
     }
 }
 
