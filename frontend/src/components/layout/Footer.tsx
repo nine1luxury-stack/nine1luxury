@@ -21,9 +21,9 @@ export function Footer() {
     ];
 
     return (
-        <footer className="bg-[#030303] border-t border-gold-500/10 pt-20 pb-8 overflow-hidden relative">
-            {/* Background Glow Effect */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gold-500/3 rounded-full blur-[150px] pointer-events-none" />
+        <footer className="bg-[hsl(225,14%,4%)] border-t border-ivory/[0.04] pt-20 pb-8 overflow-hidden relative">
+            {/* Background Glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] rounded-full blur-[180px] pointer-events-none" style={{ background: 'hsla(37, 48%, 48%, 0.03)' }} />
 
             <div className="container mx-auto px-6 relative z-10 w-full max-w-[1400px]">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 text-center md:text-right" dir="rtl">
@@ -31,7 +31,7 @@ export function Footer() {
                     {/* Brand Section */}
                     <div className="flex flex-col items-center md:items-start space-y-6 lg:col-span-1">
                         <Link href="/" className="relative block">
-                            <div className="relative w-40 h-16 transition-all duration-300 hover:drop-shadow-[0_0_15px_rgba(174,132,57,0.3)]">
+                            <div className="relative w-36 h-14 transition-all duration-300 hover:drop-shadow-[0_0_12px_hsla(37,48%,48%,0.2)]">
                                 <Image
                                     src="/logo-main.png"
                                     alt="nine1luxury"
@@ -40,22 +40,22 @@ export function Footer() {
                                 />
                             </div>
                         </Link>
-                        <p className="text-gray-500 text-sm leading-8 max-w-[280px]">
+                        <p className="text-ivory/30 text-sm leading-8 max-w-[280px]">
                             وجهتك الأولى للملابس الشبابية الفاخرة. نجمع بين الأناقة العصرية والجودة العالية لنمنحك إطلالة تعكس ثقتك وتميزك.
                         </p>
 
                         {/* Social Icons */}
-                        <div className="flex flex-wrap justify-center md:justify-start gap-3">
+                        <div className="flex flex-wrap justify-center md:justify-start gap-2.5">
                             {socialLinks.map((social) => (
                                 <a
                                     key={social.name}
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:border-gold-500/50 hover:bg-gold-500 flex items-center justify-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(174,132,57,0.3)] hover:scale-110"
+                                    className="group w-10 h-10 rounded-xl bg-white/[0.03] border border-ivory/[0.06] hover:border-gold-500/40 hover:bg-gold-500 flex items-center justify-center transition-all duration-400 hover:shadow-[0_0_16px_hsla(37,48%,48%,0.2)] hover:scale-105"
                                     aria-label={social.name}
                                 >
-                                    <social.icon className="w-4 h-4 text-gray-400 group-hover:text-rich-black transition-colors duration-300" />
+                                    <social.icon className="w-4 h-4 text-ivory/30 group-hover:text-rich-black transition-colors duration-300" />
                                 </a>
                             ))}
                         </div>
@@ -63,16 +63,16 @@ export function Footer() {
 
                     {/* Quick Links */}
                     <div className="flex flex-col items-center md:items-start">
-                        <h3 className="text-gold-400 font-playfair font-bold mb-8 text-lg relative inline-block">
+                        <h3 className="text-champagne font-playfair font-bold mb-8 text-base relative inline-block">
                             روابط سريعة
-                            <span className="absolute -bottom-2 right-0 w-8 h-0.5 bg-gold-500/50 rounded-full" />
+                            <span className="absolute -bottom-2 right-0 w-7 h-0.5 bg-gold-500/40 rounded-full" />
                         </h3>
-                        <nav className="space-y-4">
+                        <nav className="space-y-3.5">
                             {quickLinks.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="block text-gray-400 hover:text-gold-300 transition-colors duration-300 text-sm hover:translate-x-[-4px] transform"
+                                    className="block text-ivory/30 hover:text-gold-300 transition-all duration-300 text-sm hover:translate-x-[-3px] transform"
                                 >
                                     {link.label}
                                 </Link>
@@ -82,57 +82,57 @@ export function Footer() {
 
                     {/* Contact Info */}
                     <div className="flex flex-col items-center md:items-start">
-                        <h3 className="text-gold-400 font-playfair font-bold mb-8 text-lg relative inline-block">
+                        <h3 className="text-champagne font-playfair font-bold mb-8 text-base relative inline-block">
                             اتصل بنا
-                            <span className="absolute -bottom-2 right-0 w-8 h-0.5 bg-gold-500/50 rounded-full" />
+                            <span className="absolute -bottom-2 right-0 w-7 h-0.5 bg-gold-500/40 rounded-full" />
                         </h3>
-                        <div className="space-y-4 w-full">
+                        <div className="space-y-3 w-full">
                             <a
                                 href="https://wa.me/201094372339"
                                 target="_blank"
-                                className="flex items-center justify-center md:justify-start gap-3 group p-3 rounded-xl hover:bg-white/5 transition-all duration-300"
+                                className="flex items-center justify-center md:justify-start gap-3 group p-3 rounded-xl hover:bg-white/[0.02] transition-all duration-300"
                             >
-                                <div className="w-9 h-9 rounded-full bg-gold-500/10 flex items-center justify-center group-hover:bg-gold-500 text-gold-400 group-hover:text-rich-black transition-all duration-300">
-                                    <Phone className="w-4 h-4" />
+                                <div className="w-8 h-8 rounded-lg bg-gold-500/[0.07] flex items-center justify-center group-hover:bg-gold-500 text-gold-400 group-hover:text-rich-black transition-all duration-300">
+                                    <Phone className="w-3.5 h-3.5" />
                                 </div>
-                                <span dir="ltr" className="text-gray-400 font-mono text-sm group-hover:text-gold-300 transition-colors">010 9437 2339</span>
+                                <span dir="ltr" className="text-ivory/35 font-mono text-sm group-hover:text-gold-300 transition-colors">010 9437 2339</span>
                             </a>
 
                             <a
                                 href="mailto:nine1luxury@gmail.com"
-                                className="flex items-center justify-center md:justify-start gap-3 group p-3 rounded-xl hover:bg-white/5 transition-all duration-300"
+                                className="flex items-center justify-center md:justify-start gap-3 group p-3 rounded-xl hover:bg-white/[0.02] transition-all duration-300"
                             >
-                                <div className="w-9 h-9 rounded-full bg-gold-500/10 flex items-center justify-center group-hover:bg-gold-500 text-gold-400 group-hover:text-rich-black transition-all duration-300">
-                                    <Mail className="w-4 h-4" />
+                                <div className="w-8 h-8 rounded-lg bg-gold-500/[0.07] flex items-center justify-center group-hover:bg-gold-500 text-gold-400 group-hover:text-rich-black transition-all duration-300">
+                                    <Mail className="w-3.5 h-3.5" />
                                 </div>
-                                <span className="text-gray-400 text-sm group-hover:text-gold-300 transition-colors">nine1luxury@gmail.com</span>
+                                <span className="text-ivory/35 text-sm group-hover:text-gold-300 transition-colors">nine1luxury@gmail.com</span>
                             </a>
 
                             <div className="flex items-center justify-center md:justify-start gap-3 p-3 rounded-xl">
-                                <div className="w-9 h-9 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400">
-                                    <MapPin className="w-4 h-4" />
+                                <div className="w-8 h-8 rounded-lg bg-gold-500/[0.07] flex items-center justify-center text-gold-400">
+                                    <MapPin className="w-3.5 h-3.5" />
                                 </div>
-                                <span className="text-gray-400 text-sm">المحلة، مصر</span>
+                                <span className="text-ivory/35 text-sm">المحلة، مصر</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Newsletter */}
                     <div className="flex flex-col items-center md:items-start">
-                        <h3 className="text-gold-400 font-playfair font-bold mb-8 text-lg relative inline-block">
+                        <h3 className="text-champagne font-playfair font-bold mb-8 text-base relative inline-block">
                             ابقَ على اطلاع
-                            <span className="absolute -bottom-2 right-0 w-8 h-0.5 bg-gold-500/50 rounded-full" />
+                            <span className="absolute -bottom-2 right-0 w-7 h-0.5 bg-gold-500/40 rounded-full" />
                         </h3>
-                        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+                        <p className="text-ivory/25 text-sm mb-5 leading-relaxed">
                             اشترك ليصلك كل جديد وعروض حصرية
                         </p>
-                        <div className="w-full max-w-[280px] space-y-3">
+                        <div className="w-full max-w-[280px] space-y-2.5">
                             <input
                                 type="email"
                                 placeholder="بريدك الإلكتروني"
-                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder:text-gray-600 focus:border-gold-500/50 transition-all outline-none"
+                                className="luxury-input text-sm py-3"
                             />
-                            <button className="w-full bg-gold-500 hover:bg-gold-400 text-rich-black font-bold py-3 rounded-xl text-sm transition-all duration-300 hover:shadow-[0_0_20px_rgba(174,132,57,0.3)]">
+                            <button className="w-full bg-gold-500 hover:bg-gold-400 text-rich-black font-bold py-3 rounded-xl text-sm transition-all duration-400 hover:shadow-[0_8px_24px_hsla(37,48%,48%,0.2)]">
                                 اشتراك
                             </button>
                         </div>
@@ -141,7 +141,7 @@ export function Footer() {
                 </div>
 
                 {/* Footer Bottom */}
-                <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-600" dir="rtl">
+                <div className="mt-16 pt-8 border-t border-ivory/[0.04] flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-ivory/20" dir="rtl">
                     <p>جميع الحقوق محفوظة © Nine1Luxury {new Date().getFullYear()}</p>
                     <div className="flex items-center gap-6">
                         <Link href="/policy" className="hover:text-gold-300 transition-colors">سياسة الاستبدال</Link>

@@ -48,30 +48,53 @@ export function Testimonials() {
     };
 
     return (
-        <section id="reviews" className="py-24 bg-rich-black relative overflow-hidden border-y border-gold-500/10">
-            {/* Background Effect */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-[0.03]">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold-500 rounded-full blur-[150px]" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold-300 rounded-full blur-[150px]" />
+        <section id="reviews" className="py-24 bg-rich-black relative overflow-hidden border-y border-ivory/[0.04]">
+            {/* Background */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full blur-[180px]" style={{ background: 'hsla(37, 48%, 48%, 0.04)' }} />
+                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-[180px]" style={{ background: 'hsla(39, 52%, 68%, 0.03)' }} />
             </div>
 
             <div className="container mx-auto px-4 relative z-10">
-                <div className="flex flex-col items-center mb-16 text-center">
-
-                    
-
+                {/* Section Header */}
+                <div className="flex flex-col items-center mb-14 text-center">
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="section-label"
+                    >
+                        آراء عملائنا
+                    </motion.p>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="section-title text-3xl md:text-5xl"
+                    >
+                        تجارب حقيقية
+                    </motion.h2>
+                    <motion.div
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="h-px w-20 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mt-5"
+                    />
                 </div>
 
+                {/* Reviews Carousel */}
                 <div className="relative overflow-hidden -mx-4">
                     <motion.div 
-                        className="flex gap-8 px-4 w-fit h-full"
+                        className="flex gap-6 px-4 w-fit h-full"
                         animate={{ x: ["-50%", "0%"] }}
                         whileHover={{ animationPlayState: "paused" }}
                         transition={{
                             x: {
                                 repeat: Infinity,
                                 repeatType: "loop",
-                                duration: 15,
+                                duration: 18,
                                 ease: "linear",
                             },
                         }}
@@ -79,32 +102,32 @@ export function Testimonials() {
                         {[...reviews, ...reviews].map((review, idx) => (
                             <div
                                 key={idx}
-                                className="relative w-[380px] flex-shrink-0 p-8 bg-surface-dark/40 border border-white/5 rounded-sm hover:border-gold-500/30 transition-all duration-300 group cursor-default"
+                                className="relative w-[360px] flex-shrink-0 p-7 bg-surface-card/50 border border-ivory/[0.04] rounded-2xl hover:border-gold-500/20 transition-all duration-500 group cursor-default hover:bg-surface-elevated/50"
                             >
-                                <div className="absolute top-6 left-6 text-gold-500/10 group-hover:text-gold-500/20 transition-colors">
-                                    <Quote className="w-10 h-10" />
+                                <div className="absolute top-5 left-5 text-gold-500/[0.06] group-hover:text-gold-500/[0.12] transition-colors duration-500">
+                                    <Quote className="w-9 h-9" />
                                 </div>
 
-                                <div className="flex gap-1 mb-6">
+                                <div className="flex gap-0.5 mb-5">
                                     {[...Array(5)].map((_, i) => (
                                         <Star
                                             key={i}
-                                            className={`w-4 h-4 ${i < review.rating ? 'text-gold-500 fill-gold-500' : 'text-gray-600'}`}
+                                            className={`w-3.5 h-3.5 ${i < review.rating ? 'text-gold-500 fill-gold-500' : 'text-ivory/10'}`}
                                         />
                                     ))}
                                 </div>
 
-                                <p className="text-gray-300 leading-relaxed mb-6 font-light h-24 overflow-hidden line-clamp-3 italic">
+                                <p className="text-ivory/50 leading-relaxed mb-6 font-light h-20 overflow-hidden line-clamp-3 italic text-sm">
                                     &quot;{review.content}&quot;
                                 </p>
 
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-gold-gradient flex items-center justify-center text-rich-black font-bold text-lg">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-9 h-9 rounded-full luxury-gradient flex items-center justify-center text-rich-black font-bold text-sm">
                                         {review.name[0]}
                                     </div>
                                     <div>
-                                        <h4 className="text-white font-bold">{review.name}</h4>
-                                        <p className="text-xs text-gold-500 uppercase">
+                                        <h4 className="text-ivory/80 font-bold text-sm">{review.name}</h4>
+                                        <p className="text-[10px] text-gold-500/60 uppercase tracking-wider">
                                             {review.role}
                                         </p>
                                     </div>
@@ -113,9 +136,9 @@ export function Testimonials() {
                         ))}
                     </motion.div>
                     
-                    {/* Premium faded edges mask */}
-                    <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-rich-black via-rich-black/50 to-transparent z-20 pointer-events-none" />
-                    <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-rich-black via-rich-black/50 to-transparent z-20 pointer-events-none" />
+                    {/* Edge fade masks */}
+                    <div className="absolute top-0 left-0 w-28 h-full bg-gradient-to-r from-rich-black to-transparent z-20 pointer-events-none" />
+                    <div className="absolute top-0 right-0 w-28 h-full bg-gradient-to-l from-rich-black to-transparent z-20 pointer-events-none" />
                 </div>
             </div>
 
@@ -126,28 +149,28 @@ export function Testimonials() {
             >
                 <form onSubmit={handleAddReview} className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm text-gray-400">الاسم</label>
+                        <label className="text-sm text-ivory/40">الاسم</label>
                         <input 
                             required
                             value={newReview.name}
                             onChange={(e) => setNewReview({...newReview, name: e.target.value})}
-                            className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none"
+                            className="luxury-input"
                             placeholder="اسمك الكريم"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm text-gray-400">التقييم</label>
+                        <label className="text-sm text-ivory/40">التقييم</label>
                         <div className="flex gap-2">
                             {[1, 2, 3, 4, 5].map((star) => (
                                 <button
                                     key={star}
                                     type="button"
                                     onClick={() => setNewReview({...newReview, rating: star})}
-                                    className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all ${
+                                    className={`w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${
                                         newReview.rating >= star 
-                                            ? "bg-gold-500/20 border-gold-500 text-gold-500" 
-                                            : "border-white/10 text-gray-500 hover:border-gold-500/50"
+                                            ? "bg-gold-500/15 border-gold-500/40 text-gold-500" 
+                                            : "border-ivory/[0.06] text-ivory/20 hover:border-gold-500/30"
                                     }`}
                                 >
                                     <Star className={`w-5 h-5 ${newReview.rating >= star ? 'fill-current' : ''}`} />
@@ -157,12 +180,12 @@ export function Testimonials() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm text-gray-400">رأيك يهمنا</label>
+                        <label className="text-sm text-ivory/40">رأيك يهمنا</label>
                         <textarea 
                             required
                             value={newReview.content}
                             onChange={(e) => setNewReview({...newReview, content: e.target.value})}
-                            className="w-full bg-rich-black border border-white/10 rounded-lg p-3 text-white focus:border-gold-500 outline-none min-h-[120px]"
+                            className="luxury-input min-h-[120px] resize-none"
                             placeholder="اكتب تجربتك مع منتجاتنا..."
                         />
                     </div>
@@ -171,13 +194,13 @@ export function Testimonials() {
                         <button 
                             type="button"
                             onClick={() => setIsModalOpen(false)}
-                            className="px-6 py-2 text-gray-400 hover:text-white transition-colors"
+                            className="px-6 py-2.5 text-ivory/40 hover:text-ivory transition-colors rounded-xl"
                         >
                             إلغاء
                         </button>
                         <button 
                             type="submit"
-                            className="bg-gold-500 hover:bg-gold-600 text-rich-black px-8 py-2 rounded-lg font-bold transition-colors"
+                            className="btn-primary text-sm py-2.5 px-8"
                         >
                             نشر الرأي
                         </button>
