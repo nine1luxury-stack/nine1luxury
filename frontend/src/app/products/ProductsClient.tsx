@@ -4,20 +4,20 @@ import { useState, useMemo, useEffect } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ProductCard } from "@/components/product/ProductCard";
-import { X, SlidersHorizontal } from "lucide-react";
+import { X, SlidersHorizontal, ChevronDown, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { PromoBanner } from "@/components/layout/PromoBanner";
 
-const MAX_PRICE = 100000;
+const MAX_PRICE = 10000;
 
 function ProductSkeleton() {
     return (
         <div className="animate-pulse">
-            <div className="aspect-[3/4] bg-white/5 rounded-sm mb-3" />
-            <div className="h-4 bg-white/5 rounded mb-2 w-3/4" />
-            <div className="h-4 bg-white/5 rounded w-1/2" />
+            <div className="aspect-[3/5] bg-ivory/[0.03] rounded-2xl mb-4 border border-ivory/[0.04]" />
+            <div className="h-4 bg-ivory/[0.03] rounded-full mb-2 w-3/4" />
+            <div className="h-4 bg-ivory/[0.03] rounded-full w-1/2" />
         </div>
     );
 }
@@ -41,8 +41,9 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
     const [selectedCategory, setSelectedCategory] = useState("جميع المنتجات");
     const [priceRange, setPriceRange] = useState(MAX_PRICE);
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-    const [displayLimit, setDisplayLimit] = useState(8); 
+    const [displayLimit, setDisplayLimit] = useState(10); 
     const [sortBy, setSortBy] = useState<"newest" | "price-low" | "price-high">("newest");
+    const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
@@ -76,7 +77,6 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
             return categoryMatch && priceMatch && sizeMatch;
         });
 
-        // Sort results
         if (sortBy === "price-low") {
             result.sort((a, b) => a.price - b.price);
         } else if (sortBy === "price-high") {
@@ -94,85 +94,88 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
         );
     };
 
+    const activeFilterCount = (selectedCategory !== "جميع المنتجات" ? 1 : 0) + (priceRange < MAX_PRICE ? 1 : 0) + selectedSizes.length;
+
     return (
         <main className="min-h-screen bg-rich-black">
             <Header />
 
-            <div className="pt-32 pb-24 container mx-auto px-4">
-                <div className="flex flex-col items-center justify-center text-center mb-12 space-y-3">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white uppercase">
-                        المتجر الكامل
-                    </h1>
-                    <p className="text-gold-300/60 uppercase font-medium">
-                        تصفح مجموعتنا الحصرية من الملابس الفاخرة
-                    </p>
+            <div className="pt-32 pb-24 container mx-auto px-6 max-w-[1600px]">
+                {/* Section Header */}
+                <div className="flex flex-col items-center justify-center text-center mb-16 space-y-4">
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="section-label"
+                    >
+                        مجموعتنا المختارة
+                    </motion.div>
+                    <motion.h1 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="section-title text-4xl md:text-6xl font-playfair"
+                    >
+                        المتجر الرئيسي
+                    </motion.h1>
+                    <motion.div
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="h-px w-20 bg-gradient-to-r from-transparent via-gold-500/30 to-transparent"
+                    />
                 </div>
 
-                <div className="mb-12">
+                <div className="mb-14">
                     <PromoBanner />
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-12">
+                <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
                     {/* Mobile Filter Toggle */}
-                    <div className="lg:hidden mb-6">
+                    <div className="lg:hidden mb-6 flex gap-3">
                         <button
-                            onClick={() => {
-                                document.getElementById('mobile-filters')?.classList.remove('translate-x-full');
-                                document.getElementById('filters-overlay')?.classList.remove('hidden');
-                            }}
-                            className="w-full bg-rich-black border border-white/10 p-4 rounded-xl flex items-center justify-between text-white hover:border-gold-500 transition-colors"
+                            onClick={() => setIsMobileFiltersOpen(true)}
+                            className="flex-1 bg-surface-card border border-ivory/[0.08] p-4 rounded-2xl flex items-center justify-between text-ivory hover:border-gold-500/40 transition-all active:scale-[0.98]"
                         >
-                            <span className="font-bold uppercase flex items-center gap-2">
+                            <span className="font-bold text-sm flex items-center gap-3">
                                 <SlidersHorizontal className="w-4 h-4 text-gold-500" />
                                 الفلترة والتصنيف
                             </span>
-                            <span className="bg-gold-500 text-rich-black text-xs font-bold px-2 py-1 rounded">
-                                {selectedCategory !== "جميع المنتجات" || priceRange !== 10000 || selectedSizes.length > 0 ? "نشط" : "عادي"}
-                            </span>
+                            {activeFilterCount > 0 && (
+                                <span className="w-5 h-5 bg-gold-500 text-rich-black text-[10px] font-black rounded-full flex items-center justify-center">
+                                    {activeFilterCount}
+                                </span>
+                            )}
                         </button>
                     </div>
 
                     {/* Filter Sidebar */}
-                    <aside
-                        id="mobile-filters"
-                        className={cn(
-                            "fixed inset-y-0 right-0 z-50 w-80 bg-rich-black border-l border-white/10 p-8 transform translate-x-full transition-transform duration-300 lg:translate-x-0 lg:static lg:w-72 lg:p-0 lg:border-none lg:block shrink-0 overflow-y-auto lg:overflow-visible"
-                        )}
-                    >
-                        <div className="flex justify-between items-center mb-8 lg:hidden">
-                            <h2 className="text-xl font-bold text-white font-playfair uppercase">الفلترة</h2>
-                            <button
-                                onClick={() => {
-                                    document.getElementById('mobile-filters')?.classList.add('translate-x-full');
-                                    document.getElementById('filters-overlay')?.classList.add('hidden');
-                                }}
-                                className="text-gray-400 hover:text-white"
-                            >
-                                <X className="w-6 h-6" />
-                            </button>
-                        </div>
-
+                    <aside className="hidden lg:block w-72 shrink-0 space-y-12 bg-surface-dark/30 p-8 rounded-3xl border border-ivory/[0.04]">
                         {/* Categories */}
-                        <div className="space-y-6 mb-10">
-                            <h3 className="text-white font-black uppercase tracking-[0.3em] text-[10px] border-b border-white/5 pb-4">التصنيفات</h3>
-                            <div className="flex flex-col gap-1">
+                        <div className="space-y-6">
+                            <h3 className="text-gold-500/60 font-black uppercase tracking-[0.3em] text-[10px] px-2 flex items-center justify-between">
+                                التصنيفات
+                                <div className="h-[1px] flex-1 bg-gold-500/10 mr-4" />
+                            </h3>
+                            <div className="flex flex-col gap-1.5">
                                 {categories.map((cat) => {
                                     const count = products.filter(p => cat === "جميع المنتجات" || p.category === cat).length;
+                                    const isActive = selectedCategory === cat;
                                     return (
                                         <button
                                             key={cat}
                                             onClick={() => setSelectedCategory(cat)}
                                             className={cn(
-                                                "flex justify-between items-center px-4 py-3 transition-all duration-300 rounded-xl group",
-                                                selectedCategory === cat
-                                                    ? "bg-gold-500 text-rich-black font-bold shadow-lg shadow-gold-500/20"
-                                                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                                                "w-full flex justify-between items-center px-4 py-3.5 transition-all duration-400 rounded-xl group",
+                                                isActive
+                                                    ? "bg-gold-500 text-rich-black font-bold shadow-[0_8px_24px_hsla(37,48%,48%,0.2)]"
+                                                    : "text-ivory/30 hover:text-ivory/80 hover:bg-white/[0.03]"
                                             )}
                                         >
-                                            <span className="text-sm font-bold">{cat}</span>
+                                            <span className="text-sm">{cat}</span>
                                             <span className={cn(
-                                                "text-[10px] font-black px-2 py-1 rounded-lg",
-                                                selectedCategory === cat ? "bg-black/20 text-black" : "bg-white/5 text-gray-500 group-hover:bg-white/10"
+                                                "text-[10px] font-black min-w-[24px] h-[24px] rounded-full flex items-center justify-center transition-colors",
+                                                isActive ? "bg-rich-black/10 text-rich-black" : "bg-white/[0.02] text-ivory/10 group-hover:bg-white/[0.05]"
                                             )}>
                                                 {count}
                                             </span>
@@ -183,166 +186,255 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                         </div>
 
                         {/* Price Range */}
-                        <div className="space-y-4 mb-8">
-                            <h3 className="text-gold-300 font-bold uppercase tracking-widest text-sm border-b border-gold-500/10 pb-2">السعر</h3>
-                            <div className="space-y-2">
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max={MAX_PRICE}
-                                    value={priceRange}
-                                    onChange={(e) => setPriceRange(parseInt(e.target.value))}
-                                    className="w-full accent-gold-500 bg-surface-dark h-1 rounded-lg appearance-none cursor-pointer"
-                                />
-                                <div className="flex justify-between text-xs text-gray-400">
-                                    <span>0 ج.م</span>
-                                    <span className="text-gold-300 font-bold">{priceRange >= MAX_PRICE ? 'الكل' : `${priceRange} ج.م`}</span>
+                        <div className="space-y-6">
+                            <h3 className="text-gold-500/60 font-black uppercase tracking-[0.3em] text-[10px] px-2 flex items-center justify-between">
+                                السعر
+                                <div className="h-[1px] flex-1 bg-gold-500/10 mr-4" />
+                            </h3>
+                            <div className="px-2 space-y-4">
+                                <div className="relative h-2 bg-white/[0.02] rounded-full overflow-hidden border border-white/[0.04]">
+                                    <div 
+                                        className="absolute top-0 right-0 h-full bg-gold-500/40"
+                                        style={{ width: `${(priceRange / MAX_PRICE) * 100}%` }}
+                                    />
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max={MAX_PRICE}
+                                        value={priceRange}
+                                        onChange={(e) => setPriceRange(parseInt(e.target.value))}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                    />
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[10px] text-ivory/20 font-bold uppercase">بحد أقصى</span>
+                                    <span className="text-sm text-gold-500 font-playfair font-bold">
+                                        {priceRange >= MAX_PRICE ? `${MAX_PRICE}+ ج.م` : `${priceRange} ج.م`}
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Sizes */}
-                        <div className="space-y-4 mb-8">
-                            <h3 className="text-gold-300 font-bold uppercase tracking-widest text-sm border-b border-gold-500/10 pb-2">المقاس</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {FILTERS_BASE.sizes.map((size) => (
-                                    <button
-                                        key={size}
-                                        onClick={() => toggleSize(size)}
-                                        className={cn(
-                                            "w-10 h-10 border transition-all flex items-center justify-center font-bold text-xs uppercase",
-                                            selectedSizes.includes(size)
-                                                ? "bg-gold-500 border-gold-500 text-rich-black"
-                                                : "border-gold-500/20 text-gray-400 hover:border-gold-500 hover:text-gold-300"
-                                        )}
-                                    >
-                                        {size}
-                                    </button>
-                                ))}
+                        <div className="space-y-6">
+                            <h3 className="text-gold-500/60 font-black uppercase tracking-[0.3em] text-[10px] px-2 flex items-center justify-between">
+                                المقاس
+                                <div className="h-[1px] flex-1 bg-gold-500/10 mr-4" />
+                            </h3>
+                            <div className="grid grid-cols-3 gap-2 px-1">
+                                {FILTERS_BASE.sizes.map((size) => {
+                                    const isActive = selectedSizes.includes(size);
+                                    return (
+                                        <button
+                                            key={size}
+                                            onClick={() => toggleSize(size)}
+                                            className={cn(
+                                                "h-11 rounded-xl border text-[10px] font-black transition-all flex items-center justify-center uppercase tracking-widest",
+                                                isActive
+                                                    ? "bg-ivory text-rich-black border-ivory shadow-lg"
+                                                    : "border-ivory/[0.06] text-ivory/20 hover:border-gold-500/30 hover:text-gold-300"
+                                            )}
+                                        >
+                                            {size}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 
-                        <button
-                            onClick={() => {
-                                document.getElementById('mobile-filters')?.classList.add('translate-x-full');
-                                document.getElementById('filters-overlay')?.classList.add('hidden');
-                            }}
-                            className="w-full bg-white text-black font-bold py-3 rounded-xl lg:hidden"
-                        >
-                            إظهار النتائج
-                        </button>
+                        {/* Reset All */}
+                        {activeFilterCount > 0 && (
+                            <button
+                                onClick={() => {
+                                    setSelectedCategory("جميع المنتجات");
+                                    setPriceRange(MAX_PRICE);
+                                    setSelectedSizes([]);
+                                }}
+                                className="w-full text-[9px] uppercase tracking-[0.2em] font-black text-gold-500/40 hover:text-gold-500 py-4 transition-colors"
+                            >
+                                إزالة جميع المرشحات
+                            </button>
+                        )}
                     </aside>
 
-                    {/* Product Grid */}
-                    <div className="flex-1">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 px-2">
+                    {/* Product Grid Area */}
+                    <div className="flex-1 space-y-10">
+                        {/* Toolbar */}
+                        <div className="flex flex-col sm:flex-row justify-between items-center gap-6 px-2">
                              <div className="flex items-center gap-3">
-                                <span className="text-white/40 text-[10px] uppercase tracking-widest font-black">عدد المنتجات</span>
-                                <span className="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-white text-xs font-bold leading-none">
+                                <p className="text-ivory/20 text-[10px] uppercase tracking-widest font-black">إجمالي المنتجات</p>
+                                <span className="bg-white/[0.03] border border-ivory/[0.06] px-4 py-1.5 rounded-full text-gold-300 text-[10px] font-black">
                                     {filteredProducts.length}
                                 </span>
                              </div>
 
-                             <div className="flex items-center gap-4 w-full sm:w-auto">
-                                <span className="hidden sm:block text-white/40 text-[10px] uppercase tracking-widest font-black">ترتيب حسب</span>
+                             <div className="flex items-center gap-3 w-full sm:w-auto relative group">
                                 <select 
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value as any)}
-                                    className="bg-rich-black border border-white/10 text-white text-xs font-bold py-2.5 px-4 pr-10 rounded-xl focus:border-gold-500/50 outline-none transition-all cursor-pointer appearance-none hover:bg-white/5 w-full sm:w-48"
-                                    style={{ 
-                                        backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'gold\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
-                                        backgroundPosition: 'left 12px center',
-                                        backgroundRepeat: 'no-repeat',
-                                        backgroundSize: '16px'
-                                    }}
+                                    className="luxury-input text-[10px] py-3 pr-10 pl-12 bg-white/[0.02] border-ivory/[0.08] text-ivory/60 hover:border-gold-500/30 transition-all font-bold tracking-widest cursor-pointer w-full sm:w-64"
                                 >
-                                    <option value="newest">الأحدث وصولاً</option>
-                                    <option value="price-low">السعر من الأقل للأعلى</option>
-                                    <option value="price-high">السعر من الأعلى للأقل</option>
+                                    <option className="bg-rich-black py-4" value="newest">الأحدث وصولاً</option>
+                                    <option className="bg-rich-black py-4" value="price-low">السعر: من الأقل</option>
+                                    <option className="bg-rich-black py-4" value="price-high">السعر: من الأعلى</option>
                                 </select>
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gold-500/40">
+                                    <ChevronDown className="w-3.5 h-3.5" />
+                                </div>
                              </div>
                         </div>
 
-                        {!isMounted ? (
-                            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-                                {Array.from({ length: 15 }).map((_, i) => (
-                                    <ProductSkeleton key={i} />
-                                ))}
-                            </div>
-                        ) : (
-                            <>
-                                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-                                    <AnimatePresence mode="popLayout">
-                                        {filteredProducts.slice(0, displayLimit).map((product) => (
-                                            <motion.div
-                                                key={product.id}
-                                                layout
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: 10 }}
-                                                transition={{ duration: 0.3 }}
-                                            >
-                                                <ProductCard {...product} />
-                                            </motion.div>
-                                        ))}
-                                    </AnimatePresence>
+                        {/* Actual Grid */}
+                        <div className="relative">
+                            {!isMounted ? (
+                                <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5">
+                                    {Array.from({ length: 10 }).map((_, i) => (
+                                        <ProductSkeleton key={i} />
+                                    ))}
                                 </div>
+                            ) : (
+                                <>
+                                    <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5">
+                                        <AnimatePresence mode="popLayout">
+                                            {filteredProducts.slice(0, displayLimit).map((product) => (
+                                                <motion.div
+                                                    key={product.id}
+                                                    layout
+                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.95 }}
+                                                    transition={{ duration: 0.4 }}
+                                                >
+                                                    <ProductCard {...product} />
+                                                </motion.div>
+                                            ))}
+                                        </AnimatePresence>
+                                    </div>
 
-                                {filteredProducts.length >= displayLimit && (
-                                    <div className="flex justify-center mt-12 mb-8">
-                                        <button 
-                                            onClick={() => setDisplayLimit(prev => prev + 12)}
-                                            className="px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-gold-500 transition-all shadow-xl shadow-white/5"
+                                    {/* Empty States */}
+                                    {filteredProducts.length === 0 && (
+                                        <motion.div 
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="h-96 flex flex-col items-center justify-center text-center space-y-6 bg-surface-dark/10 rounded-3xl border border-dashed border-ivory/[0.04]"
                                         >
-                                            تحميل المزيد من المنتجات
-                                        </button>
-                                    </div>
-                                )}
+                                            <div className="w-20 h-20 rounded-full bg-white/[0.02] flex items-center justify-center text-ivory/10">
+                                                <SlidersHorizontal className="w-8 h-8" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-playfair font-bold text-ivory mb-2">لا توجد منتجات مطابقة</h3>
+                                                <p className="text-ivory/20 text-sm">جرب استخدام فلاتر مختلفة أو تصفح قسم آخر</p>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedCategory("جميع المنتجات");
+                                                    setPriceRange(MAX_PRICE);
+                                                    setSelectedSizes([]);
+                                                }}
+                                                className="btn-ghost text-xs"
+                                            >
+                                                مسح الفلاتر والبدء من جديد
+                                            </button>
+                                        </motion.div>
+                                    )}
 
-                                {filteredProducts.length === 0 && products.length > 0 && (
-                                    <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 border border-dashed border-gold-500/20 rounded-sm mt-8">
-                                        <X className="w-12 h-12 text-gold-500/20" />
-                                        <div>
-                                            <h3 className="text-xl font-bold text-white">لا توجد منتجات تطابق اختياراتك</h3>
-                                            <p className="text-gray-500">جرب تغيير فلاتر البحث للحصول على نتائج أفضل</p>
+                                    {/* Load More */}
+                                    {filteredProducts.length > displayLimit && (
+                                        <div className="flex justify-center mt-20">
+                                            <button 
+                                                onClick={() => setDisplayLimit(prev => prev + 10)}
+                                                className="btn-ghost flex items-center gap-4 text-xs tracking-[0.3em]"
+                                            >
+                                                اكتشف المزيد من الملابس
+                                                <div className="w-5 h-5 rounded-full border border-current flex items-center justify-center">
+                                                    <ChevronDown className="w-3 h-3" />
+                                                </div>
+                                            </button>
                                         </div>
-                                        <button
-                                            onClick={() => {
-                                                setSelectedCategory("جميع المنتجات");
-                                                setPriceRange(MAX_PRICE);
-                                                setSelectedSizes([]);
-                                            }}
-                                            className="text-gold-300 underline underline-offset-4 hover:text-gold-500 transition-colors"
-                                        >
-                                            إعادة ضبط الفلاتر
-                                        </button>
-                                    </div>
-                                )}
-
-                                {filteredProducts.length === 0 && products.length === 0 && (
-                                    <div className="h-64 flex flex-col items-center justify-center text-center space-y-4 border border-dashed border-gold-500/20 rounded-sm mt-8">
-                                        <X className="w-12 h-12 text-gold-500/20" />
-                                        <div>
-                                            <h3 className="text-xl font-bold text-white">لا توجد منتجات متاحة حالياً</h3>
-                                            <p className="text-gray-500">يرجى المحاولة مرة أخرى لاحقاً</p>
-                                        </div>
-                                    </div>
-                                )}
-                            </>
-                        )}
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
-
-                {/* Overlay for mobile drawer */}
-                <div
-                    id="filters-overlay"
-                    className="fixed inset-0 bg-black/50 z-40 hidden lg:hidden backdrop-blur-sm"
-                    onClick={() => {
-                        document.getElementById('mobile-filters')?.classList.add('translate-x-full');
-                        document.getElementById('filters-overlay')?.classList.add('hidden');
-                    }}
-                />
             </div>
+
+            {/* Mobile Filters Modal */}
+            <AnimatePresence>
+                {isMobileFiltersOpen && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsMobileFiltersOpen(false)}
+                            className="fixed inset-0 z-[100] bg-rich-black/90 backdrop-blur-md"
+                        />
+                        <motion.div
+                            initial={{ x: "100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "100%" }}
+                            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                            className="fixed inset-y-0 right-0 z-[110] w-[85%] max-w-sm bg-surface-dark p-8 flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.5)]"
+                        >
+                            <div className="flex justify-between items-center mb-10">
+                                <h2 className="text-xl font-playfair font-bold text-ivory">الفلاتر</h2>
+                                <button onClick={() => setIsMobileFiltersOpen(false)} className="p-2 text-ivory/20">
+                                    <X className="w-6 h-6" />
+                                </button>
+                            </div>
+                            
+                            {/* Same content as sidebar but for mobile */}
+                            <div className="flex-1 overflow-y-auto space-y-12 pr-2 custom-scrollbar">
+                                <div className="space-y-6">
+                                    <h3 className="text-gold-500/60 font-black uppercase tracking-[0.2em] text-[10px]">التصنيفات</h3>
+                                    <div className="flex flex-col gap-2">
+                                        {categories.map((cat) => (
+                                            <button
+                                                key={cat}
+                                                onClick={() => setSelectedCategory(cat)}
+                                                className={cn(
+                                                    "w-full text-right p-4 rounded-xl border transition-all text-sm",
+                                                    selectedCategory === cat ? "bg-gold-500 text-rich-black border-gold-500 font-bold" : "bg-white/[0.02] border-ivory/[0.04] text-ivory/40"
+                                                )}
+                                            >
+                                                {cat}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                <div className="space-y-6">
+                                    <h3 className="text-gold-500/60 font-black uppercase tracking-[0.2em] text-[10px]">المقاسات</h3>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {FILTERS_BASE.sizes.map((size) => (
+                                            <button
+                                                key={size}
+                                                onClick={() => toggleSize(size)}
+                                                className={cn(
+                                                    "h-12 rounded-xl border transition-all flex items-center justify-center font-bold text-xs",
+                                                    selectedSizes.includes(size) ? "bg-ivory text-rich-black border-ivory" : "bg-white/[0.02] border-ivory/[0.04] text-ivory/20"
+                                                )}
+                                            >
+                                                {size}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-8 pt-6 border-t border-ivory/[0.04]">
+                                <button
+                                    onClick={() => setIsMobileFiltersOpen(false)}
+                                    className="btn-primary w-full justify-center py-4"
+                                >
+                                    إظهار {filteredProducts.length} منتج
+                                </button>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
 
             <Footer />
         </main>
