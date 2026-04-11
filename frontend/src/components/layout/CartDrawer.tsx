@@ -26,7 +26,7 @@ export function CartDrawer() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setIsCartOpen(false)}
-                        className="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm"
+                        className="fixed inset-0 z-[60] bg-rich-black/85 backdrop-blur-md"
                     />
 
                     {/* Drawer */}
@@ -35,33 +35,33 @@ export function CartDrawer() {
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed inset-y-0 right-0 z-[70] w-full max-w-md bg-rich-black border-l border-gold-500/20 shadow-2xl flex flex-col"
+                        className="fixed inset-y-0 right-0 z-[70] w-full max-w-md bg-surface-dark border-l border-ivory/[0.06] shadow-[-20px_0_60px_rgba(0,0,0,0.6)] flex flex-col"
                     >
                         {/* Header */}
-                        <div className="p-6 border-b border-white/5 flex items-center justify-between">
+                        <div className="p-6 border-b border-ivory/[0.04] flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <ShoppingBag className="w-5 h-5 text-gold-500" />
-                                <h2 className="text-xl font-bold text-white font-playfair uppercase tracking-widest">حقيبة التسوق ({totalItems})</h2>
+                                <h2 className="text-lg font-bold text-ivory font-playfair uppercase tracking-wider">حقيبة التسوق ({totalItems})</h2>
                             </div>
                             <button
                                 onClick={() => setIsCartOpen(false)}
-                                className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all"
+                                className="p-2 text-ivory/30 hover:text-ivory hover:bg-white/[0.03] rounded-xl transition-all"
                             >
-                                <X className="w-6 h-6" />
+                                <X className="w-5 h-5" />
                             </button>
                         </div>
 
                         {/* Items List */}
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                        <div className="flex-1 overflow-y-auto p-6 space-y-5">
                             {cart.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
-                                    <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-gray-600">
-                                        <ShoppingBag className="w-10 h-10" />
+                                    <div className="w-18 h-18 rounded-2xl bg-white/[0.03] flex items-center justify-center text-ivory/15">
+                                        <ShoppingBag className="w-9 h-9" />
                                     </div>
-                                    <p className="text-gray-400 font-medium">حقيبة التسوق فارغة حالياً</p>
+                                    <p className="text-ivory/30 font-medium">حقيبة التسوق فارغة حالياً</p>
                                     <button
                                         onClick={() => setIsCartOpen(false)}
-                                        className="text-gold-300 font-bold hover:underline"
+                                        className="text-gold-300 font-bold hover:underline text-sm"
                                     >
                                         ابدأ التسوق الآن
                                     </button>
@@ -69,7 +69,7 @@ export function CartDrawer() {
                             ) : (
                                 cart.map((item) => (
                                     <div key={`${item.id}-${item.size}-${item.color}`} className="flex gap-4 group">
-                                        <div className="relative w-24 h-32 bg-surface-dark overflow-hidden flex-shrink-0">
+                                        <div className="relative w-22 h-28 bg-surface-card rounded-xl overflow-hidden flex-shrink-0">
                                             <Image
                                                 src={item.image}
                                                 alt={item.name}
@@ -77,40 +77,40 @@ export function CartDrawer() {
                                                 className="object-cover"
                                             />
                                         </div>
-                                        <div className="flex-1 flex flex-col justify-between py-1">
+                                        <div className="flex-1 flex flex-col justify-between py-0.5">
                                             <div className="space-y-1">
                                                 <div className="flex justify-between items-start">
-                                                    <h3 className="text-white font-bold text-sm line-clamp-1">{item.name}</h3>
+                                                    <h3 className="text-ivory/85 font-bold text-sm line-clamp-1">{item.name}</h3>
                                                     <button
                                                         onClick={() => removeFromCart(item.id, item.size, item.color)}
-                                                        className="text-gray-500 hover:text-red-500 transition-colors"
+                                                        className="text-ivory/15 hover:text-red-400 transition-colors p-1"
                                                     >
-                                                        <Trash2 className="w-4 h-4" />
+                                                        <Trash2 className="w-3.5 h-3.5" />
                                                     </button>
                                                 </div>
-                                                <div className="flex gap-2 text-[10px] text-gray-500 font-bold uppercase tracking-tighter">
-                                                    <span>المقاس: <span className="text-gold-300">{item.size}</span></span>
-                                                    <span>اللون: <span className="text-gold-300">{item.color}</span></span>
+                                                <div className="flex gap-2 text-[9px] text-ivory/20 font-bold uppercase tracking-tight">
+                                                    <span>المقاس: <span className="text-champagne/60">{item.size}</span></span>
+                                                    <span>اللون: <span className="text-champagne/60">{item.color}</span></span>
                                                 </div>
                                             </div>
 
                                             <div className="flex items-center justify-between mt-auto">
-                                                <div className="flex items-center border border-white/10 rounded-sm">
+                                                <div className="flex items-center border border-ivory/[0.06] rounded-lg">
                                                     <button
                                                         onClick={() => handleUpdateQuantity(item, -1)}
-                                                        className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white"
+                                                        className="w-7 h-7 flex items-center justify-center text-ivory/30 hover:text-ivory transition-colors"
                                                     >
                                                         <Minus className="w-3 h-3" />
                                                     </button>
-                                                    <span className="w-8 text-center text-xs text-white font-bold">{item.quantity}</span>
+                                                    <span className="w-7 text-center text-xs text-ivory font-bold">{item.quantity}</span>
                                                     <button
                                                         onClick={() => handleUpdateQuantity(item, 1)}
-                                                        className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white"
+                                                        className="w-7 h-7 flex items-center justify-center text-ivory/30 hover:text-ivory transition-colors"
                                                     >
                                                         <Plus className="w-3 h-3" />
                                                     </button>
                                                 </div>
-                                                <span className="text-gold-300 font-bold">{formatPrice(item.price * item.quantity)}</span>
+                                                <span className="text-champagne font-bold text-sm">{formatPrice(item.price * item.quantity)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -120,16 +120,16 @@ export function CartDrawer() {
 
                         {/* Footer */}
                         {cart.length > 0 && (
-                            <div className="p-6 border-t border-white/5 space-y-4 bg-surface-dark/20">
-                                <div className="flex justify-between text-lg font-bold">
-                                    <span className="text-gray-400">الإجمالي:</span>
-                                    <span className="text-gold-300">{formatPrice(totalPrice)}</span>
+                            <div className="p-6 border-t border-ivory/[0.04] space-y-4 bg-surface-card/30">
+                                <div className="flex justify-between text-base font-bold">
+                                    <span className="text-ivory/40">الإجمالي:</span>
+                                    <span className="text-champagne">{formatPrice(totalPrice)}</span>
                                 </div>
-                                <p className="text-[10px] text-gray-500 text-center uppercase tracking-widest">التوصيل مجاني لأي مكان في مصر بمناسبة الافتتاح</p>
+                                <p className="text-[9px] text-ivory/15 text-center uppercase tracking-[0.15em]">التوصيل مجاني لأي مكان في مصر بمناسبة الافتتاح</p>
                                 <Link
                                     href="/checkout"
                                     onClick={() => setIsCartOpen(false)}
-                                    className="block w-full bg-gold-500 hover:bg-gold-600 text-rich-black font-bold py-4 text-center rounded-sm transition-all uppercase tracking-[0.2em] shadow-[0_10px_20px_rgba(212,175,55,0.2)]"
+                                    className="btn-primary w-full justify-center tracking-[0.15em]"
                                 >
                                     إتمام الطلب
                                 </Link>
