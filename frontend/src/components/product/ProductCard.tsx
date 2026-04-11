@@ -61,19 +61,21 @@ export function ProductCard({ id, name, price, discount, images: propImages, cat
                         <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
-                            className="px-3 py-1 bg-ivory text-rich-black text-[8px] font-black rounded-full shadow-lg uppercase tracking-[0.15em] backdrop-blur-sm"
+                            className="px-3.5 py-1.5 bg-ivory text-rich-black text-[7px] font-black rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.3)] uppercase tracking-[0.2em] backdrop-blur-md flex items-center gap-1.5"
                         >
+                            <span className="w-1 h-1 rounded-full bg-bronze animate-pulse" />
                             جديد
                         </motion.div>
                     )}
                     {discount && discount > 0 && (
-                        <div className="px-3 py-1 bg-gold-500 text-rich-black text-[8px] font-black rounded-full shadow-[0_4px_15px_hsla(37,48%,48%,0.35)] uppercase tracking-[0.12em]">
+                        <div className="px-3.5 py-1.5 luxury-gradient text-rich-black text-[7px] font-black rounded-full shadow-[0_8px_20px_hsla(37,48%,48%,0.3)] uppercase tracking-[0.15em] flex items-center gap-1.5">
+                            <span className="text-[9px]">↓</span>
                             -{discount}%
                         </div>
                     )}
                     {isSoldOut && (
-                        <div className="px-3 py-1 bg-red-600/80 backdrop-blur-sm text-[8px] font-black text-white rounded-full uppercase tracking-[0.12em]">
-                            مباع
+                        <div className="px-3.5 py-1.5 bg-surface-dark/90 text-ivory/40 border border-ivory/10 text-[7px] font-black rounded-full shadow-lg uppercase tracking-[0.15em] backdrop-blur-md">
+                            نفد بالكامل
                         </div>
                     )}
                 </div>

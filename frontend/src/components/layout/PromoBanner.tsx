@@ -26,33 +26,24 @@ export function PromoBanner({ settingKey = "promoBanner" }: { settingKey?: strin
     if (!promoBanner) return null;
 
     return (
-        <div className="w-full relative overflow-hidden bg-gradient-to-r from-rich-black via-gold-500/10 to-rich-black py-4 border-y border-ivory/[0.04] group">
+        <div className="w-full relative overflow-hidden bg-gradient-to-r from-bronze/20 via-surface-dark to-bronze/20 py-5 border-y border-ivory/[0.06] group shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
             <div className="container mx-auto px-4 whitespace-nowrap animate-marquee flex items-center hover:[animation-play-state:paused] hover:cursor-default">
-                <div className="inline-flex items-center gap-6 px-4">
-                    <p className="text-champagne/80 font-playfair font-medium text-lg md:text-xl uppercase tracking-[0.2em]">
-                        {promoBanner}
-                    </p>
-                    <Sparkles className="w-4 h-4 text-gold-500/40" />
-                </div>
-                <div className="inline-flex items-center gap-6 px-4" aria-hidden="true">
-                    <p className="text-champagne/80 font-playfair font-medium text-lg md:text-xl uppercase tracking-[0.2em]">
-                        {promoBanner}
-                    </p>
-                    <Sparkles className="w-4 h-4 text-gold-500/40" />
-                </div>
-                <div className="inline-flex items-center gap-6 px-4" aria-hidden="true">
-                    <p className="text-champagne/80 font-playfair font-medium text-lg md:text-xl uppercase tracking-[0.2em]">
-                        {promoBanner}
-                    </p>
-                    <Sparkles className="w-4 h-4 text-gold-500/40" />
-                </div>
-                <div className="inline-flex items-center gap-6 px-4" aria-hidden="true">
-                    <p className="text-champagne/80 font-playfair font-medium text-lg md:text-xl uppercase tracking-[0.2em]">
-                        {promoBanner}
-                    </p>
-                    <Sparkles className="w-4 h-4 text-gold-500/40" />
-                </div>
+                {Array.from({ length: 12 }).map((_, i) => (
+                    <div key={i} className="inline-flex items-center gap-10 px-6">
+                        <p className="text-champagne font-playfair font-black text-base md:text-lg uppercase tracking-[0.4em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                            {promoBanner}
+                        </p>
+                        <div className="flex items-center gap-1">
+                            <Sparkles className="w-3.5 h-3.5 text-gold-500/30 animate-pulse" />
+                            <div className="w-1.5 h-1.5 rounded-full bg-bronze/40" />
+                            <Sparkles className="w-3.5 h-3.5 text-gold-500/30 animate-pulse" />
+                        </div>
+                    </div>
+                ))}
             </div>
+            {/* Subtle light sweep effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-ivory/5 to-transparent -translate-x-full group-hover:animate-[gold-shimmer_3s_infinite]" />
         </div>
     );
 }

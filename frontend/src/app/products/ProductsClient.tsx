@@ -135,14 +135,14 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                     <div className="lg:hidden mb-6 flex gap-3">
                         <button
                             onClick={() => setIsMobileFiltersOpen(true)}
-                            className="flex-1 bg-surface-card border border-ivory/[0.08] p-4 rounded-2xl flex items-center justify-between text-ivory hover:border-gold-500/40 transition-all active:scale-[0.98]"
+                            className="flex-1 bg-surface-card/80 backdrop-blur-xl border border-ivory/[0.08] p-4 rounded-2xl flex items-center justify-between text-ivory hover:border-gold-500/40 transition-all active:scale-[0.98] shadow-2xl"
                         >
-                            <span className="font-bold text-sm flex items-center gap-3">
-                                <SlidersHorizontal className="w-4 h-4 text-gold-500" />
+                            <span className="font-bold text-[10px] uppercase tracking-[0.2em] flex items-center gap-3">
+                                <SlidersHorizontal className="w-3.5 h-3.5 text-gold-500" />
                                 الفلترة والتصنيف
                             </span>
                             {activeFilterCount > 0 && (
-                                <span className="w-5 h-5 bg-gold-500 text-rich-black text-[10px] font-black rounded-full flex items-center justify-center">
+                                <span className="w-5 h-5 luxury-gradient text-rich-black text-[10px] font-black rounded-full flex items-center justify-center">
                                     {activeFilterCount}
                                 </span>
                             )}
@@ -150,7 +150,7 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                     </div>
 
                     {/* Filter Sidebar */}
-                    <aside className="hidden lg:block w-72 shrink-0 space-y-12 bg-surface-dark/30 p-8 rounded-3xl border border-ivory/[0.04]">
+                    <aside className="hidden lg:block w-72 shrink-0 space-y-12 bg-surface-dark/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-bronze/10 sticky top-32 h-fit">
                         {/* Categories */}
                         <div className="space-y-6">
                             <h3 className="text-gold-500/60 font-black uppercase tracking-[0.3em] text-[10px] px-2 flex items-center justify-between">
@@ -166,19 +166,26 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                                             key={cat}
                                             onClick={() => setSelectedCategory(cat)}
                                             className={cn(
-                                                "w-full flex justify-between items-center px-4 py-3.5 transition-all duration-400 rounded-xl group",
+                                                "w-full flex justify-between items-center px-4 py-4 transition-all duration-500 rounded-xl group relative overflow-hidden",
                                                 isActive
-                                                    ? "bg-gold-500 text-rich-black font-bold shadow-[0_8px_24px_hsla(37,48%,48%,0.2)]"
+                                                    ? "bg-ivory text-rich-black font-bold shadow-[0_12px_32px_rgba(0,0,0,0.4)]"
                                                     : "text-ivory/30 hover:text-ivory/80 hover:bg-white/[0.03]"
                                             )}
                                         >
-                                            <span className="text-sm">{cat}</span>
+                                            <span className="text-[11px] uppercase tracking-[0.1em] z-10">{cat}</span>
                                             <span className={cn(
-                                                "text-[10px] font-black min-w-[24px] h-[24px] rounded-full flex items-center justify-center transition-colors",
-                                                isActive ? "bg-rich-black/10 text-rich-black" : "bg-white/[0.02] text-ivory/10 group-hover:bg-white/[0.05]"
+                                                "text-[9px] font-black min-w-[22px] h-[22px] rounded-full flex items-center justify-center transition-colors z-10",
+                                                isActive ? "bg-rich-black/10 text-rich-black" : "bg-white/[0.02] text-ivory/10 group-hover:bg-white/[0.05] group-hover:text-gold-500"
                                             )}>
                                                 {count}
                                             </span>
+                                            {isActive && (
+                                                <motion.div 
+                                                    layoutId="active-cat"
+                                                    className="absolute inset-0 bg-ivory"
+                                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                                />
+                                            )}
                                         </button>
                                     );
                                 })}
@@ -374,28 +381,29 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                             initial={{ x: "100%" }}
                             animate={{ x: 0 }}
                             exit={{ x: "100%" }}
-                            transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                            className="fixed inset-y-0 right-0 z-[110] w-[85%] max-w-sm bg-surface-dark p-8 flex flex-col shadow-[-20px_0_60px_rgba(0,0,0,0.5)]"
+                            transition={{ type: "spring", damping: 35, stiffness: 350 }}
+                            className="fixed inset-y-0 right-0 z-[110] w-[90%] max-w-sm bg-surface-dark p-10 flex flex-col shadow-[-40px_0_80px_rgba(0,0,0,0.8)] border-l border-ivory/5"
                         >
-                            <div className="flex justify-between items-center mb-10">
-                                <h2 className="text-xl font-playfair font-bold text-ivory">الفلاتر</h2>
-                                <button onClick={() => setIsMobileFiltersOpen(false)} className="p-2 text-ivory/20">
-                                    <X className="w-6 h-6" />
+                            <div className="flex justify-between items-center mb-14">
+                                <h2 className="text-2xl font-playfair font-black text-ivory tracking-widest">الفلاتر</h2>
+                                <button onClick={() => setIsMobileFiltersOpen(false)} className="p-3 bg-white/5 rounded-full text-ivory/40">
+                                    <X className="w-5 h-5" />
                                 </button>
                             </div>
                             
-                            {/* Same content as sidebar but for mobile */}
-                            <div className="flex-1 overflow-y-auto space-y-12 pr-2 custom-scrollbar">
-                                <div className="space-y-6">
-                                    <h3 className="text-gold-500/60 font-black uppercase tracking-[0.2em] text-[10px]">التصنيفات</h3>
-                                    <div className="flex flex-col gap-2">
+                            <div className="flex-1 overflow-y-auto space-y-14 pr-2 custom-scrollbar">
+                                <div className="space-y-8">
+                                    <h3 className="text-gold-500/60 font-black uppercase tracking-[0.4em] text-[9px] px-2">التصنيفات</h3>
+                                    <div className="flex flex-col gap-3">
                                         {categories.map((cat) => (
                                             <button
                                                 key={cat}
                                                 onClick={() => setSelectedCategory(cat)}
                                                 className={cn(
-                                                    "w-full text-right p-4 rounded-xl border transition-all text-sm",
-                                                    selectedCategory === cat ? "bg-gold-500 text-rich-black border-gold-500 font-bold" : "bg-white/[0.02] border-ivory/[0.04] text-ivory/40"
+                                                    "w-full text-right p-5 rounded-2xl border transition-all duration-500 text-[11px] uppercase tracking-widest relative overflow-hidden",
+                                                    selectedCategory === cat 
+                                                        ? "bg-ivory text-rich-black border-ivory font-black shadow-xl" 
+                                                        : "bg-white/[0.02] border-ivory/[0.04] text-ivory/40"
                                                 )}
                                             >
                                                 {cat}
@@ -404,16 +412,18 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                                     </div>
                                 </div>
                                 
-                                <div className="space-y-6">
-                                    <h3 className="text-gold-500/60 font-black uppercase tracking-[0.2em] text-[10px]">المقاسات</h3>
-                                    <div className="grid grid-cols-3 gap-2">
+                                <div className="space-y-8">
+                                    <h3 className="text-gold-500/60 font-black uppercase tracking-[0.4em] text-[9px] px-2">المقاسات المختارة</h3>
+                                    <div className="grid grid-cols-3 gap-3">
                                         {FILTERS_BASE.sizes.map((size) => (
                                             <button
                                                 key={size}
                                                 onClick={() => toggleSize(size)}
                                                 className={cn(
-                                                    "h-12 rounded-xl border transition-all flex items-center justify-center font-bold text-xs",
-                                                    selectedSizes.includes(size) ? "bg-ivory text-rich-black border-ivory" : "bg-white/[0.02] border-ivory/[0.04] text-ivory/20"
+                                                    "h-14 rounded-2xl border transition-all duration-500 flex items-center justify-center font-black text-[10px] tracking-widest",
+                                                    selectedSizes.includes(size) 
+                                                        ? "bg-ivory text-rich-black border-ivory shadow-lg" 
+                                                        : "bg-white/[0.02] border-ivory/[0.04] text-ivory/20"
                                                 )}
                                             >
                                                 {size}
@@ -423,12 +433,22 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                                 </div>
                             </div>
 
-                            <div className="mt-8 pt-6 border-t border-ivory/[0.04]">
+                            <div className="mt-10 pt-8 border-t border-ivory/[0.06]">
                                 <button
                                     onClick={() => setIsMobileFiltersOpen(false)}
-                                    className="btn-primary w-full justify-center py-4"
+                                    className="btn-primary w-full justify-center py-5 rounded-2xl shadow-[0_20px_40px_hsla(37,48%,48%,0.2)]"
                                 >
-                                    إظهار {filteredProducts.length} منتج
+                                    إظهار النتائج ({filteredProducts.length})
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSelectedCategory("جميع المنتجات");
+                                        setPriceRange(MAX_PRICE);
+                                        setSelectedSizes([]);
+                                    }}
+                                    className="w-full text-[9px] uppercase tracking-[0.3em] font-black text-ivory/20 mt-6 hover:text-gold-500 transition-colors"
+                                >
+                                    تصفير جميع الفلاتر
                                 </button>
                             </div>
                         </motion.div>
