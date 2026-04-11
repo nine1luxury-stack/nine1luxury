@@ -64,14 +64,20 @@ async function ProductsDataWrapper() {
         );
     } catch (error) {
         console.error("SERVER ERROR in ProductsPage:", error);
+        // Fallback to mock data for demo/unstable DB
+        const { MOCK_PRODUCTS } = await import("@/lib/mockData");
+        const mockCategories = [
+            { id: "c1", name: "جميع المنتجات" },
+            { id: "c2", name: "تيشرتات" },
+            { id: "c3", name: "هوديز" },
+            { id: "c4", name: "بناطيل" }
+        ];
+
         return (
-            <div className="min-h-screen bg-rich-black p-20 text-center pt-32">
-                <div className="max-w-md mx-auto">
-                    <h1 className="text-champagne text-2xl font-bold font-playfair mb-4">عذراً، حدث خطأ</h1>
-                    <p className="text-ivory/25 mb-8 leading-relaxed">تعذر الاتصال بقاعدة البيانات. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.</p>
-                </div>
-                <ProductsClient initialProducts={[]} initialCategories={[]} />
-            </div>
+            <ProductsClient 
+                initialProducts={JSON.parse(JSON.stringify(MOCK_PRODUCTS))} 
+                initialCategories={JSON.parse(JSON.stringify(mockCategories))} 
+            />
         );
     }
 }

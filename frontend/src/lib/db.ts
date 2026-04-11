@@ -27,7 +27,7 @@ export async function withDbTimeout<T>(
     return Promise.race([
         queryFn(),
         new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error('Database connection timed out. Please check your MongoDB Atlas connection and IP whitelist.')), timeoutMs)
+            setTimeout(() => reject(new Error('Database connection timed out. Please check your database connection string and network settings.')), timeoutMs)
         ),
     ]);
 }
