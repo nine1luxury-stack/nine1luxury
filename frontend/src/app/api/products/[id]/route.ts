@@ -16,6 +16,11 @@ export async function GET(
                 images: true,
                 variants: true,
             },
+        }).catch(async (dbError) => {
+            console.error('Database unreachable for single product, using mock fallback:', dbError);
+            const { MOCK_PRODUCTS } = await import('@/lib/mockData');
+            // Return specific mock or the first one as fallback
+            return MOCK_PRODUCTS.find(p => p.id === id) || MOCK_PRODUCTS[0];
         });
 
         if (!product) {
@@ -24,13 +29,13 @@ export async function GET(
 
         const formattedProduct = {
             ...product,
-            images: (product as any).images || (product as any).productimage,
-            variants: (product as any).variants || (product as any).productvariant,
+            images: (product as any).images || (product as any).productimage || [],
+            variants: (product as any).variants || (product as any).productvariant || [],
         };
 
         return NextResponse.json(formattedProduct);
     } catch (error: any) {
-        console.error('Error fetching product:', error);
+        console.error('Error in product detail API:', error);
         return NextResponse.json({ error: 'Failed to fetch product', details: error.message }, { status: 500 });
     }
 }

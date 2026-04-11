@@ -29,40 +29,42 @@ export async function GET(request: Request) {
                 isActive: true,
                 createdAt: true,
                 images: {
-                    take: 1, // Only need the first image for the list
+                    take: 1, 
                     select: { id: true, url: true }
                 },
                 variants: {
                     select: { id: true, size: true, color: true, stock: true }
                 }
-                // Specifically EXCLUDED: description, sizeChartImage, model
             },
             ...(limit ? { take: limit } : {}),
             orderBy: {
                 createdAt: 'desc',
             }
-        }));
-
-        console.log(`API: Fast fetch returned ${products.length} products`);
+        })).catch(async (dbError) => {
+            console.error('Database unreachable, using mock fallback:', dbError);
+            const { MOCK_PRODUCTS } = await import('@/lib/mockData');
+            let results = [...MOCK_PRODUCTS];
+            if (category) results = results.filter(p => p.category === category);
+            if (featured === 'true') results = results.filter(p => p.featured);
+            return results.slice(0, limit || 50);
+        });
 
         const formattedProducts = products.map((product) => ({
             ...product,
             images: product.images || [],
             variants: product.variants || [],
-            description: "",
-            model: "",
-            sizeChartImage: null
+            description: (product as any).description || "",
+            model: (product as any).model || "",
+            sizeChartImage: (product as any).sizeChartImage || null
         }));
 
-        console.log(`API: Returning ${formattedProducts.length} formatted products`);
         return NextResponse.json(formattedProducts);
     } catch (error: any) {
-        console.error('Error fetching products:', error);
-        const isTimeout = error.message?.includes('timed out') || error.message?.includes('timeout');
+        console.error('Error in products API:', error);
         return NextResponse.json({
-            error: isTimeout ? 'Database connection timed out' : 'Failed to fetch products',
+            error: 'Failed to fetch products',
             details: error.message
-        }, { status: isTimeout ? 503 : 500 });
+        }, { status: 500 });
     }
 }
 
