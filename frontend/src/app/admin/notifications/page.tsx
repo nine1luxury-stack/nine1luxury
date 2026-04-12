@@ -3,6 +3,8 @@
 import { useNotifications } from "@/context/NotificationContext";
 import { CheckCheck, Trash2, ShoppingBag, User, Info, Bell } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 
 export default function NotificationsPage() {
     const { 
@@ -11,6 +13,8 @@ export default function NotificationsPage() {
         markAllAsRead, 
         clearNotifications 
     } = useNotifications();
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const getIcon = (type: string) => {
         switch (type) {
@@ -51,7 +55,7 @@ export default function NotificationsPage() {
                         تحديد الكل كمقروء
                     </button>
                     <button 
-                        onClick={clearNotifications}
+                        onClick={() => setIsDeleteModalOpen(true)}
                         className="px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-lg text-sm font-bold text-red-500 hover:bg-red-500/20 transition-colors flex items-center gap-2"
                     >
                         <Trash2 className="w-4 h-4" />
@@ -124,6 +128,17 @@ export default function NotificationsPage() {
                     )}
                 </AnimatePresence>
             </div>
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={() => {
+                    clearNotifications();
+                    setIsDeleteModalOpen(false);
+                }}
+                title="مسح جميع الإشعارات"
+                message="هل أنت متأكد من رغبتك في مسح كافة الإشعارات؟ لا يمكن التراجع عن هذا الإجراء."
+            />
         </div>
     );
 }

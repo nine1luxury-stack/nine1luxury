@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 import {
     Trash2,
     Search,
@@ -29,6 +31,7 @@ interface Booking {
 }
 
 export default function AdminBookingsPage() {
+    const router = useRouter();
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
@@ -47,6 +50,11 @@ export default function AdminBookingsPage() {
         shippingAmount: "",
         notes: ""
     });
+
+    // Delete Modal State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [bookingToDelete, setBookingToDelete] = useState<Booking | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const fetchBookings = async () => {
         try {
@@ -83,6 +91,7 @@ export default function AdminBookingsPage() {
             });
 
             if (!res.ok) throw new Error("Failed to update status");
+            router.refresh();
         } catch (error) {
             console.error(error);
             alert("فشل تحديث حالة الحجز");
@@ -93,21 +102,26 @@ export default function AdminBookingsPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm("هل أنت متأكد من حذف هذا الحجز؟")) return;
-
-        const previousBookings = [...bookings];
-        setBookings(prev => prev.filter(b => b.id !== id));
-
+        setIsDeleting(true);
         try {
-            const res = await fetch(`/api/bookings/${id}`, {
-                method: "DELETE"
-            });
-            if (!res.ok) throw new Error("Failed to delete");
-        } catch (error) {
-            console.error(error);
+            const res = await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                setBookings(prev => prev.filter(b => b.id !== id));
+                router.refresh();
+                setIsDeleteModalOpen(false);
+                setBookingToDelete(null);
+            }
+        } catch (e) {
+            console.error(e);
             alert("فشل حذف الحجز");
-            setBookings(previousBookings);
+        } finally {
+            setIsDeleting(false);
         }
+    };
+
+    const confirmDelete = (booking: Booking) => {
+        setBookingToDelete(booking);
+        setIsDeleteModalOpen(true);
     };
 
     const handleAddBooking = async (e: React.FormEvent) => {
@@ -139,6 +153,7 @@ export default function AdminBookingsPage() {
                     notes: ""
                 });
                 fetchBookings();
+                router.refresh();
             } else {
                 alert(data.error || "فشل إضافة الحجز");
             }
@@ -185,6 +200,12 @@ export default function AdminBookingsPage() {
 
     return (
         <div className="space-y-8" dir="rtl">
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={() => bookingToDelete && handleDelete(bookingToDelete.id)}
+                isDeleting={isDeleting}
+            />
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-white mb-2">إدارة طلبات الحجز</h1>
@@ -335,8 +356,8 @@ export default function AdminBookingsPage() {
                                                     </>
                                                 )}
                                                 <button
-                                                    onClick={() => handleDelete(booking.id)}
-                                                    className="p-2 bg-white/5 text-gray-400 rounded-lg hover:bg-red-500 hover:text-white transition-all shadow-lg"
+                                                    onClick={() => confirmDelete(booking)}
+                                                    className="p-2 text-gray-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
                                                     title="حذف"
                                                 >
                                                     <Trash2 className="w-4 h-4" />

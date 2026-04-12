@@ -74,7 +74,7 @@ export function Header() {
 
                 {/* Desktop Nav */}
                 <nav className="hidden lg:flex items-center gap-7 text-[0.82rem] font-medium uppercase">
-                    {navLinks.map((link) => (
+                    {navLinks.filter(l => l.href !== '/booking').map((link) => (
                         <Link
                             key={link.href}
                             href={link.href}
@@ -153,7 +153,7 @@ export function Header() {
                             </div>
 
                             <nav className="flex-1 flex flex-col gap-1.5">
-                                {navLinks.map((link, idx) => (
+                                {navLinks.filter(l => l.href !== '/booking').map((link, idx) => (
                                     <motion.div
                                         key={link.href}
                                         initial={{ opacity: 0, x: 30 }}

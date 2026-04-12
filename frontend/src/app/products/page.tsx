@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 function ProductsSkeletonGrid() {
     return (
-        <div className="min-h-screen bg-rich-black pt-32 pb-24 container mx-auto px-4">
+        <div className="min-h-screen bg-rich-black pt-16 pb-24 container mx-auto px-4">
             <div className="flex flex-col items-center mb-12 space-y-3">
                <div className="h-10 skeleton w-64 rounded-xl" />
                <div className="h-4 skeleton w-48 rounded-xl" />
@@ -39,45 +39,28 @@ export default async function ProductsPage() {
 }
 
 async function ProductsDataWrapper() {
-    try {
-        // Fetch only 8 products WITHOUT images for max speed on initial SSR
-        const [products, categories] = await withDbTimeout(() => Promise.all([
-            prisma.product.findMany({
-                where: { isActive: true },
-                select: {
-                    id: true, name: true, price: true, discount: true,
-                    category: true, isActive: true, createdAt: true,
-                    // EXCLUDE images: true to avoid massive Base64 payload in SSR HTML
-                    variants: { select: { id: true, size: true, color: true, stock: true } }
-                },
-                take: 8,
-                orderBy: { createdAt: 'desc' }
-            }),
-            prisma.category.findMany({ orderBy: { name: 'asc' } })
-        ]));
+    const [products, categories] = await withDbTimeout(() => Promise.all([
+        prisma.product.findMany({
+            where: { isActive: true },
+            select: {
+                id: true, name: true, price: true, discount: true,
+                category: true, isActive: true, createdAt: true,
+                // Include images but limited to 1 for initial load efficiency
+                images: { take: 1, select: { url: true } },
+                variants: { select: { id: true, size: true, color: true, stock: true } }
+            },
+            // Removed take: 8 to show all products
+            orderBy: { createdAt: 'desc' }
+        }),
+        prisma.category.findMany({ orderBy: { name: 'asc' } })
+    ]));
 
-        return (
-            <ProductsClient 
-                initialProducts={JSON.parse(JSON.stringify(products))} 
-                initialCategories={JSON.parse(JSON.stringify(categories))} 
-            />
-        );
-    } catch (error) {
-        console.error("SERVER ERROR in ProductsPage:", error);
-        // Fallback to mock data for demo/unstable DB
-        const { MOCK_PRODUCTS } = await import("@/lib/mockData");
-        const mockCategories = [
-            { id: "c1", name: "جميع المنتجات" },
-            { id: "c2", name: "تيشرتات" },
-            { id: "c3", name: "هوديز" },
-            { id: "c4", name: "بناطيل" }
-        ];
+    console.log(`[ProductsPage] Successfully fetched ${products.length} active products from database.`);
 
-        return (
-            <ProductsClient 
-                initialProducts={JSON.parse(JSON.stringify(MOCK_PRODUCTS))} 
-                initialCategories={JSON.parse(JSON.stringify(mockCategories))} 
-            />
-        );
-    }
+    return (
+        <ProductsClient 
+            initialProducts={JSON.parse(JSON.stringify(products))} 
+            initialCategories={JSON.parse(JSON.stringify(categories))} 
+        />
+    );
 }

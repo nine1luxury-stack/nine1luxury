@@ -17,6 +17,7 @@ import { formatPrice, cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/Modal";
 import { ordersApi, Order, OrderItem } from "@/lib/api";
 import { CreateOrderModal } from "@/components/admin/orders/CreateOrderModal";
+import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 
 
 
@@ -26,7 +27,11 @@ export default function AdminOrdersPage() {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [deletingId, setDeletingId] = useState<string | null>(null);
+    
+    // Delete Modal State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [orderToDelete, setOrderToDelete] = useState<Order | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // Return Modal State
     const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
@@ -151,23 +156,28 @@ export default function AdminOrdersPage() {
     };
 
     const handleDeleteOrder = async (orderId: string) => {
-        if (!confirm("هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.")) return;
-
+        setIsDeleting(true);
         // Optimistic Update
         const previousOrders = [...orders];
         setOrders(prev => prev.filter(o => o.id !== orderId));
-        setDeletingId(orderId);
 
         try {
             await ordersApi.delete(orderId);
+            setIsDeleteModalOpen(false);
+            setOrderToDelete(null);
             alert("تم حذف الطلب بنجاح");
         } catch (error) {
             console.error("Failed to delete order", error);
             alert("فشل حذف الطلب");
             setOrders(previousOrders); // Rollback
         } finally {
-            setDeletingId(null);
+            setIsDeleting(false);
         }
+    };
+
+    const confirmDeleteOrder = (order: Order) => {
+        setOrderToDelete(order);
+        setIsDeleteModalOpen(true);
     };
 
     // Filter orders based on search term (searching by ID, name, or phone)
@@ -363,16 +373,12 @@ export default function AdminOrdersPage() {
                                                     <Eye className="w-4 h-4" />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDeleteOrder(order.id)}
-                                                    disabled={deletingId === order.id}
+                                                    onClick={() => confirmDeleteOrder(order)}
+                                                    disabled={isDeleting}
                                                     className="p-2 text-gray-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
                                                     title="حذف"
                                                 >
-                                                    {deletingId === order.id ? (
-                                                        <Loader2 className="w-4 h-4 animate-spin text-gold-500" />
-                                                    ) : (
-                                                        <Trash2 className="w-4 h-4" />
-                                                    )}
+                                                    <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </div>
                                         </td>
@@ -612,6 +618,15 @@ export default function AdminOrdersPage() {
                     };
                     fetchOrders();
                 }}
+            />
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={() => orderToDelete && handleDeleteOrder(orderToDelete.id)}
+                title="حذف الطلب"
+                message={`هل أنت متأكد من حذف الطلب #${orderToDelete?.id?.slice(-8)}؟ لا يمكن التراجع عن هذا الإجراء.`}
+                isLoading={isDeleting}
             />
         </div>
     );

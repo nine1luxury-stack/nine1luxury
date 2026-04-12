@@ -1,15 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Wallet, Plus, Trash2, Loader2, Edit, Save, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 
 export default function AdminOffersPage() {
+    const router = useRouter();
     const [offers, setOffers] = useState<any[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [offerToDelete, setOfferToDelete] = useState<any>(null);
     
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -75,6 +82,7 @@ export default function AdminOffersPage() {
                     isActive: true
                 });
                 fetchOffers();
+                router.refresh();
             } else {
                 const error = await res.json();
                 alert(error.error || "Failed to save offer");
@@ -99,14 +107,26 @@ export default function AdminOffersPage() {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-    const deleteOffer = async (id: string) => {
-        if (!confirm("هل أنت متأكد من حذف هذا العرض؟")) return;
+    const handleDelete = async (id: string) => {
+        setIsDeleting(true);
         try {
             const res = await fetch(`/api/offers/${id}`, { method: "DELETE" });
-            if (res.ok) fetchOffers();
+            if (res.ok) {
+                fetchOffers();
+                router.refresh();
+                setIsDeleteModalOpen(false);
+                setOfferToDelete(null);
+            }
         } catch (error) {
             console.error(error);
+        } finally {
+            setIsDeleting(false);
         }
+    };
+
+    const confirmDelete = (offer: any) => {
+        setOfferToDelete(offer);
+        setIsDeleteModalOpen(true);
     };
 
     const toggleStatus = async (id: string, currentStatus: boolean) => {
@@ -116,7 +136,10 @@ export default function AdminOffersPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ isActive: !currentStatus })
             });
-            if (res.ok) fetchOffers();
+            if (res.ok) {
+                fetchOffers();
+                router.refresh();
+            }
         } catch (error) {
             console.error(error);
         }
@@ -267,8 +290,8 @@ export default function AdminOffersPage() {
                                                 <Edit className="w-4 h-4" />
                                             </button>
                                             <button
-                                                onClick={() => deleteOffer(offer.id)}
-                                                className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors border border-red-500/20"
+                                                onClick={() => confirmDelete(offer)}
+                                                className="p-2 text-gray-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
                                                 title="حذف"
                                             >
                                                 <Trash2 className="w-4 h-4" />
@@ -281,6 +304,15 @@ export default function AdminOffersPage() {
                     )}
                 </div>
             )}
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={() => offerToDelete && handleDelete(offerToDelete.id)}
+                title="حذف العرض"
+                message={`هل أنت متأكد من حذف العرض "${offerToDelete?.title}"؟`}
+                isLoading={isDeleting}
+            />
         </div>
     );
 }

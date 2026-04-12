@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -19,6 +19,7 @@ import {
     Settings,
     Ticket,
     Wallet,
+    MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +28,7 @@ const menuItems = [
     { name: "المنتجات", icon: Package, href: "/admin/products" },
     { name: "المخزن", icon: Warehouse, href: "/admin/inventory" },
     { name: "الطلبات", icon: ShoppingBag, href: "/admin/orders" },
-    { name: "الحجوزات", icon: Calendar, href: "/admin/bookings" },
+    { name: "تجارب العملاء", icon: MessageSquare, href: "/admin/testimonials" },
     { name: "الموردين", icon: Truck, href: "/admin/suppliers" },
     { name: "المصروفات", icon: Banknote, href: "/admin/expenses" },
     { name: "العروض", icon: Wallet, href: "/admin/offers" },
@@ -38,11 +39,18 @@ const menuItems = [
 export function AdminSidebar() {
     const pathname = usePathname();
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) return <div className="w-20 sm:w-64" />;
 
     return (
         <aside
             className={cn(
-                "bg-surface-dark border-l border-white/5 flex flex-col h-screen sticky top-0 transition-all duration-300",
+                "bg-surface-dark border-l border-white/5 flex flex-col h-screen sticky top-0 transition-all duration-300 z-50",
                 isCollapsed ? "w-20" : "w-64"
             )}
         >
@@ -61,7 +69,6 @@ export function AdminSidebar() {
                     </Link>
                 )}
                 <button
-                    suppressHydrationWarning
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     className={cn(
                         "p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors",

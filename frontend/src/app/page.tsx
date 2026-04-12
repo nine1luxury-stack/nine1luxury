@@ -132,23 +132,51 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="group relative h-52 rounded-2xl overflow-hidden glass-card-premium luxury-shadow"
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    e.currentTarget.style.setProperty("--mouse-x", `${x}px`);
+                    e.currentTarget.style.setProperty("--mouse-y", `${y}px`);
+                  }}
+                  className="group relative h-64 rounded-[2.5rem] overflow-hidden glass-card-premium luxury-shadow-lg border-ivory/[0.05] hover:border-gold-500/30 transition-all duration-700"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-gold-500/[0.1] via-transparent to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
-                  {/* Ambient corner glow */}
-                  <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-[60px] bg-gold-500/[0.06] group-hover:bg-gold-500/[0.12] transition-all duration-700" />
-                  <div className="relative h-full p-7 flex flex-col justify-center items-center text-center">
-                    <div className="w-10 h-10 rounded-full bg-gold-500/[0.08] flex items-center justify-center mb-4 group-hover:bg-gold-500/[0.15] transition-all duration-500">
-                      <Crown className="w-5 h-5 text-gold-500/70 group-hover:text-gold-400 transition-colors" />
-                    </div>
-                    <h4 className="text-xl font-bold text-ivory mb-5 font-playfair group-hover:text-gold-300 transition-colors duration-300">{offer.title}</h4>
+                  {/* Dynamic Mouse Glow */}
+                  <div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{
+                      background: `radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), hsla(37, 48%, 48%, 0.12), transparent 40%)`
+                    }}
+                  />
+
+                  {/* Mesh Gradient Background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-gold-500/[0.03] via-transparent to-rose-500/[0.02] opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
+                  
+                  {/* Subtle Top-Right Ambient Glow */}
+                  <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-[80px] bg-gold-500/[0.08] group-hover:bg-gold-500/[0.15] transition-all duration-1000 animate-pulse" />
+
+                  <div className="relative h-full p-8 flex flex-col justify-center items-center text-center">
+                    {/* Title with Metallic Gradient and Editorial Font */}
+                    <h4 className="text-2xl md:text-3xl font-almarai-extra-bold-straight text-metallic-gradient mb-8 transition-transform duration-500 group-hover:scale-110">
+                      {offer.title}
+                    </h4>
+
+                    {/* Glass Capsule Button */}
                     <Link
                       href={`/products?category=${encodeURIComponent(offer.link)}`}
-                      className="flex items-center gap-2 text-gold-500 text-[10px] font-bold uppercase tracking-[0.2em] hover:text-ivory transition-all border border-gold-500/15 px-5 py-2 rounded-full hover:bg-gold-500/[0.08] hover:border-gold-500/30"
+                      className="group/btn relative flex items-center gap-3 px-8 py-3 rounded-full bg-white/[0.03] border border-ivory/[0.08] hover:border-gold-500/40 transition-all duration-500 overflow-hidden"
                     >
-                      تسوق القسم
-                      <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" />
+                      {/* Button Inner Shine */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-500/10 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
+                      
+                      <span className="relative text-[10px] font-black uppercase tracking-[0.3em] text-ivory/60 group-hover/btn:text-gold-300 transition-colors">
+                        تسوق الآن
+                      </span>
+                      <ArrowLeft className="relative w-3.5 h-3.5 text-gold-500 transition-transform group-hover/btn:-translate-x-1.5" />
                     </Link>
+
+                    {/* Decorative Bottom Line */}
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
                   </div>
                 </motion.div>
               ))
@@ -349,10 +377,6 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/products" className="btn-primary text-lg">
                 احجز منتجك الآن
-              </Link>
-              <Link href="/booking" className="btn-ghost text-base">
-                <Star className="w-4 h-4" />
-                احجز موعد
               </Link>
             </div>
           </motion.div>

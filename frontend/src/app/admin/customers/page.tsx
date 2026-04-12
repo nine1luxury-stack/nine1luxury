@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import { formatPrice } from "@/lib/utils";
 import { Customer } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
+import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 
 export default function AdminCustomersPage() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +17,11 @@ export default function AdminCustomersPage() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    // Delete Modal State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const fetchCustomers = useCallback(async () => {
         try {
@@ -69,19 +75,27 @@ export default function AdminCustomersPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('هل أنت متأكد من حذف هذا العميل؟ (سيتم حذف السجل اليدوي فقط إن وجد)')) return;
-
+        setIsDeleting(true);
         try {
             const res = await fetch(`/api/customers/${id}`, { method: 'DELETE' });
             if (res.ok) {
-                fetchCustomers();
+                setCustomers(prev => prev.filter(c => c.id !== id));
+                setIsDeleteModalOpen(false);
+                setCustomerToDelete(null);
             } else {
                 const err = await res.json();
                 alert(err.error || "فشل الحذف");
             }
         } catch (error) {
             console.error(error);
+        } finally {
+            setIsDeleting(false);
         }
+    };
+
+    const confirmDelete = (customer: Customer) => {
+        setCustomerToDelete(customer);
+        setIsDeleteModalOpen(true);
     };
 
     const handleEdit = (customer: Customer) => {
@@ -225,7 +239,7 @@ export default function AdminCustomersPage() {
                                                     <button
                                                         onClick={() => {
                                                             setActiveMenu(null);
-                                                            handleDelete(customer.id);
+                                                            confirmDelete(customer);
                                                         }}
                                                         className="w-full text-right px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors flex items-center gap-2"
                                                     >
@@ -281,6 +295,15 @@ export default function AdminCustomersPage() {
                     </button>
                 </form>
             </Modal>
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={() => customerToDelete && handleDelete(customerToDelete.id)}
+                title="حذف العميل"
+                message={`هل أنت متأكد من حذف العميل "${customerToDelete?.name}"؟ سيتم حذف كافة سجلات الطلبات المرتبطة به.`}
+                isLoading={isDeleting}
+            />
         </div>
     );
 }

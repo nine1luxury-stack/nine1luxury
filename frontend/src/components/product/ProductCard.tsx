@@ -121,12 +121,12 @@ export function ProductCard({ id, name, price, discount, images: propImages, cat
                 {/* Subtle top glow line */}
                 <div className="absolute top-0 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-gold-500/10 to-transparent" />
                 
-                <div className="space-y-1.5">
-                    <span className="text-[8px] text-gold-500/80 font-bold uppercase tracking-[3px]">
+                <div className="space-y-2">
+                    <span className="text-[10px] text-gold-500/80 font-bold uppercase tracking-[3px]">
                         {category}
                     </span>
                     <Link href={`/products/${id}`}>
-                        <h3 className="text-sm md:text-base font-bold text-ivory/90 group-hover:text-gold-300 transition-colors duration-300 line-clamp-1 font-playfair tracking-wide leading-tight">
+                        <h3 className="text-base md:text-lg font-bold text-ivory/90 group-hover:text-gold-300 transition-colors duration-300 line-clamp-1 font-playfair tracking-wide leading-tight">
                             {name}
                         </h3>
                     </Link>
@@ -139,7 +139,7 @@ export function ProductCard({ id, name, price, discount, images: propImages, cat
                                 {formatPrice(price)}
                             </span>
                         )}
-                        <span className="text-base font-bold text-ivory group-hover:text-gold-300 transition-colors">
+                        <span className="text-lg md:text-xl font-bold text-ivory group-hover:text-gold-300 transition-colors">
                             {formatPrice(discountedPrice)}
                         </span>
                     </div>

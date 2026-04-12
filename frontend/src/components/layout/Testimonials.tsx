@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Star, Quote, MessageSquarePlus } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from "@/components/ui/Modal";
+import { Loader2 } from "lucide-react";
 
 const INITIAL_REVIEWS = [
     {
@@ -29,22 +30,54 @@ const INITIAL_REVIEWS = [
 export function Testimonials() {
     const [reviews, setReviews] = useState(INITIAL_REVIEWS);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [newReview, setNewReview] = useState({ name: "", content: "", rating: 5 });
 
-    const handleAddReview = (e: React.FormEvent) => {
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const res = await fetch('/api/testimonials');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.length > 0) {
+                        setReviews(data);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch testimonials:", err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchReviews();
+    }, []);
+
+    const handleAddReview = async (e: React.FormEvent) => {
         e.preventDefault();
-        setReviews([
-            {
-                name: newReview.name,
-                role: "عميل جديد",
-                content: newReview.content,
-                rating: newReview.rating,
-            },
-            ...reviews
-        ]);
-        setIsModalOpen(false);
-        setNewReview({ name: "", content: "", rating: 5 });
-        alert("شكراً لمشاركتنا رأيك!");
+        setIsSubmitting(true);
+        try {
+            const res = await fetch('/api/testimonials', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newReview)
+            });
+
+            if (res.ok) {
+                const added = await res.json();
+                setReviews([added, ...reviews]);
+                setIsModalOpen(false);
+                setNewReview({ name: "", content: "", rating: 5 });
+                alert("شكراً لمشاركتنا رأيك! تم حفظ تجربتك بنجاح.");
+            } else {
+                alert("حدث خطأ أثناء حفظ التقييم. يرجى المحاولة مرة أخرى.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("فشل الاتصال بالسيرفر.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -227,8 +260,10 @@ export function Testimonials() {
                         </button>
                         <button 
                             type="submit"
-                            className="btn-primary text-sm py-2.5 px-8"
+                            disabled={isSubmitting}
+                            className="btn-primary text-sm py-2.5 px-8 flex items-center gap-2"
                         >
+                            {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                             نشر الرأي
                         </button>
                     </div>

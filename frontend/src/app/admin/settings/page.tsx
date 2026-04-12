@@ -2,11 +2,13 @@
 
 import { motion } from "framer-motion";
 import { Save, Store, Globe, Bell, Mail, Type } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function AdminSettingsPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [isFetching, setIsFetching] = useState(true);
+    const router = useRouter();
     const [settings, setSettings] = useState({
         storeName: "nine1luxury",
         storeEmail: "support@nine1luxury.com",
@@ -63,6 +65,7 @@ export default function AdminSettingsPage() {
             
             if (res.ok) {
                 alert("تم حفظ الإعدادات بنجاح!");
+                router.refresh();
             } else {
                 alert("حدث خطأ أثناء حفظ الإعدادات");
             }

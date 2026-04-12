@@ -12,11 +12,13 @@ export async function GET(request: Request) {
         const limitParam = searchParams.get('limit');
         const all = searchParams.get('all');
 
-        const where: Record<string, string | boolean> = {};
+        const where: Record<string, string | boolean> = {
+            isActive: true // Always enforce isActive for public GET
+        };
         if (category) where.category = category;
         if (featured === 'true') where.featured = true;
 
-        const limit = all === 'true' ? undefined : (limitParam ? parseInt(limitParam) : 24);
+        const limit = all === 'true' ? undefined : (limitParam ? parseInt(limitParam) : 100);
 
         const products = await withDbTimeout(() => prisma.product.findMany({
             where,
@@ -40,14 +42,7 @@ export async function GET(request: Request) {
             orderBy: {
                 createdAt: 'desc',
             }
-        })).catch(async (dbError) => {
-            console.error('Database unreachable, using mock fallback:', dbError);
-            const { MOCK_PRODUCTS } = await import('@/lib/mockData');
-            let results = [...MOCK_PRODUCTS];
-            if (category) results = results.filter(p => p.category === category);
-            if (featured === 'true') results = results.filter(p => p.featured);
-            return results.slice(0, limit || 50);
-        });
+        }));
 
         const formattedProducts = products.map((product) => ({
             ...product,

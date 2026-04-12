@@ -3,18 +3,24 @@
 import { motion } from "framer-motion";
 import { Truck, Plus, MoreVertical, Phone, Edit, Trash2 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { suppliersApi, Supplier, SupplierStat } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
-
-
+import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 
 export default function SuppliersPage() {
+    const router = useRouter();
     const [suppliers, setSuppliers] = useState<Supplier[]>([]);
     const [stats, setStats] = useState<SupplierStat[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({ name: '', phone: '', manualTotalPurchases: '', manualTotalPaid: '', description: '' });
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
+    
+    // Delete Modal State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [supplierToDelete, setSupplierToDelete] = useState<Supplier | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const loadData = useCallback(async () => {
         try {
@@ -62,6 +68,7 @@ export default function SuppliersPage() {
             setFormData({ name: '', phone: '', manualTotalPurchases: '', manualTotalPaid: '', description: '' });
             setEditingId(null);
             loadData(); // Background sync
+            router.refresh();
         } catch (e) {
             console.error(e);
             alert("حدث خطأ أثناء حفظ بيانات المورد");
@@ -70,20 +77,25 @@ export default function SuppliersPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('هل أنت متأكد من حذف هذا المورد؟')) return;
-        const previousSuppliers = [...suppliers];
-        
-        // Optimistic delete
-        setSuppliers(prev => prev.filter(s => s.id !== id));
-
+        setIsDeleting(true);
         try {
             await suppliersApi.delete(id);
             loadData(); // Background sync
+            router.refresh();
+            setIsDeleteModalOpen(false);
+            setSupplierToDelete(null);
         } catch (e) {
             console.error(e);
             alert("فشل حذف المورد");
-            setSuppliers(previousSuppliers); // Rollback
+        } finally {
+            setIsDeleting(false);
         }
+    };
+
+    const confirmDelete = (supplier: Supplier) => {
+        setActiveMenu(null); // Close dropdown first
+        setSupplierToDelete(supplier);
+        setIsDeleteModalOpen(true);
     };
 
     const handleEdit = (supplier: Supplier) => {
@@ -212,10 +224,7 @@ export default function SuppliersPage() {
                                                     تعديل
                                                 </button>
                                                 <button
-                                                    onClick={() => {
-                                                        setActiveMenu(null);
-                                                        handleDelete(supplier.id);
-                                                    }}
+                                                    onClick={() => confirmDelete(supplier)}
                                                     className="w-full text-right px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors flex items-center gap-2"
                                                 >
                                                     <Trash2 className="w-4 h-4" />

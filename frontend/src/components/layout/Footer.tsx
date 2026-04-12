@@ -13,7 +13,6 @@ export function Footer() {
     const quickLinks = [
         { href: "/products", label: "المنتجات" },
         { href: "/offers", label: "العروض" },
-        { href: "/booking", label: "الحجز" },
         { href: "/about", label: "عن المتجر" },
         { href: "/contact", label: "تواصل معنا" },
         { href: "/shipping", label: "سياسة الشحن" },

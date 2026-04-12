@@ -3,10 +3,13 @@
 import { motion } from "framer-motion";
 import { Plus, Calendar, TrendingDown, MoreVertical, Edit, Trash2 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { expensesApi, Expense, ExpenseStats } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
+import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 
 export default function ExpensesPage() {
+    const router = useRouter();
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [stats, setStats] = useState<ExpenseStats | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +22,11 @@ export default function ExpensesPage() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    
+    // Delete Modal State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [expenseToDelete, setExpenseToDelete] = useState<Expense | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const loadData = useCallback(async () => {
         setLoading(true);
@@ -67,6 +75,7 @@ export default function ExpensesPage() {
             setEditingId(null);
             setFormData({ amount: '', category: 'OTHER', description: '', date: new Date().toISOString().slice(0, 10) });
             loadData(); // Sync with server
+            router.refresh();
         } catch (e) {
             console.error("Failed to save expense:", e);
             alert("حدث خطأ أثناء الحفظ");
@@ -76,23 +85,25 @@ export default function ExpensesPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('هل أنت متأكد من حذف هذا المصروف؟')) return;
-        
-        const previousExpenses = [...expenses];
-        const previousStats = stats;
-
-        // Optimistic delete
-        setExpenses(prev => prev.filter(e => e.id !== id));
-        
+        setIsDeleting(true);
         try {
             await expensesApi.delete(id);
-            loadData(); // Sync stats & list
+            loadData();
+            router.refresh();
+            setIsDeleteModalOpen(false);
+            setExpenseToDelete(null);
         } catch (e) {
-            console.error("Failed to delete expense:", e);
+            console.error(e);
             alert("فشل حذف المصروف");
-            setExpenses(previousExpenses); // Rollback
-            setStats(previousStats);
+        } finally {
+            setIsDeleting(false);
         }
+    };
+
+    const confirmDelete = (expense: Expense) => {
+        setActiveMenu(null); // Close dropdown
+        setExpenseToDelete(expense);
+        setIsDeleteModalOpen(true);
     };
 
     const handleEdit = (expense: Expense) => {
@@ -245,10 +256,7 @@ export default function ExpensesPage() {
                                                         تعديل
                                                     </button>
                                                     <button
-                                                        onClick={() => {
-                                                            setActiveMenu(null);
-                                                            handleDelete(expense.id);
-                                                        }}
+                                                        onClick={() => confirmDelete(expense)}
                                                         className="w-full text-right px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors flex items-center gap-2"
                                                     >
                                                         <Trash2 className="w-4 h-4" />

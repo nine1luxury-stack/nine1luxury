@@ -1,13 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Ticket, Plus, Trash2, Percent, Loader2, Edit, Save } from "lucide-react";
+import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 
 export default function AdminCouponsPage() {
+    const router = useRouter();
     const [coupons, setCoupons] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    
+    // Delete Modal State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [couponToDelete, setCouponToDelete] = useState<any>(null);
     
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -62,6 +70,7 @@ export default function AdminCouponsPage() {
                     isActive: true
                 });
                 fetchCoupons();
+                router.refresh();
             } else {
                 const error = await res.json();
                 alert(error.error || "Failed to save coupon");
@@ -86,14 +95,27 @@ export default function AdminCouponsPage() {
         setShowForm(true);
     };
 
-    const deleteCoupon = async (id: string) => {
-        if (!confirm("هل أنت متأكد من حذف هذا الكوبون؟")) return;
+    const handleDelete = async (id: string) => {
+        setIsDeleting(true);
         try {
             const res = await fetch(`/api/coupons/${id}`, { method: "DELETE" });
-            if (res.ok) fetchCoupons();
+            if (res.ok) {
+                setCoupons(prev => prev.filter(c => c.id !== id));
+                router.refresh();
+                setIsDeleteModalOpen(false);
+                setCouponToDelete(null);
+            }
         } catch (error) {
             console.error(error);
+            alert("فشل حذف الكوبون");
+        } finally {
+            setIsDeleting(false);
         }
+    };
+
+    const confirmDelete = (coupon: any) => {
+        setCouponToDelete(coupon);
+        setIsDeleteModalOpen(true);
     };
 
     const toggleStatus = async (id: string, currentStatus: boolean) => {
@@ -103,7 +125,10 @@ export default function AdminCouponsPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ isActive: !currentStatus })
             });
-            if (res.ok) fetchCoupons();
+            if (res.ok) {
+                fetchCoupons();
+                router.refresh();
+            }
         } catch (error) {
             console.error(error);
         }
@@ -259,9 +284,9 @@ export default function AdminCouponsPage() {
                                         <Edit className="w-4 h-4" />
                                     </button>
                                     <button
-                                        onClick={() => deleteCoupon(coupon.id)}
-                                        className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
-                                        title="حذف الكوبون"
+                                        onClick={() => confirmDelete(coupon)}
+                                        className="p-2 text-gray-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
+                                        title="حذف"
                                     >
                                         <Trash2 className="w-4 h-4" />
                                     </button>
@@ -271,6 +296,15 @@ export default function AdminCouponsPage() {
                     )}
                 </div>
             )}
+
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={() => couponToDelete && handleDelete(couponToDelete.id)}
+                title="حذف الكوبون"
+                message={`هل أنت متأكد من حذف الكوبون "${couponToDelete?.code}"؟`}
+                isLoading={isDeleting}
+            />
         </div>
     );
 }

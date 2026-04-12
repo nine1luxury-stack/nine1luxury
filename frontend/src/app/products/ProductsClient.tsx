@@ -97,7 +97,7 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
     const activeFilterCount = (selectedCategory !== "جميع المنتجات" ? 1 : 0) + (priceRange < MAX_PRICE ? 1 : 0) + selectedSizes.length;
 
     return (
-        <main className="min-h-screen bg-rich-black pt-32 pb-24">
+        <main className="min-h-screen bg-rich-black pt-16 pb-24">
 
             <div className="container mx-auto px-6 max-w-[1600px]">
                 {/* Section Header */}

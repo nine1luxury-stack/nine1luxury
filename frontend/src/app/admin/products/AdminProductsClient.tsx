@@ -12,17 +12,29 @@ import {
     ChevronRight,
     ChevronLeft,
     X,
-    Settings
+    Settings,
+    Loader2
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { formatPrice, cn } from "@/lib/utils";
 import { Product, ProductVariant, productsApi, categoriesApi } from "@/lib/api";
+import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 
 export default function AdminProductsClient({ initialProducts, initialCategories }: { initialProducts: Product[], initialCategories: any[] }) {
     console.log(`CLIENT PROPS: ${initialProducts?.length || 0} products`);
+    const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("الكل");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+    // Delete Modal State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [productToDelete, setProductToDelete] = useState<Product | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const [isDeleteCategoryModalOpen, setIsDeleteCategoryModalOpen] = useState(false);
+    const [categoryToDelete, setCategoryToDelete] = useState<any>(null);
 
     // Initial server-side loaded data (No loading flicker)
     const [products, setProducts] = useState<Product[]>(initialProducts);
@@ -43,21 +55,38 @@ export default function AdminProductsClient({ initialProducts, initialCategories
     const addProduct = async (productForUI: Partial<Product>) => {
         const newProd = await productsApi.create(productForUI);
         setProducts(prev => [newProd, ...prev]);
+        router.refresh();
     };
 
     const updateProduct = async (id: string, productForUI: Partial<Product>) => {
         const updated = await productsApi.update(id, productForUI);
         setProducts(prev => prev.map(p => p.id === id ? updated : p));
+        router.refresh();
     };
 
     const deleteProduct = async (id: string) => {
+        setIsDeleting(true);
+        // Optimistic update
+        const previousProducts = [...products];
         setProducts(prev => prev.filter(p => p.id !== id));
+        
         try {
             await productsApi.delete(id);
+            router.refresh();
+            setIsDeleteModalOpen(false);
+            setProductToDelete(null);
         } catch (e) {
             console.error(e);
+            setProducts(previousProducts); // Rollback
             alert("فشل حذف المنتج من السيرفر");
+        } finally {
+            setIsDeleting(false);
         }
+    };
+
+    const confirmDelete = (product: Product) => {
+        setProductToDelete(product);
+        setIsDeleteModalOpen(true);
     };
 
     const addCategory = async (name: string) => {
@@ -76,7 +105,14 @@ export default function AdminProductsClient({ initialProducts, initialCategories
         try {
             await categoriesApi.delete(id);
             setDbCategories(prev => prev.filter(c => c.id !== id));
+            setIsDeleteCategoryModalOpen(false);
+            setCategoryToDelete(null);
         } catch(e) { console.error(e) }
+    };
+
+    const confirmDeleteCategory = (category: any) => {
+        setCategoryToDelete(category);
+        setIsDeleteCategoryModalOpen(true);
     };
 
 
@@ -437,11 +473,7 @@ export default function AdminProductsClient({ initialProducts, initialCategories
                                                         <Edit2 className="w-4 h-4" />
                                                     </button>
                                                     <button
-                                                        onClick={() => {
-                                                            if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
-                                                                deleteProduct(product.id);
-                                                            }
-                                                        }}
+                                                        onClick={() => confirmDelete(product)}
                                                         className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                                                         title="حذف"
                                                     >
@@ -1013,6 +1045,14 @@ export default function AdminProductsClient({ initialProducts, initialCategories
                     </div>
                 )}
             </AnimatePresence>
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={() => productToDelete && deleteProduct(productToDelete.id)}
+                title="حذف المنتج"
+                message={`هل أنت متأكد من حذف المنتج "${productToDelete?.name}"؟ لا يمكن التراجع عن هذا الإجراء.`}
+                isLoading={isDeleting}
+            />
         </div>
     );
 }
