@@ -179,7 +179,6 @@ export default function CheckoutPage() {
                             متابعة التسوق
                         </Link>
                     </div>
-                </div>
             </main>
         );
     }
