@@ -4,12 +4,12 @@ import { prisma } from "@/lib/db";
 
 export async function GET() {
   try {
-    const offers = await (prisma as any).offer.findMany({
+    const offers = await prisma.offer.findMany({
         orderBy: { createdAt: 'desc' }
     });
     return NextResponse.json(offers);
   } catch (error) {
-    console.error("Failed to fetch offers:", error);
+    console.error("[API Offers] Failed to fetch offers:", error);
     return NextResponse.json({ error: "Failed to fetch offers" }, { status: 500 });
   }
 }
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Title and link are required" }, { status: 400 });
     }
 
-    const offer = await (prisma as any).offer.create({
+    const offer = await prisma.offer.create({
       data: {
         title,
         description,
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(offer);
   } catch (error) {
-    console.error("Failed to create offer:", error);
+    console.error("[API Offers] Failed to create offer:", error);
     return NextResponse.json({ error: "Failed to create offer" }, { status: 500 });
   }
 }

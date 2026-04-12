@@ -27,7 +27,14 @@ export async function withDbTimeout<T>(
     return Promise.race([
         queryFn(),
         new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error('Database connection timed out. Please check your database connection string and network settings.')), timeoutMs)
+            setTimeout(() => {
+                const errorMsg = 'Database connection timed out (10s). Please check if your MySQL service is running and the DATABASE_URL is correct.';
+                console.error(`[Prisma Timeout]: ${errorMsg}`);
+                reject(new Error(errorMsg));
+            }, timeoutMs)
         ),
-    ]);
+    ]).catch(err => {
+        console.error(`[Prisma Error]: ${err.message}`);
+        throw err;
+    });
 }

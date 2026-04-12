@@ -58,7 +58,7 @@ model product {
   featured       Boolean          @default(false)
   isActive       Boolean          @default(true)
   reorderPoint   Int              @default(10)
-  sizeChartImage String? @db.LongText
+  sizeChartImage String?          @db.LongText
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   images         productimage[]
@@ -203,6 +203,7 @@ model offer {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
 model testimonial {
   id        String   @id @default(cuid())
   name      String
