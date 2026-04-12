@@ -114,7 +114,7 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="section-title text-4xl md:text-6xl font-playfair"
+                        className="section-title text-4xl md:text-7xl font-almarai font-extrabold tracking-tight"
                     >
                         المتجر الرئيسي
                     </motion.h1>
@@ -150,12 +150,12 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                     </div>
 
                     {/* Filter Sidebar */}
-                    <aside className="hidden lg:block w-72 shrink-0 space-y-12 bg-surface-dark/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-bronze/10 sticky top-32 h-fit">
+                    <aside className="hidden lg:block w-80 shrink-0 space-y-12 glass-card-premium p-10 rounded-[3rem] sticky top-32 h-fit">
                         {/* Categories */}
-                        <div className="space-y-6">
-                            <h3 className="text-gold-500/60 font-black uppercase tracking-[0.3em] text-[10px] px-2 flex items-center justify-between">
+                        <div className="space-y-8">
+                            <h3 className="text-gold-500 font-bold uppercase tracking-[0.4em] text-[10px] px-2 flex items-center justify-between font-almarai">
                                 التصنيفات
-                                <div className="h-[1px] flex-1 bg-gold-500/10 mr-4" />
+                                <div className="h-[1px] flex-1 bg-gold-500/20 mr-4" />
                             </h3>
                             <div className="flex flex-col gap-1.5">
                                 {categories.map((cat) => {
@@ -172,10 +172,10 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                                                     : "text-ivory/30 hover:text-ivory/80 hover:bg-white/[0.03]"
                                             )}
                                         >
-                                            <span className="text-[11px] uppercase tracking-[0.1em] z-10">{cat}</span>
+                                            <span className="text-[12px] uppercase tracking-[0.1em] z-10 font-almarai">{cat}</span>
                                             <span className={cn(
-                                                "text-[9px] font-black min-w-[22px] h-[22px] rounded-full flex items-center justify-center transition-colors z-10",
-                                                isActive ? "bg-rich-black/10 text-rich-black" : "bg-white/[0.02] text-ivory/10 group-hover:bg-white/[0.05] group-hover:text-gold-500"
+                                                "text-[10px] font-bold min-w-[24px] h-[24px] rounded-full flex items-center justify-center transition-colors z-10",
+                                                isActive ? "bg-rich-black/20 text-rich-black" : "bg-white/[0.04] text-ivory/30 group-hover:bg-gold-500/10 group-hover:text-gold-500"
                                             )}>
                                                 {count}
                                             </span>

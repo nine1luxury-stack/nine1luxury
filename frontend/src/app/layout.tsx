@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
-import { Amiri } from "next/font/google";
+import { Amiri, Cairo, Almarai } from "next/font/google";
 import "@fontsource-variable/playfair-display";
 import { CartProvider } from "@/context/CartContext";
 import { ProductProvider } from "@/context/ProductContext";
@@ -14,6 +14,20 @@ const amiri = Amiri({
   subsets: ["arabic"],
   weight: ["400", "700"],
   variable: "--font-amiri",
+  display: "swap",
+});
+
+const cairo = Cairo({
+  subsets: ["arabic"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-cairo",
+  display: "swap",
+});
+
+const almarai = Almarai({
+  subsets: ["arabic"],
+  weight: ["300", "400", "700", "800"],
+  variable: "--font-almarai",
   display: "swap",
 });
 
@@ -50,7 +64,7 @@ export default function RootLayout({
           body { background-color: #000000 !important; }
         `}</style>
       </head>
-      <body className={`${amiri.variable} antialiased min-h-screen selection:bg-gold-500/30 selection:text-gold-300`} suppressHydrationWarning>
+      <body className={`${amiri.variable} ${cairo.variable} ${almarai.variable} antialiased min-h-screen selection:bg-gold-500/30 selection:text-gold-300 font-almarai`} suppressHydrationWarning>
         <ProductProvider>
           <CartProvider>
             <NotificationProvider>

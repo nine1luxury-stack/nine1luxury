@@ -40,7 +40,7 @@ export function Footer() {
                                 />
                             </div>
                         </Link>
-                        <p className="text-ivory/30 text-sm leading-8 max-w-[280px]">
+                        <p className="text-ivory/70 text-sm leading-8 max-w-[280px]">
                             وجهتك الأولى للملابس الشبابية الفاخرة. نجمع بين الأناقة العصرية والجودة العالية لنمنحك إطلالة تعكس ثقتك وتميزك.
                         </p>
 
@@ -55,7 +55,7 @@ export function Footer() {
                                     className="group w-10 h-10 rounded-xl bg-white/[0.03] border border-ivory/[0.06] hover:border-gold-500/40 hover:bg-gold-500 flex items-center justify-center transition-all duration-400 hover:shadow-[0_0_16px_hsla(37,48%,48%,0.2)] hover:scale-105"
                                     aria-label={social.name}
                                 >
-                                    <social.icon className="w-4 h-4 text-ivory/30 group-hover:text-rich-black transition-colors duration-300" />
+                                    <social.icon className="w-4 h-4 text-ivory/60 group-hover:text-rich-black transition-colors duration-300" />
                                 </a>
                             ))}
                         </div>
@@ -63,7 +63,7 @@ export function Footer() {
 
                     {/* Quick Links */}
                     <div className="flex flex-col items-center md:items-start">
-                        <h3 className="text-champagne font-playfair font-bold mb-8 text-base relative inline-block">
+                        <h3 className="text-champagne font-bold mb-8 text-base relative inline-block">
                             روابط سريعة
                             <span className="absolute -bottom-2 right-0 w-7 h-0.5 bg-gold-500/40 rounded-full" />
                         </h3>
@@ -72,7 +72,7 @@ export function Footer() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="block text-ivory/30 hover:text-gold-300 transition-all duration-300 text-sm hover:translate-x-[-3px] transform"
+                                    className="block text-ivory/70 hover:text-gold-300 transition-all duration-300 text-sm hover:translate-x-[-3px] transform"
                                 >
                                     {link.label}
                                 </Link>
@@ -82,7 +82,7 @@ export function Footer() {
 
                     {/* Contact Info */}
                     <div className="flex flex-col items-center md:items-start">
-                        <h3 className="text-champagne font-playfair font-bold mb-8 text-base relative inline-block">
+                        <h3 className="text-champagne font-bold mb-8 text-base relative inline-block">
                             اتصل بنا
                             <span className="absolute -bottom-2 right-0 w-7 h-0.5 bg-gold-500/40 rounded-full" />
                         </h3>
@@ -95,7 +95,7 @@ export function Footer() {
                                 <div className="w-8 h-8 rounded-lg bg-gold-500/[0.07] flex items-center justify-center group-hover:bg-gold-500 text-gold-400 group-hover:text-rich-black transition-all duration-300">
                                     <Phone className="w-3.5 h-3.5" />
                                 </div>
-                                <span dir="ltr" className="text-ivory/35 font-mono text-sm group-hover:text-gold-300 transition-colors">010 9437 2339</span>
+                                <span dir="ltr" className="text-ivory/80 font-mono text-sm group-hover:text-gold-300 transition-colors">010 9437 2339</span>
                             </a>
 
                             <a
@@ -105,32 +105,32 @@ export function Footer() {
                                 <div className="w-8 h-8 rounded-lg bg-gold-500/[0.07] flex items-center justify-center group-hover:bg-gold-500 text-gold-400 group-hover:text-rich-black transition-all duration-300">
                                     <Mail className="w-3.5 h-3.5" />
                                 </div>
-                                <span className="text-ivory/35 text-sm group-hover:text-gold-300 transition-colors">nine1luxury@gmail.com</span>
+                                <span className="text-ivory/80 text-sm group-hover:text-gold-300 transition-colors">nine1luxury@gmail.com</span>
                             </a>
 
                             <div className="flex items-center justify-center md:justify-start gap-3 p-3 rounded-xl">
                                 <div className="w-8 h-8 rounded-lg bg-gold-500/[0.07] flex items-center justify-center text-gold-400">
                                     <MapPin className="w-3.5 h-3.5" />
                                 </div>
-                                <span className="text-ivory/35 text-sm">المحلة، مصر</span>
+                                <span className="text-ivory/80 text-sm">المحلة، مصر</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Newsletter */}
                     <div className="flex flex-col items-center md:items-start">
-                        <h3 className="text-champagne font-playfair font-bold mb-8 text-base relative inline-block">
+                        <h3 className="text-champagne font-bold mb-8 text-base relative inline-block">
                             ابقَ على اطلاع
                             <span className="absolute -bottom-2 right-0 w-7 h-0.5 bg-gold-500/40 rounded-full" />
                         </h3>
-                        <p className="text-ivory/25 text-sm mb-5 leading-relaxed">
+                        <p className="text-ivory/70 text-sm mb-5 leading-relaxed">
                             اشترك ليصلك كل جديد وعروض حصرية
                         </p>
                         <div className="w-full max-w-[280px] space-y-2.5">
                             <input
                                 type="email"
                                 placeholder="بريدك الإلكتروني"
-                                className="luxury-input text-sm py-3"
+                                className="luxury-input text-sm py-3 text-white"
                             />
                             <button className="w-full bg-gold-500 hover:bg-gold-400 text-rich-black font-bold py-3 rounded-xl text-sm transition-all duration-400 hover:shadow-[0_8px_24px_hsla(37,48%,48%,0.2)]">
                                 اشتراك
@@ -141,12 +141,12 @@ export function Footer() {
                 </div>
 
                 {/* Footer Bottom */}
-                <div className="mt-16 pt-8 border-t border-ivory/[0.04] flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-ivory/20" dir="rtl">
-                    <p>جميع الحقوق محفوظة © Nine1Luxury {new Date().getFullYear()}</p>
-                    <div className="flex items-center gap-6">
+                <div className="mt-16 pt-8 border-t border-ivory/[0.04] flex flex-col items-center justify-center gap-6 text-xs text-ivory/60" dir="rtl">
+                    <div className="flex items-center gap-8">
                         <Link href="/policy" className="hover:text-gold-300 transition-colors">سياسة الاستبدال</Link>
                         <Link href="/shipping" className="hover:text-gold-300 transition-colors">سياسة الشحن</Link>
                     </div>
+                    <p className="opacity-80">جميع الحقوق محفوظة © Nine1Luxury {new Date().getFullYear()}</p>
                 </div>
             </div>
         </footer>

@@ -28,8 +28,8 @@ export default function OffersClient({ initialOffers }: { initialOffers: any[] }
                             <Sparkles className="w-4 h-4" />
                             حملات حصرية
                         </motion.div>
-                        <h1 className="text-5xl md:text-7xl font-bold text-white font-playfair uppercase tracking-tight">
-                            عروض <span className="text-gold-500">استثنائية</span>
+                        <h1 className="text-5xl md:text-8xl font-extrabold text-white font-almarai uppercase tracking-tight leading-[1.1]">
+                            عروض <span className="text-metallic-gradient">استثنائية</span>
                         </h1>
                         <p className="text-gray-400 max-w-2xl text-lg font-medium leading-relaxed">
                             اختر من بين مجموعتنا المختارة بعناية، واستمتع بتجربة تسوق فاخرة مع تخفيضات تليق بك.
@@ -61,19 +61,19 @@ export default function OffersClient({ initialOffers }: { initialOffers: any[] }
                                 className="group relative bg-surface-dark border border-white/5 rounded-3xl overflow-hidden hover:border-gold-500/30 transition-all duration-500 shadow-2xl shadow-black/40"
                             >
                                 {/* Content */}
-                                <div className="p-8">
-                                    <h3 className="text-2xl font-bold text-white mb-3 font-playfair group-hover:text-gold-500 transition-colors">
+                                <div className="p-10">
+                                    <h3 className="text-3xl font-extrabold text-white mb-4 font-almarai group-hover:text-gold-300 transition-colors leading-tight">
                                         {offer.title}
                                     </h3>
-                                    <p className="text-gray-400 mb-8 line-clamp-3 text-sm leading-relaxed min-h-[60px]">
+                                    <p className="text-ivory/40 mb-10 line-clamp-3 text-base leading-relaxed min-h-[72px]">
                                         {offer.description || "استمتع بأفضل العروض والخصومات الحصرية على تشكيلتنا المميزة لفترة محدودة."}
                                     </p>
                                     
                                     <Link 
                                         href={`/products?category=${encodeURIComponent(offer.link)}`}
-                                        className="w-full inline-flex items-center justify-center gap-3 bg-white text-black py-4 rounded-2xl font-bold group-hover:bg-gold-500 group-hover:text-rich-black transition-all duration-300 transform active:scale-95 shadow-xl shadow-black/20"
+                                        className="w-full inline-flex items-center justify-center gap-3 bg-ivory text-rich-black py-5 rounded-2xl font-black group-hover:bg-gold-500 transition-all duration-300 transform active:scale-95 shadow-xl shadow-black/20 text-sm uppercase tracking-widest"
                                     >
-                                        تسوق الآن
+                                        تسوق التشكيلة الآن
                                         <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-2" />
                                     </Link>
                                 </div>

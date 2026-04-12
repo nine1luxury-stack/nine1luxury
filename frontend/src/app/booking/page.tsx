@@ -141,9 +141,9 @@ export default function BookingPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-5xl md:text-7xl font-bold text-white uppercase"
+                        className="text-5xl md:text-8xl font-extrabold text-white font-almarai uppercase leading-tight"
                     >
-                        احجز منتجك المفضل
+                        احجز منتجك <span className="text-metallic-gradient">المفضل</span>
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -166,9 +166,9 @@ export default function BookingPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
                         {/* Info Side */}
                         <div className="lg:col-span-2 space-y-8">
-                            <div className="space-y-2">
-                                <h2 className="text-3xl font-playfair font-bold text-white uppercase">لماذا Nine1Luxury؟</h2>
-                                <div className="h-1 w-20 bg-gold-500" />
+                            <div className="space-y-4">
+                                <h2 className="text-4xl font-almarai font-extrabold text-white uppercase leading-tight">لماذا تسوق معنا؟</h2>
+                                <div className="h-1.5 w-24 luxury-gradient rounded-full" />
                             </div>
                             
                             <div className="space-y-6">
@@ -214,15 +214,15 @@ export default function BookingPage() {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -20 }}
-                                        className="bg-surface-dark border border-white/5 p-8 md:p-12 rounded-3xl shadow-2xl relative overflow-hidden"
+                                        className="glass-card-premium p-10 md:p-14 rounded-[3rem] shadow-2xl relative overflow-hidden"
                                     >
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 blur-3xl -mr-16 -mt-16" />
                                         
                                         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
-                                                    <label className="text-xs font-bold text-gray-500 uppercase flex items-center gap-2">
-                                                        <Phone className="w-3 h-3" /> رقم الهاتف
+                                                    <label className="text-[10px] font-bold text-gold-500/60 uppercase flex items-center gap-3 tracking-[0.2em] font-almarai">
+                                                        <Phone className="w-3.5 h-3.5" /> رقم الهاتف المحمول
                                                     </label>
                                                     <input
                                                         type="tel"

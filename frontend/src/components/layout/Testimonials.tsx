@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, MessageSquarePlus } from "lucide-react";
 import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 
@@ -71,10 +71,20 @@ export function Testimonials() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="section-title text-3xl md:text-5xl"
+                        className="section-title-editorial text-3xl md:text-5xl mb-4"
                     >
-                        تجارب حقيقية
+                        تجارب{" "}
+                        <span className="text-metallic-gradient">حقيقية</span>
                     </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="section-subtitle"
+                    >
+                        ثقة عملائنا هي أغلى ما نملك
+                    </motion.p>
                     <motion.div
                         initial={{ scaleX: 0 }}
                         whileInView={{ scaleX: 1 }}
@@ -102,8 +112,9 @@ export function Testimonials() {
                         {[...reviews, ...reviews].map((review, idx) => (
                             <div
                                 key={idx}
-                                className="relative w-[360px] flex-shrink-0 p-7 bg-surface-card/50 border border-ivory/[0.04] rounded-2xl hover:border-gold-500/20 transition-all duration-500 group cursor-default hover:bg-surface-elevated/50"
+                                className="relative w-[360px] flex-shrink-0 p-7 glass-card-premium rounded-2xl cursor-default"
                             >
+                                {/* Quote icon with glow */}
                                 <div className="absolute top-5 left-5 text-gold-500/[0.06] group-hover:text-gold-500/[0.12] transition-colors duration-500">
                                     <Quote className="w-9 h-9" />
                                 </div>
@@ -117,17 +128,17 @@ export function Testimonials() {
                                     ))}
                                 </div>
 
-                                <p className="text-ivory/50 leading-relaxed mb-6 font-light h-20 overflow-hidden line-clamp-3 italic text-sm">
+                                <p className="text-ivory/80 leading-relaxed mb-6 font-light h-20 overflow-hidden line-clamp-3 italic text-sm">
                                     &quot;{review.content}&quot;
                                 </p>
 
                                 <div className="flex items-center gap-3">
-                                    <div className="w-9 h-9 rounded-full luxury-gradient flex items-center justify-center text-rich-black font-bold text-sm">
+                                    <div className="w-10 h-10 rounded-xl luxury-gradient flex items-center justify-center text-rich-black font-bold text-sm shadow-[0_4px_12px_hsla(37,48%,48%,0.2)]">
                                         {review.name[0]}
                                     </div>
                                     <div>
-                                        <h4 className="text-ivory/80 font-bold text-sm">{review.name}</h4>
-                                        <p className="text-[10px] text-gold-500/60 uppercase tracking-wider">
+                                        <h4 className="text-ivory/90 font-bold text-sm">{review.name}</h4>
+                                        <p className="text-[10px] text-gold-500/90 uppercase tracking-wider">
                                             {review.role}
                                         </p>
                                     </div>
@@ -140,6 +151,22 @@ export function Testimonials() {
                     <div className="absolute top-0 left-0 w-28 h-full bg-gradient-to-r from-rich-black to-transparent z-20 pointer-events-none" />
                     <div className="absolute top-0 right-0 w-28 h-full bg-gradient-to-l from-rich-black to-transparent z-20 pointer-events-none" />
                 </div>
+
+                {/* Add Review Button */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    className="mt-10 text-center"
+                >
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="btn-ghost text-sm py-3 px-8"
+                    >
+                        <MessageSquarePlus className="w-4 h-4" />
+                        شاركنا تجربتك
+                    </button>
+                </motion.div>
             </div>
 
             <Modal

@@ -1,21 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 // Premium gold dust particles with 3D-feeling motion paths
 function GoldParticles() {
     const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; size: number; delay: number; duration: number; drift: number }>>([]);
 
     useEffect(() => {
-        const arr = Array.from({ length: 25 }, (_, i) => ({
+        const arr = Array.from({ length: 30 }, (_, i) => ({
             id: i,
             x: Math.random() * 100,
             y: Math.random() * 100,
-            size: Math.random() * 2.5 + 0.5,
+            size: Math.random() * 3 + 0.5,
             delay: Math.random() * 6,
             duration: Math.random() * 12 + 12,
             drift: (Math.random() - 0.5) * 30,
@@ -34,12 +34,12 @@ function GoldParticles() {
                         top: `${p.y}%`,
                         width: p.size,
                         height: p.size,
-                        background: `radial-gradient(circle, hsla(40, 55%, 75%, 0.6) 0%, hsla(37, 48%, 48%, 0) 70%)`,
+                        background: `radial-gradient(circle, hsla(40, 55%, 75%, 0.7) 0%, hsla(37, 48%, 48%, 0) 70%)`,
                     }}
                     animate={{
                         y: [0, -50, -20, -60, 0],
                         x: [0, p.drift * 0.5, p.drift, p.drift * 0.3, 0],
-                        opacity: [0, 0.7, 0.4, 0.8, 0],
+                        opacity: [0, 0.8, 0.4, 0.9, 0],
                         scale: [0.5, 1, 0.8, 1.2, 0.5],
                     }}
                     transition={{
@@ -54,9 +54,58 @@ function GoldParticles() {
     );
 }
 
+// Interactive cursor light beam
+function CursorLightBeam() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const mouseX = useMotionValue(0.5);
+    const mouseY = useMotionValue(0.5);
+    const springX = useSpring(mouseX, { stiffness: 50, damping: 30 });
+    const springY = useSpring(mouseY, { stiffness: 50, damping: 30 });
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (containerRef.current) {
+                const rect = containerRef.current.getBoundingClientRect();
+                mouseX.set((e.clientX - rect.left) / rect.width);
+                mouseY.set((e.clientY - rect.top) / rect.height);
+            }
+        };
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, [mouseX, mouseY]);
+
+    const x = useTransform(springX, [0, 1], ["-20%", "120%"]);
+    const y = useTransform(springY, [0, 1], ["-20%", "120%"]);
+
+    return (
+        <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none">
+            <motion.div
+                className="absolute w-[600px] h-[600px] rounded-full blur-[200px]"
+                style={{
+                    left: x,
+                    top: y,
+                    background: 'radial-gradient(circle, hsla(37, 48%, 48%, 0.08) 0%, transparent 70%)',
+                    translateX: '-50%',
+                    translateY: '-50%',
+                }}
+            />
+            <motion.div
+                className="absolute w-[300px] h-[300px] rounded-full blur-[120px]"
+                style={{
+                    left: x,
+                    top: y,
+                    background: 'radial-gradient(circle, hsla(40, 55%, 72%, 0.06) 0%, transparent 70%)',
+                    translateX: '-50%',
+                    translateY: '-50%',
+                }}
+            />
+        </div>
+    );
+}
+
 export function Hero() {
     return (
-        <section className="relative min-h-[92vh] w-full overflow-hidden flex items-center justify-center bg-rich-black pt-20">
+        <section className="relative min-h-[95vh] w-full overflow-hidden flex items-center justify-center bg-rich-black pt-20">
             {/* Layered Background — Creates depth */}
             <div className="absolute inset-0 overflow-hidden">
                 {/* Primary ambient glow */}
@@ -76,6 +125,8 @@ export function Hero() {
                 {/* Central diffuse light */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full blur-[250px]" 
                      style={{ background: 'hsla(37, 48%, 48%, 0.03)' }} />
+                {/* Subtle radial vignette */}
+                <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, hsla(225, 12%, 3%, 0.6) 100%)' }} />
             </div>
 
             {/* Decorative horizon lines */}
@@ -92,7 +143,23 @@ export function Hero() {
                     animate={{ opacity: [0.2, 0.5, 0.2] }}
                     transition={{ duration: 6, repeat: Infinity, delay: 1.5 }}
                 />
+                {/* Vertical accent lines */}
+                <motion.div
+                    className="absolute top-0 left-[15%] w-px h-full"
+                    style={{ background: 'linear-gradient(to bottom, transparent, hsla(37, 48%, 48%, 0.04), transparent)' }}
+                    animate={{ opacity: [0.2, 0.4, 0.2] }}
+                    transition={{ duration: 7, repeat: Infinity, delay: 1 }}
+                />
+                <motion.div
+                    className="absolute top-0 right-[15%] w-px h-full"
+                    style={{ background: 'linear-gradient(to bottom, transparent, hsla(37, 48%, 48%, 0.04), transparent)' }}
+                    animate={{ opacity: [0.2, 0.4, 0.2] }}
+                    transition={{ duration: 7, repeat: Infinity, delay: 3 }}
+                />
             </div>
+
+            {/* Cursor Light Beam */}
+            <CursorLightBeam />
 
             {/* Gold Dust Particles */}
             <GoldParticles />
@@ -123,12 +190,12 @@ export function Hero() {
                                 alt="NINE1LUXURY"
                                 fill
                                 className="object-contain"
-                                style={{ filter: 'drop-shadow(0 0 40px hsla(37, 48%, 48%, 0.2))' }}
+                                style={{ filter: 'drop-shadow(0 0 50px hsla(37, 48%, 48%, 0.25))' }}
                                 priority
                             />
                         </motion.div>
 
-                        {/* Slogan — Letter by letter reveal */}
+                        {/* Slogan — Letter by letter reveal with metallic shimmer */}
                         <div
                             className="mt-8 flex flex-row flex-wrap justify-center gap-x-5"
                             style={{ direction: 'ltr' }}
@@ -147,7 +214,7 @@ export function Hero() {
                                                 ease: "easeOut"
                                             }}
                                             className="text-champagne/80 text-lg sm:text-xl md:text-3xl font-bold uppercase tracking-[0.18em]"
-                                            style={{ textShadow: '0 0 40px hsla(37, 48%, 48%, 0.2)' }}
+                                            style={{ textShadow: '0 0 40px hsla(37, 48%, 48%, 0.25)' }}
                                         >
                                             {char}
                                         </motion.span>
@@ -156,13 +223,30 @@ export function Hero() {
                             ))}
                         </div>
 
-                        {/* Decorative line */}
+                        {/* Decorative line with shimmer */}
                         <motion.div
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: 1 }}
                             transition={{ delay: 1.2, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                            className="mt-7 h-px w-36 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent"
-                        />
+                            className="mt-7 h-px w-48 relative overflow-hidden"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
+                            <motion.div
+                                className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-300/40 to-transparent"
+                                animate={{ x: ["-100%", "100%"] }}
+                                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                            />
+                        </motion.div>
+
+                        {/* Short tagline */}
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1.5, duration: 0.8 }}
+                            className="mt-6 text-ivory/70 text-sm md:text-base tracking-wide max-w-md leading-relaxed"
+                        >
+                            وجهتك الأولى للملابس الفاخرة — أناقة لا تُضاهى وجودة تتحدث عن نفسها
+                        </motion.p>
                     </motion.div>
 
                     {/* CTA Buttons */}
@@ -197,7 +281,7 @@ export function Hero() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 2.2 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
                 <span className="text-gold-500/35 text-[9px] uppercase tracking-[0.35em] font-bold">اكتشف المزيد</span>
                 <motion.div

@@ -85,15 +85,7 @@ export default function AboutPage() {
                     transition={{ duration: 0.6 }}
                     className="container mx-auto px-4 text-center relative z-10 pt-20"
                 >
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.2, type: "spring" }}
-                        className="w-14 h-14 mx-auto mb-6 rounded-2xl bg-gold-500/[0.07] border border-gold-500/15 flex items-center justify-center"
-                    >
-                        <Sparkles className="w-7 h-7 text-gold-500" />
-                    </motion.div>
-                    <h1 className="section-title text-4xl md:text-7xl mb-6">
+                    <h1 className="section-title text-4xl md:text-9xl font-almarai font-extrabold mb-8 tracking-tighter leading-none">
                         من نحن
                     </h1>
                     <div className="h-px w-20 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mx-auto mb-6" />
@@ -138,11 +130,11 @@ export default function AboutPage() {
                             viewport={{ once: true }}
                             className="space-y-6 text-center"
                         >
-                            <h2 className="section-title text-3xl md:text-4xl">قصتنا</h2>
-                            <div className="h-px w-14 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mx-auto" />
+                            <h2 className="section-title text-4xl md:text-7xl font-almarai font-extrabold tracking-tighter">قصتنا</h2>
+                            <div className="h-2 w-32 luxury-gradient rounded-full mx-auto" />
                             <p className="text-ivory/35 leading-[2.2] text-lg">
-                                بدأت <span className="text-champagne font-bold">Nine1Luxury</span> من رؤية بسيطة: جعل الأناقة والفخامة في متناول الجميع.
-                                نؤمن بأن كل شخص يستحق أن يشعر بالثقة والتميز في ملابسه.
+                                بدأت <span className="text-metallic-gradient font-black">Nine1Luxury</span> من رؤية طموحة لمزج الأناقة الكلاسيكية باللمسات العصرية العالمية.
+                                نحن لا نبيع مجرد ملابس، بل نقدم تجربة تعزز الثقة والتميز في كل تفصيلة.
                             </p>
                             <p className="text-ivory/35 leading-[2.2] text-lg">
                                 منذ انطلاقتنا، التزمنا بتقديم منتجات عالية الجودة بتصاميم عصرية تجمع بين الأصالة والحداثة.
@@ -170,11 +162,11 @@ export default function AboutPage() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.1 }}
-                            className="section-title text-3xl md:text-4xl mb-4"
+                            className="section-title text-4xl md:text-6xl mb-6 font-almarai font-extrabold tracking-tighter"
                         >
-                            قيمنا
+                            قيمنا الأساسية
                         </motion.h2>
-                        <div className="h-px w-14 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mx-auto" />
+                        <div className="h-1.5 w-24 luxury-gradient rounded-full mx-auto" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
