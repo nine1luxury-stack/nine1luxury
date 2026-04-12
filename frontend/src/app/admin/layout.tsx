@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { NotificationsDropdown } from "@/components/admin/NotificationsDropdown";
 import { Bell } from "lucide-react";
+import { NotificationProvider } from "@/context/NotificationContext";
 
 export default function AdminLayout({
     children,
@@ -34,8 +35,9 @@ export default function AdminLayout({
     const displayName = user?.name === 'Admin User' ? 'Ebeed' : (user?.name || 'Ebeed');
 
     return (
-        <div className="flex min-h-screen bg-rich-black text-white" dir="rtl">
-            <AdminSidebar />
+        <NotificationProvider>
+            <div className="flex min-h-screen bg-rich-black text-white" dir="rtl">
+                <AdminSidebar />
 
             <div className="flex-1 flex flex-col">
                 {/* Admin Header */}
@@ -77,5 +79,6 @@ export default function AdminLayout({
                 </main>
             </div>
         </div>
+        </NotificationProvider>
     );
 }

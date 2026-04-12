@@ -9,7 +9,9 @@ import {
     CheckCircle2, 
     XCircle,
     Loader2,
-    Quote
+    Quote,
+    Plus,
+    X
 } from "lucide-react";
 import { DeleteConfirmModal } from "@/components/admin/DeleteConfirmModal";
 
@@ -18,6 +20,34 @@ export default function AdminTestimonialsPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<any>(null);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
+    const [newTestimonial, setNewTestimonial] = useState({ name: '', role: 'عميل', content: '', rating: 5 });
+
+    const handleAdd = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsAdding(true);
+        try {
+            const res = await fetch('/api/testimonials', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newTestimonial)
+            });
+            if (res.ok) {
+                const added = await res.json();
+                setTestimonials(prev => [added, ...prev]);
+                setIsAddModalOpen(false);
+                setNewTestimonial({ name: '', role: 'عميل', content: '', rating: 5 });
+            } else {
+                alert("فشل إضافة التجربة");
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsAdding(false);
+        }
+    };
+
 
     useEffect(() => {
         fetchTestimonials();
@@ -88,6 +118,13 @@ export default function AdminTestimonialsPage() {
                     </h1>
                     <p className="text-gray-400 text-sm mt-1">مراجعة والتحكم في الآراء المعروضة على الموقع</p>
                 </div>
+                <button
+                    onClick={() => setIsAddModalOpen(true)}
+                    className="bg-gold-500 text-rich-black px-6 py-3 rounded-xl font-bold text-sm tracking-widest flex items-center gap-2 hover:bg-gold-300 transition-all shadow-lg shadow-gold-500/10"
+                >
+                    <Plus className="w-4 h-4" />
+                    <span>إضافة تجربة جديدة</span>
+                </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -169,6 +206,88 @@ export default function AdminTestimonialsPage() {
                 title="حذف تجربة العميل"
                 message={`هل أنت متأكد من حذف تجربة "${itemToDelete?.name}"؟ لا يمكن التراجع عن هذا الإجراء.`}
             />
+
+            {/* Add Testimonial Modal */}
+            <AnimatePresence>
+                {isAddModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-surface-dark border border-white/10 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+                        >
+                            <div className="p-6 border-b border-white/5 flex justify-between items-center bg-rich-black/50">
+                                <h2 className="text-xl font-bold text-white font-playfair">إضافة تجربة جديدة</h2>
+                                <button onClick={() => setIsAddModalOpen(false)} className="text-gray-400 hover:text-white">
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleAdd} className="p-6 space-y-4 overflow-y-auto custom-scrollbar">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">اسم العميل</label>
+                                    <input
+                                        required
+                                        type="text"
+                                        value={newTestimonial.name}
+                                        onChange={e => setNewTestimonial({ ...newTestimonial, name: e.target.value })}
+                                        className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">الدور / الوظيفة</label>
+                                    <input
+                                        type="text"
+                                        value={newTestimonial.role}
+                                        onChange={e => setNewTestimonial({ ...newTestimonial, role: e.target.value })}
+                                        className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                        placeholder="مثال: عميل مميز"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">التقييم (من 1 إلى 5)</label>
+                                    <input
+                                        required
+                                        type="number"
+                                        min="1"
+                                        max="5"
+                                        value={newTestimonial.rating}
+                                        onChange={e => setNewTestimonial({ ...newTestimonial, rating: parseInt(e.target.value) })}
+                                        className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">محتوى التجربة</label>
+                                    <textarea
+                                        required
+                                        value={newTestimonial.content}
+                                        onChange={e => setNewTestimonial({ ...newTestimonial, content: e.target.value })}
+                                        className="w-full bg-rich-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-gold-500 outline-none h-24 resize-none"
+                                    />
+                                </div>
+
+                                <div className="pt-4 flex gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAddModalOpen(false)}
+                                        className="flex-1 px-4 py-3 rounded-xl border border-white/10 text-gray-400 font-bold hover:bg-white/5 transition-colors"
+                                    >
+                                        إلغاء
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isAdding}
+                                        className="flex-1 px-4 py-3 rounded-xl bg-gold-500 text-rich-black font-bold hover:bg-gold-300 transition-colors shadow-lg shadow-gold-500/10 disabled:opacity-50"
+                                    >
+                                        {isAdding ? 'جاري الإضافة...' : 'إضافة التجربة'}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
