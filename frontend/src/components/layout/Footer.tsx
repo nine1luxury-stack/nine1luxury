@@ -141,22 +141,27 @@ export function Footer() {
                 </div>
 
                 {/* Footer Bottom */}
-                <div className="mt-16 pt-8 border-t border-ivory/[0.04] flex flex-col items-center justify-center gap-6 text-xs text-ivory/60" dir="rtl">
-                    <div className="flex items-center gap-8">
+                <div className="mt-16 pt-8 border-t border-ivory/[0.04] flex flex-col items-center justify-center gap-6" dir="rtl">
+                    <div className="flex items-center gap-8 text-[11px] text-ivory/40 uppercase tracking-wider font-bold">
                         <Link href="/policy" className="hover:text-gold-300 transition-colors">سياسة الاستبدال</Link>
                         <Link href="/shipping" className="hover:text-gold-300 transition-colors">سياسة الشحن</Link>
                     </div>
-                    <p className="opacity-80">
-                        جميع الحقوق محفوظة © Nine1Luxury 2026 
+                    
+                    <div className="flex flex-col md:flex-row items-center gap-3 text-xs">
+                        <p className="text-ivory/50 font-medium">
+                            جميع الحقوق محفوظة © Nine1Luxury 2026
+                        </p>
+                        <span className="hidden md:block w-px h-3 bg-ivory/10" />
                         <a 
                             href="https://www.instagram.com/_bebo9__?igsh=N3JhankyYTZmNTBy&utm_source=qr" 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="mr-1 hover:text-gold-500 transition-colors underline underline-offset-4"
+                            className="flex items-center gap-1.5 text-ivory/40 hover:text-gold-500 transition-all duration-300 group font-bold"
                         >
-                            by IbrahimElseginy || SW
+                            <span>by</span>
+                            <span className="underline underline-offset-4 decoration-gold-500/20 group-hover:decoration-gold-500 transition-all">IbrahimElseginy || SW</span>
                         </a>
-                    </p>
+                    </div>
                 </div>
             </div>
         </footer>

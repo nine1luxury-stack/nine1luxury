@@ -113,7 +113,7 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="section-title text-4xl md:text-7xl font-almarai font-extrabold tracking-tight"
+                        className="section-title text-3xl md:text-5xl font-almarai font-extrabold tracking-tight"
                     >
                         المتجر الرئيسي
                     </motion.h1>

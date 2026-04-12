@@ -82,7 +82,7 @@ export default function AboutPage() {
                     transition={{ duration: 0.6 }}
                     className="container mx-auto px-4 text-center relative z-10 pt-20"
                 >
-                    <h1 className="section-title text-4xl md:text-9xl font-almarai font-extrabold mb-8 tracking-tighter leading-none">
+                    <h1 className="section-title text-4xl md:text-5xl font-almarai font-extrabold mb-8 tracking-tighter leading-none">
                         من نحن
                     </h1>
                     <div className="h-px w-20 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mx-auto mb-6" />

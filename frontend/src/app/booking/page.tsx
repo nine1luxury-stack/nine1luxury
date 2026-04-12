@@ -138,7 +138,7 @@ export default function BookingPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-5xl md:text-8xl font-extrabold text-white font-almarai uppercase leading-tight"
+                        className="text-4xl md:text-5xl font-extrabold text-white font-almarai uppercase leading-tight"
                     >
                         احجز منتجك <span className="text-metallic-gradient">المفضل</span>
                     </motion.h1>

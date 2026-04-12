@@ -9,6 +9,7 @@ import { ProductProvider } from "@/context/ProductContext";
 import { NotificationProvider } from "@/context/NotificationContext";
 import { WhatsAppButton } from "@/components/common/WhatsAppButton";
 import { ScrollToTop } from "@/components/common/ScrollToTop";
+import { SplashScreen } from "@/components/common/SplashScreen";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -71,6 +72,7 @@ export default function RootLayout({
           <CartProvider>
             <NotificationProvider>
               <SecurityWrapper>
+                <SplashScreen />
                 <Header />
                 {children}
                 <Footer />

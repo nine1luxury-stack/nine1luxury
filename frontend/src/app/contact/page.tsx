@@ -86,7 +86,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="section-title text-4xl md:text-6xl mb-4"
+                            className="section-title text-4xl md:text-5xl mb-4"
                         >
                             تواصل معنا
                         </motion.h1>
