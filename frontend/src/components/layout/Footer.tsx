@@ -147,19 +147,17 @@ export function Footer() {
                         <Link href="/shipping" className="hover:text-gold-300 transition-colors">سياسة الشحن</Link>
                     </div>
                     
-                    <div className="flex flex-col md:flex-row items-center gap-3 text-xs">
+                    <div className="flex flex-col md:flex-row items-center gap-2 text-xs">
                         <p className="text-ivory/50 font-medium">
-                            جميع الحقوق محفوظة © Nine1Luxury 2026
+                            Nine1Luxury جميع الحقوق محفوظة © 2026 | 
                         </p>
-                        <span className="hidden md:block w-px h-3 bg-ivory/10" />
                         <a 
                             href="https://www.instagram.com/_bebo9__?igsh=N3JhankyYTZmNTBy&utm_source=qr" 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="flex items-center gap-1.5 text-ivory/40 hover:text-gold-500 transition-all duration-300 group font-bold"
                         >
-                            <span>by</span>
-                            <span className="underline underline-offset-4 decoration-gold-500/20 group-hover:decoration-gold-500 transition-all">IbrahimElseginy || SW</span>
+                            <span>by IbrahimElseginy || SW</span>
                         </a>
                     </div>
                 </div>

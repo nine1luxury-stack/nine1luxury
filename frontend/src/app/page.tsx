@@ -340,7 +340,7 @@ export default function Home() {
               </div>
             </motion.div>
 
-            <h2 className="text-3xl md:text-6xl font-bold text-ivory mb-6 leading-tight font-almarai-extra-bold">
+            <h2 className="text-3xl md:text-6xl font-bold text-ivory mb-6 leading-tight font-almarai-extra-bold-straight">
               جاهز لإضافة لمسة من <span className="text-metallic-gradient">الرفاهية</span>
             </h2>
             <p className="text-ivory/80 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
