@@ -97,10 +97,9 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
     const activeFilterCount = (selectedCategory !== "جميع المنتجات" ? 1 : 0) + (priceRange < MAX_PRICE ? 1 : 0) + selectedSizes.length;
 
     return (
-        <main className="min-h-screen bg-rich-black">
-            <Header />
+        <main className="min-h-screen bg-rich-black pt-32 pb-24">
 
-            <div className="pt-32 pb-24 container mx-auto px-6 max-w-[1600px]">
+            <div className="container mx-auto px-6 max-w-[1600px]">
                 {/* Section Header */}
                 <div className="flex flex-col items-center justify-center text-center mb-16 space-y-4">
                     <motion.div
@@ -456,7 +455,7 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                 )}
             </AnimatePresence>
 
-            <Footer />
+
         </main>
     );
 }

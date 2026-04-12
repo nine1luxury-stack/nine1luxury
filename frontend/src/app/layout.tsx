@@ -9,6 +9,8 @@ import { ProductProvider } from "@/context/ProductContext";
 import { NotificationProvider } from "@/context/NotificationContext";
 import { WhatsAppButton } from "@/components/common/WhatsAppButton";
 import { ScrollToTop } from "@/components/common/ScrollToTop";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
 const amiri = Amiri({
   subsets: ["arabic"],
@@ -69,7 +71,9 @@ export default function RootLayout({
           <CartProvider>
             <NotificationProvider>
               <SecurityWrapper>
+                <Header />
                 {children}
+                <Footer />
                 <WhatsAppButton />
                 <ScrollToTop />
                 <Analytics />

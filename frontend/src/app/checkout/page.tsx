@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -168,9 +166,7 @@ export default function CheckoutPage() {
 
     if (isOrderPlaced) {
         return (
-            <main className="min-h-screen bg-rich-black">
-                <Header />
-                <div className="pt-48 pb-24 text-center container mx-auto px-4">
+            <main className="min-h-screen bg-rich-black py-48 text-center container mx-auto px-4">
                     <div className="max-w-md mx-auto bg-surface-dark/40 border border-gold-500/10 p-12 rounded-2xl">
                         <div className="w-20 h-20 bg-gold-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                              <Send className="w-10 h-10 text-gold-500" />
@@ -184,27 +180,23 @@ export default function CheckoutPage() {
                         </Link>
                     </div>
                 </div>
-                <Footer />
             </main>
         );
     }
 
     if (cart.length === 0) {
         return (
-            <main className="min-h-screen bg-rich-black">
-                <Header />
-                <div className="pt-48 pb-24 text-center">
+            <main className="min-h-screen bg-rich-black py-48 text-center">
+                <div className="container mx-auto px-4">
                     <h2 className="text-3xl font-bold text-white mb-6">سلة التسوق فارغة</h2>
                     <Link href="/products" className="bg-gold-500 text-rich-black px-8 py-3 font-bold uppercase inline-block rounded-lg">تواصل للتسوق</Link>
                 </div>
-                <Footer />
             </main>
         );
     }
 
     return (
         <main className="min-h-screen bg-rich-black">
-            <Header />
 
             <div className="pt-32 pb-24 container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
@@ -428,7 +420,7 @@ export default function CheckoutPage() {
                 </div>
             </div>
 
-            <Footer />
+
         </main >
     );
 }

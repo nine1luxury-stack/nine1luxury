@@ -1,7 +1,5 @@
 "use client";
 
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { motion, useInView } from "framer-motion";
 import { Award, Target, Heart, Sparkles, Users, Package, Star, TrendingUp } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
@@ -71,7 +69,6 @@ export default function AboutPage() {
 
     return (
         <main className="min-h-screen bg-rich-black">
-            <Header />
 
             {/* Hero Section */}
             <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
@@ -213,7 +210,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <Footer />
+
         </main>
     );
 }

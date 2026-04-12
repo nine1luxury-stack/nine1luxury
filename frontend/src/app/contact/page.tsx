@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 } from "lucide-react";
 
@@ -76,7 +74,6 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
 
     return (
         <main className="min-h-screen bg-rich-black">
-            <Header />
 
             <div className="pt-32 pb-24 container mx-auto px-4">
                 <motion.div
@@ -240,7 +237,7 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                 </motion.div>
             </div>
 
-            <Footer />
+
         </main>
     );
 }

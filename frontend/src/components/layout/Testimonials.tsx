@@ -71,7 +71,7 @@ export function Testimonials() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="section-title-editorial text-3xl md:text-5xl mb-4"
+                        className="section-title-editorial text-3xl md:text-5xl mb-4 font-almarai-extra-bold"
                     >
                         تجارب{" "}
                         <span className="text-metallic-gradient">حقيقية</span>

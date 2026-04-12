@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, Phone, MessageSquare, CheckCircle, Loader2, Package, Maximize2, MapPin, Banknote } from "lucide-react";
 import Image from "next/image";
@@ -116,7 +114,6 @@ export default function BookingPage() {
 
     return (
         <main className="min-h-screen bg-rich-black overflow-hidden">
-            <Header />
 
             {/* Hero Section */}
             <section className="relative min-h-[55vh] pt-32 pb-24 flex items-center justify-center overflow-hidden">
@@ -373,7 +370,7 @@ export default function BookingPage() {
                 </div>
             </section>
 
-            <Footer />
+
         </main>
     );
 }

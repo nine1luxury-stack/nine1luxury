@@ -10,10 +10,9 @@ export default function OffersClient({ initialOffers }: { initialOffers: any[] }
     const offers = initialOffers;
 
     return (
-        <main className="min-h-screen bg-rich-black overflow-hidden" dir="rtl">
-            <Header />
+        <main className="min-h-screen bg-rich-black overflow-hidden pt-32 pb-24" dir="rtl">
 
-            <div className="pt-32 pb-24 container mx-auto px-4">
+            <div className="container mx-auto px-4">
                 {/* Hero section for offers */}
                 <div className="relative mb-20">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500/10 rounded-full blur-[120px] -z-10" />
@@ -107,7 +106,7 @@ export default function OffersClient({ initialOffers }: { initialOffers: any[] }
                 )}
             </div>
 
-            <Footer />
+
         </main>
     );
 }

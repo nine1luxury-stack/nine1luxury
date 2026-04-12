@@ -146,7 +146,17 @@ export function Footer() {
                         <Link href="/policy" className="hover:text-gold-300 transition-colors">سياسة الاستبدال</Link>
                         <Link href="/shipping" className="hover:text-gold-300 transition-colors">سياسة الشحن</Link>
                     </div>
-                    <p className="opacity-80">جميع الحقوق محفوظة © Nine1Luxury {new Date().getFullYear()}</p>
+                    <p className="opacity-80">
+                        جميع الحقوق محفوظة © Nine1Luxury 2026 
+                        <a 
+                            href="https://www.instagram.com/_bebo9__?igsh=N3JhankyYTZmNTBy&utm_source=qr" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="mr-1 hover:text-gold-500 transition-colors underline underline-offset-4"
+                        >
+                            by IbrahimElseginy || SW
+                        </a>
+                    </p>
                 </div>
             </div>
         </footer>

@@ -51,7 +51,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-rich-black">
-      <Header />
       <Hero />
 
       {/* ═══ Trending Categories — Horizontal Glass Scroll ═══ */}
@@ -85,8 +84,8 @@ export default function Home() {
       <section className="py-20 md:py-28 bg-rich-black overflow-hidden relative" dir="rtl">
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[180px] -z-10" style={{ background: 'hsla(37, 48%, 48%, 0.04)' }} />
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-14 gap-6">
-            <div className="text-right">
+          <div className="flex flex-col items-center justify-center text-center mb-14 gap-6">
+            <div className="flex flex-col items-center">
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -100,7 +99,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="section-title-editorial text-3xl md:text-5xl"
+                className="section-title-editorial text-3xl md:text-5xl font-almarai-extra-bold"
               >
                 أحدث{" "}
                 <span className="text-metallic-gradient">العروض</span>
@@ -110,7 +109,7 @@ export default function Home() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="section-subtitle mt-3 text-right mx-0"
+                className="section-subtitle mt-3 text-center mx-auto"
               >
                 عروض محدودة الوقت — لا تفوت الفرصة
               </motion.p>
@@ -186,7 +185,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="section-title-editorial text-3xl md:text-6xl mb-4"
+              className="section-title-editorial text-3xl md:text-6xl mb-4 font-almarai-extra-bold"
             >
               المجموعة{" "}
               <span className="text-metallic-gradient">المميزة</span>
@@ -263,7 +262,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="section-title-editorial text-3xl md:text-5xl mb-4"
+              className="section-title-editorial text-3xl md:text-5xl mb-4 font-almarai-extra-bold"
             >
               ما يميز{" "}
               <span className="text-metallic-gradient">Nine1Luxury</span>
@@ -341,7 +340,7 @@ export default function Home() {
               </div>
             </motion.div>
 
-            <h2 className="text-3xl md:text-6xl font-bold text-ivory mb-6 leading-tight font-playfair">
+            <h2 className="text-3xl md:text-6xl font-bold text-ivory mb-6 leading-tight font-almarai-extra-bold">
               جاهز لإضافة لمسة من <span className="text-metallic-gradient">الرفاهية</span>
             </h2>
             <p className="text-ivory/80 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
@@ -360,7 +359,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer />
+
     </main>
   );
 }
