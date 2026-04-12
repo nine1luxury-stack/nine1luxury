@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { createClient } from '@/utils/supabase/middleware'
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+    // 0. Update Supabase Session
+    let response = createClient(request);
+
     const token = request.cookies.get('token')?.value
     const role = request.cookies.get('role')?.value
     const { pathname } = request.nextUrl
@@ -32,7 +36,7 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/', request.url))
     }
 
-    return NextResponse.next()
+    return response
 }
 
 export const config = {
