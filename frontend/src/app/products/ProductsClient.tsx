@@ -32,7 +32,7 @@ const FILTERS_BASE = {
     ],
 };
 
-export default function ProductsClient({ initialProducts, initialCategories }: { initialProducts: any[], initialCategories: any[] }) {
+export default function ProductsClient({ initialProducts, initialCategories, error }: { initialProducts: any[], initialCategories: any[], error?: string }) {
     const products = initialProducts || [];
     const dbCategories = initialCategories || [];
     const searchParams = useSearchParams();
@@ -128,6 +128,22 @@ export default function ProductsClient({ initialProducts, initialCategories }: {
                 <div className="mb-14">
                     <PromoBanner />
                 </div>
+
+                {error && (
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="mb-10 p-6 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-between gap-4"
+                    >
+                        <p className="text-red-400 font-bold text-sm">{error}</p>
+                        <button 
+                            onClick={() => window.location.reload()}
+                            className="text-xs bg-red-500/20 hover:bg-red-500/30 text-white px-4 py-2 rounded-lg transition-all"
+                        >
+                            تحديث الصفحة
+                        </button>
+                    </motion.div>
+                )}
 
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
                     {/* Mobile Filter Toggle */}
