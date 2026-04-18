@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
 }
 
 model notification {
-  id          String   @id @default(cuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
   type        String
@@ -17,8 +17,8 @@ model notification {
 }
 
 model order {
-  id            String      @id @default(cuid())
-  userId        String?
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String?     @db.ObjectId
   guestName     String?
   guestPhone    String?
   guestAddress  String?
@@ -36,29 +36,29 @@ model order {
 }
 
 model orderitem {
-  id        String  @id @default(cuid())
-  orderId   String
-  productId String
-  variantId String?
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String  @db.ObjectId
+  productId String  @db.ObjectId
+  variantId String? @db.ObjectId
   quantity  Int
   price     Float
   order     order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
-  @@index([orderId], map: "orderitem_orderId_fkey")
+  @@index([orderId])
 }
 
 model product {
-  id             String           @id @default(cuid())
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
   name           String
   model          String?
-  description    String           @db.Text
+  description    String
   price          Float
   discount       Float?
   category       String
   featured       Boolean          @default(false)
   isActive       Boolean          @default(true)
   reorderPoint   Int              @default(10)
-  sizeChartImage String?          @db.LongText
+  sizeChartImage String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   images         productimage[]
@@ -71,18 +71,18 @@ model product {
 }
 
 model productimage {
-  id        String  @id @default(cuid())
-  productId String
-  url       String  @db.LongText
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId String  @db.ObjectId
+  url       String
   color     String?
   product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@index([productId], map: "productimage_productId_fkey")
+  @@index([productId])
 }
 
 model productvariant {
-  id             String  @id @default(cuid())
-  productId      String
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId      String  @db.ObjectId
   color          String
   colorHex       String?
   size           String
@@ -93,11 +93,11 @@ model productvariant {
   sku            String?
   product        product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@index([productId], map: "productvariant_productId_fkey")
+  @@index([productId])
 }
 
 model user {
-  id        String   @id @default(cuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String   @unique
   password  String
   name      String
@@ -108,10 +108,10 @@ model user {
 }
 
 model returnrequest {
-  id        String   @id @default(cuid())
-  orderId   String
-  productId String
-  variantId String?
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String   @db.ObjectId
+  productId String   @db.ObjectId
+  variantId String?  @db.ObjectId
   quantity  Int
   type      String
   status    String   @default("PENDING")
@@ -121,7 +121,7 @@ model returnrequest {
 }
 
 model supplier {
-  id                   String   @id @default(cuid())
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
   name                 String
   phone                String?
   email                String?
@@ -133,7 +133,7 @@ model supplier {
 }
 
 model expense {
-  id          String   @id @default(cuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   amount      Float
   category    String
   description String?
@@ -143,7 +143,7 @@ model expense {
 }
 
 model customer {
-  id            String   @id @default(cuid())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   phone         String   @unique
   totalOrders   Int      @default(0)
@@ -154,7 +154,7 @@ model customer {
 }
 
 model booking {
-  id             String   @id @default(cuid())
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
   name           String
   phone          String
   city           String?
@@ -169,20 +169,20 @@ model booking {
 }
 
 model category {
-  id        String   @id @default(cuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model setting {
-  id    String @id @default(cuid())
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
   key   String @unique
   value String
 }
 
 model coupon {
-  id          String   @id @default(cuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   code        String   @unique
   type        String   @default("PERCENTAGE")
   value       Float
@@ -194,7 +194,7 @@ model coupon {
 }
 
 model offer {
-  id          String   @id @default(cuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String?
   imageUrl    String?
@@ -205,10 +205,10 @@ model offer {
 }
 
 model testimonial {
-  id        String   @id @default(cuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   role      String   @default("عميل")
-  content   String   @db.Text
+  content   String
   rating    Int      @default(5)
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
