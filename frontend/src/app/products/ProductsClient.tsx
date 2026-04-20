@@ -198,7 +198,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                                                 <motion.div 
                                                     layoutId="active-cat"
                                                     className="absolute inset-0 bg-ivory"
-                                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                                    transition={{ type: "spring", bounce: 0, duration: 0.2 }}
                                                 />
                                             )}
                                         </button>
@@ -318,7 +318,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                                                     initial={{ opacity: 0, scale: 0.95 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     exit={{ opacity: 0, scale: 0.95 }}
-                                                    transition={{ duration: 0.4 }}
+                                                    transition={{ duration: 0.15 }}
                                                 >
                                                     <ProductCard {...product} />
                                                 </motion.div>

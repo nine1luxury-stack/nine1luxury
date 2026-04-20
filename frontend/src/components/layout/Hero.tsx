@@ -167,9 +167,9 @@ export function Hero() {
             {/* Content */}
             <div className="container mx-auto px-4 relative z-10 text-center">
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                     className="space-y-6"
                 >
                     {/* Logo */}
@@ -179,9 +179,9 @@ export function Hero() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{
                                 type: "spring",
-                                stiffness: 80,
-                                damping: 20,
-                                duration: 1
+                                stiffness: 100,
+                                damping: 15,
+                                duration: 0.3
                             }}
                             className="relative w-full max-w-[300px] h-36 md:max-w-[550px] md:h-56"
                         >
@@ -209,8 +209,8 @@ export function Hero() {
                                             initial={{ opacity: 0, y: 12 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             transition={{
-                                                duration: 0.12,
-                                                delay: 0.4 + (wordIndex * 0.1) + (charIndex * 0.025),
+                                                duration: 0.05,
+                                                delay: 0.1 + (wordIndex * 0.05) + (charIndex * 0.01),
                                                 ease: "easeOut"
                                             }}
                                             className="text-champagne/80 text-lg sm:text-xl md:text-3xl font-bold uppercase tracking-[0.18em]"
@@ -227,14 +227,14 @@ export function Hero() {
                         <motion.div
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: 1 }}
-                            transition={{ delay: 1.2, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                            transition={{ delay: 0.3, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                             className="mt-7 h-px w-48 relative overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
                             <motion.div
                                 className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-300/40 to-transparent"
                                 animate={{ x: ["-100%", "100%"] }}
-                                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                             />
                         </motion.div>
 
@@ -242,7 +242,7 @@ export function Hero() {
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 1.5, duration: 0.8 }}
+                            transition={{ delay: 0.4, duration: 0.3 }}
                             className="mt-6 text-ivory/70 text-sm md:text-base tracking-wide max-w-md leading-relaxed"
                         >
                             وجهتك الأولى للملابس الفاخرة — أناقة لا تُضاهى وجودة تتحدث عن نفسها
@@ -251,9 +251,9 @@ export function Hero() {
 
                     {/* CTA Buttons */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{ delay: 0.4, duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                         className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
                     >
                         <Link
@@ -280,7 +280,7 @@ export function Hero() {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 2.2 }}
+                transition={{ delay: 0.6 }}
                 className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             >
                 <span className="text-gold-500/35 text-[9px] uppercase tracking-[0.35em] font-bold">اكتشف المزيد</span>
