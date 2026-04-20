@@ -105,7 +105,7 @@ function CursorLightBeam() {
 
 export function Hero() {
     return (
-        <section className="relative min-h-[95vh] w-full overflow-hidden flex items-center justify-center bg-rich-black pt-20">
+        <section className="relative min-h-[95vh] w-full overflow-hidden flex items-center justify-center bg-transparent pt-20">
             {/* Layered Background — Creates depth */}
             <div className="absolute inset-0 overflow-hidden">
                 {/* Primary ambient glow */}

@@ -14,6 +14,51 @@ import { productsApi, Product } from "@/lib/api";
 import { useState, useEffect } from "react";
 import { ShoppingBag, ArrowLeft, Loader2, Truck, Shield, Headphones, Sparkles, Crown, Star, ArrowRight } from "lucide-react";
 
+function Starfield() {
+  const [stars, setStars] = useState<Array<{ id: number; x: number; y: number; size: number; delay: number; duration: number }>>([]);
+
+  useEffect(() => {
+    const arr = Array.from({ length: 150 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2 + 0.5,
+      delay: Math.random() * 5,
+      duration: Math.random() * 4 + 2,
+    }));
+    setStars(arr);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rich-black via-[#050B14] to-rich-black opacity-80" />
+      {stars.map((s) => (
+        <motion.div
+          key={s.id}
+          className="absolute bg-white rounded-full"
+          style={{
+            left: `${s.x}%`,
+            top: `${s.y}%`,
+            width: s.size,
+            height: s.size,
+            boxShadow: `0 0 ${s.size * 2}px hsla(0, 0%, 100%, 0.8)`,
+          }}
+          animate={{
+            opacity: [0.1, 0.8, 0.1],
+            scale: [0.8, 1.2, 0.8],
+          }}
+          transition={{
+            duration: s.duration,
+            delay: s.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function Home() {
   const [displayProducts, setDisplayProducts] = useState<Product[]>([]);
   const [offers, setOffers] = useState<any[]>([]);
@@ -50,11 +95,13 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen bg-rich-black">
+    <main className="min-h-screen bg-rich-black relative">
+      <Starfield />
+      
       <Hero />
 
       {/* ═══ Trending Categories — Horizontal Glass Scroll ═══ */}
-      <section className="py-12 bg-rich-black relative overflow-hidden" dir="rtl">
+      <section className="py-12 bg-transparent relative overflow-hidden" dir="rtl">
         <div className="container mx-auto px-4">
           <div className="flex gap-3 md:gap-4 overflow-x-auto no-scrollbar pb-4 justify-center flex-wrap">
             {categories.map((cat, idx) => (
@@ -81,7 +128,7 @@ export default function Home() {
       <div className="section-divider" />
 
       {/* ═══ Offers Section ═══ */}
-      <section className="py-20 md:py-28 bg-rich-black overflow-hidden relative" dir="rtl">
+      <section className="py-20 md:py-28 bg-transparent overflow-hidden relative" dir="rtl">
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[180px] -z-10" style={{ background: 'hsla(37, 48%, 48%, 0.04)' }} />
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col items-center justify-center text-center mb-14 gap-6">
@@ -188,7 +235,7 @@ export default function Home() {
       <div className="section-divider" />
 
       {/* ═══ Featured Products ═══ */}
-      <section className="pt-16 pb-28 bg-rich-black relative">
+      <section className="pt-16 pb-28 bg-transparent relative">
         {/* Watermark */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-[0.012] flex items-center justify-center">
           <span className="text-[20vw] font-playfair font-bold whitespace-nowrap">NINE 1 LUXURY</span>
@@ -268,7 +315,7 @@ export default function Home() {
       <div className="section-divider" />
 
       {/* ═══ Why Choose Us — Premium 3D Cards ═══ */}
-      <section className="py-20 md:py-28 bg-rich-black relative overflow-hidden" dir="rtl">
+      <section className="py-20 md:py-28 bg-transparent relative overflow-hidden" dir="rtl">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[220px]" style={{ background: 'hsla(37, 48%, 48%, 0.03)' }} />
 
         <div className="container mx-auto px-4 relative z-10">
@@ -371,7 +418,7 @@ export default function Home() {
               اكتشف مجموعتنا الحصرية واحصل على إطلالة تعكس ثقتك وتميزك
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/products" className="btn-primary text-lg">
+              <Link href="/booking" className="btn-primary text-lg">
                 احجز منتجك الآن
               </Link>
             </div>
