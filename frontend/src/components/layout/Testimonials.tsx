@@ -103,7 +103,7 @@ export function Testimonials() {
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
+                        transition={{ duration: 0.12 }}
                         className="section-title-editorial text-3xl md:text-5xl mb-4 font-almarai-extra-bold"
                     >
                         تجارب{" "}
@@ -113,7 +113,7 @@ export function Testimonials() {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ duration: 0.12 }}
                         className="section-subtitle"
                     >
                         ثقة عملائنا هي أغلى ما نملك
@@ -122,7 +122,7 @@ export function Testimonials() {
                         initial={{ scaleX: 0 }}
                         whileInView={{ scaleX: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ duration: 0.2 }}
                         className="h-px w-20 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mt-5"
                     />
                 </div>

@@ -77,8 +77,9 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
 
             <div className="pt-32 pb-24 container mx-auto px-4">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.15 }}
                     className="max-w-6xl mx-auto"
                 >
                     {/* Header */}
@@ -106,9 +107,9 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                                         <motion.a
                                             key={idx}
                                             href={info.link}
-                                            initial={{ opacity: 0, x: -20 }}
+                                            initial={{ opacity: 0, x: -8 }}
                                             animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: idx * 0.08 }}
+                                            transition={{ duration: 0.15, delay: idx * 0.03 }}
                                             className="flex items-start gap-4 p-4 glass-card rounded-2xl group"
                                         >
                                             <div className="w-11 h-11 rounded-xl bg-gold-500/[0.07] flex items-center justify-center shrink-0 group-hover:bg-gold-500 transition-all duration-400 group-hover:shadow-[0_0_16px_hsla(37,48%,48%,0.2)]">
@@ -133,9 +134,9 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
                                             href={social.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            initial={{ opacity: 0, scale: 0.98 }}
                                             animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ delay: idx * 0.08 }}
+                                            transition={{ duration: 0.12, delay: idx * 0.03 }}
                                             className="flex items-center justify-center gap-2.5 px-4 py-3 glass-card rounded-xl group hover:scale-[1.02] transition-all duration-300"
                                         >
                                             <social.icon className="w-4.5 h-4.5 text-gold-500" />
@@ -150,9 +151,9 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
 
                             {/* WhatsApp Quick Contact */}
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
+                                transition={{ duration: 0.15, delay: 0.06 }}
                                 className="p-6 glass-card rounded-2xl border-gold-500/15"
                                 style={{ borderColor: 'hsla(37, 48%, 48%, 0.12)' }}
                             >
@@ -179,9 +180,9 @@ import { MapPin, Phone, Mail, Instagram, Facebook, Send, MessageCircle, Music2 }
 
                         {/* Contact Form */}
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
+                            transition={{ duration: 0.15, delay: 0.04 }}
                             className="glass-card rounded-2xl p-7 md:p-8"
                         >
                             <h2 className="text-xl font-playfair font-bold text-champagne mb-6">أرسل رسالة</h2>

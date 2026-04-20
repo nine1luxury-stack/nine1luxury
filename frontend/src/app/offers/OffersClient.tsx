@@ -54,9 +54,9 @@ export default function OffersClient({ initialOffers }: { initialOffers: any[] }
                         {offers.map((offer, index) => (
                             <motion.div
                                 key={offer.id || index}
-                                initial={{ opacity: 0, y: 30 }}
+                                initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
+                                transition={{ duration: 0.15, delay: index * 0.03 }}
                                 className="group relative bg-surface-dark border border-white/5 rounded-3xl overflow-hidden hover:border-gold-500/30 transition-all duration-500 shadow-2xl shadow-black/40"
                             >
                                 {/* Content */}

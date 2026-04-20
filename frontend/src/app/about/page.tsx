@@ -12,7 +12,7 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
 
     useEffect(() => {
         if (isInView) {
-            const duration = 2000;
+            const duration = 800;
             const steps = 60;
             const increment = target / steps;
             let current = 0;
@@ -77,9 +77,9 @@ export default function AboutPage() {
                 <div className="absolute bottom-[20%] right-[10%] w-64 h-64 rounded-full blur-[140px]" style={{ background: 'hsla(39, 52%, 68%, 0.03)' }} />
 
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.15 }}
                     className="container mx-auto px-4 text-center relative z-10 pt-20"
                 >
                     <h1 className="section-title text-4xl md:text-5xl font-almarai font-extrabold mb-8 tracking-tighter leading-none">
@@ -99,10 +99,10 @@ export default function AboutPage() {
                         {stats.map((stat, idx) => (
                             <motion.div
                                 key={idx}
-                                initial={{ opacity: 0, y: 30 }}
+                                initial={{ opacity: 0, y: 10 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: idx * 0.08 }}
+                                transition={{ duration: 0.15, delay: idx * 0.03 }}
                                 className="glass-card rounded-2xl p-6 md:p-8 text-center group"
                             >
                                 <div className="w-11 h-11 mx-auto mb-4 rounded-xl bg-gold-500/[0.07] flex items-center justify-center group-hover:bg-gold-500 transition-all duration-500">
@@ -170,10 +170,10 @@ export default function AboutPage() {
                         {values.map((value, idx) => (
                             <motion.div
                                 key={idx}
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 8 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: idx * 0.08 }}
+                                transition={{ duration: 0.15, delay: idx * 0.03 }}
                                 className="glass-card rounded-2xl p-7 text-center space-y-4 group"
                             >
                                 <div className="w-14 h-14 mx-auto rounded-2xl bg-gold-500/[0.07] flex items-center justify-center group-hover:bg-gold-500 transition-all duration-500 group-hover:shadow-[0_0_20px_hsla(37,48%,48%,0.25)] group-hover:scale-105">

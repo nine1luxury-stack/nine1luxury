@@ -107,10 +107,10 @@ export default function Home() {
             {categories.map((cat, idx) => (
               <motion.div
                 key={cat.slug}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.08 }}
+                transition={{ duration: 0.15, delay: idx * 0.03 }}
               >
                 <Link
                   href={`/products?category=${encodeURIComponent(cat.slug)}`}
@@ -145,7 +145,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
+                transition={{ duration: 0.12 }}
                 className="section-title-editorial text-3xl md:text-5xl font-almarai-extra-bold"
               >
                 أحدث{" "}
@@ -155,7 +155,7 @@ export default function Home() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
+                transition={{ duration: 0.12 }}
                 className="section-subtitle mt-3 text-center mx-auto"
               >
                 عروض محدودة الوقت — لا تفوت الفرصة
@@ -174,7 +174,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
+                  transition={{ duration: 0.15, delay: idx * 0.03 }}
                   onMouseMove={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
                     const x = e.clientX - rect.left;
@@ -255,7 +255,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
+              transition={{ duration: 0.12 }}
               className="section-title-editorial text-3xl md:text-6xl mb-4 font-almarai-extra-bold"
             >
               المجموعة{" "}
@@ -265,7 +265,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
+              transition={{ duration: 0.12 }}
               className="section-subtitle mb-6"
             >
               اختيارات منتقاة بعناية تعكس ذوقك الرفيع
@@ -287,7 +287,7 @@ export default function Home() {
             variants={{
               show: {
                 transition: {
-                  staggerChildren: 0.07
+                  staggerChildren: 0.02
                 }
               }
             }}
@@ -332,7 +332,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
+              transition={{ duration: 0.12 }}
               className="section-title-editorial text-3xl md:text-5xl mb-4 font-almarai-extra-bold"
             >
               ما يميز{" "}
@@ -342,7 +342,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
+              transition={{ duration: 0.12 }}
               className="section-subtitle"
             >
               نلتزم بأعلى معايير الجودة والخدمة لتجربة تسوق لا تُنسى
@@ -353,10 +353,10 @@ export default function Home() {
             {whyUs.map((item, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.08 }}
+                transition={{ duration: 0.15, delay: idx * 0.03 }}
                 className="glass-card-premium rounded-2xl p-6 md:p-8 text-center space-y-4 group"
               >
                 {/* 3D Icon Container */}
@@ -394,16 +394,17 @@ export default function Home() {
 
         <div className="container mx-auto px-4 relative z-10 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.2 }}
           >
             {/* Decorative crown */}
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
+              transition={{ duration: 0.15, delay: 0.05 }}
               className="flex justify-center mb-8"
             >
               <div className="w-14 h-14 rounded-2xl bg-gold-500/[0.06] border border-gold-500/10 flex items-center justify-center">
