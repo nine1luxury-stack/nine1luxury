@@ -120,11 +120,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {loading ? (
-              <div className="col-span-full flex justify-center py-12">
-                <Loader2 className="w-7 h-7 text-gold-500 animate-spin" />
-              </div>
-            ) : offers.length > 0 ? (
+            {offers.length > 0 ? (
               offers.map((offer, idx) => (
                 <motion.div
                   key={offer.id}

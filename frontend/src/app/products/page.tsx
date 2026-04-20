@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 function ProductsSkeletonGrid() {
     return (
-        <div className="min-h-screen bg-rich-black pt-16 pb-24 container mx-auto px-4">
+        <div className="min-h-screen bg-rich-black pt-32 pb-24 container mx-auto px-4">
             <div className="flex flex-col items-center mb-12 space-y-3">
                <div className="h-10 skeleton w-64 rounded-xl" />
                <div className="h-4 skeleton w-48 rounded-xl" />

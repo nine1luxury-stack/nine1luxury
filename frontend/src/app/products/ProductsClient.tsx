@@ -97,7 +97,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
     const activeFilterCount = (selectedCategory !== "جميع المنتجات" ? 1 : 0) + (priceRange < MAX_PRICE ? 1 : 0) + selectedSizes.length;
 
     return (
-        <main className="min-h-screen bg-rich-black pt-16 pb-24">
+        <main className="min-h-screen bg-rich-black pt-32 pb-24">
 
             <div className="container mx-auto px-6 max-w-[1600px]">
                 {/* Section Header */}
@@ -165,7 +165,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                     </div>
 
                     {/* Filter Sidebar */}
-                    <aside className="hidden lg:block w-80 shrink-0 space-y-12 glass-card-premium p-10 rounded-[3rem] sticky top-32 h-fit">
+                    <aside className="hidden lg:block w-80 shrink-0 space-y-12 glass-card-premium p-10 rounded-[3rem] sticky top-16 h-fit">
                         {/* Categories */}
                         <div className="space-y-8">
                             <h3 className="text-gold-500 font-bold uppercase tracking-[0.4em] text-[10px] px-2 flex items-center justify-between font-almarai">
@@ -308,13 +308,6 @@ export default function ProductsClient({ initialProducts, initialCategories, err
 
                         {/* Actual Grid */}
                         <div className="relative">
-                            {!isMounted ? (
-                                <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5">
-                                    {Array.from({ length: 10 }).map((_, i) => (
-                                        <ProductSkeleton key={i} />
-                                    ))}
-                                </div>
-                            ) : (
                                 <>
                                     <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5">
                                         <AnimatePresence mode="popLayout">
@@ -375,7 +368,6 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                                         </div>
                                     )}
                                 </>
-                            )}
                         </div>
                     </div>
                 </div>
