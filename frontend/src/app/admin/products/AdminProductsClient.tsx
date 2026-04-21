@@ -742,16 +742,19 @@ export default function AdminProductsClient({ initialProducts, initialCategories
                                             accept="image/*"
                                             multiple
                                             className="hidden"
-                                            onChange={(e) => {
+                                            onChange={async (e) => {
                                                 const files = Array.from(e.target.files || []);
-                                                files.forEach(file => {
-                                                    const reader = new FileReader();
-                                                    reader.onloadend = () => {
-                                                        const base64String = reader.result as string;
-                                                        setProductGallery(prev => [...prev, base64String]);
-                                                    };
-                                                    reader.readAsDataURL(file);
-                                                });
+                                                for (const file of files) {
+                                                    const formData = new FormData();
+                                                    formData.append('file', file);
+                                                    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                                                    const data = await res.json();
+                                                    if (data.url) {
+                                                        setProductGallery(prev => [...prev, data.url]);
+                                                    } else {
+                                                        alert('فشل رفع الصورة: ' + (data.error || 'خطأ غير معروف'));
+                                                    }
+                                                }
                                             }}
                                         />
                                     </label>
@@ -785,14 +788,18 @@ export default function AdminProductsClient({ initialProducts, initialCategories
                                                 type="file"
                                                 accept="image/*"
                                                 className="hidden"
-                                                onChange={(e) => {
+                                                onChange={async (e) => {
                                                     const file = e.target.files?.[0];
                                                     if (file) {
-                                                        const reader = new FileReader();
-                                                        reader.onloadend = () => {
-                                                            setSizeChartImage(reader.result as string);
-                                                        };
-                                                        reader.readAsDataURL(file);
+                                                        const formData = new FormData();
+                                                        formData.append('file', file);
+                                                        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                                                        const data = await res.json();
+                                                        if (data.url) {
+                                                            setSizeChartImage(data.url);
+                                                        } else {
+                                                            alert('فشل رفع الصورة: ' + (data.error || 'خطأ غير معروف'));
+                                                        }
                                                     }
                                                 }}
                                             />
