@@ -1,23 +1,17 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { createClient } from '@/utils/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
-    // 0. Update Supabase Session
-    let response = createClient(request);
-
     const token = request.cookies.get('token')?.value
     const role = request.cookies.get('role')?.value
     const { pathname } = request.nextUrl
 
     // Protected Routes
-    const protectedRoutes = ['/admin']
-    const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
+    const isProtectedRoute = pathname.startsWith('/admin')
     const isAdminRoute = pathname.startsWith('/admin')
 
     // Auth Routes (redirect to home if already logged in)
-    const authRoutes = ['/auth/login', '/auth/register']
-    const isAuthRoute = authRoutes.some(route => pathname.startsWith(route))
+    const isAuthRoute = pathname.startsWith('/auth/login') || pathname.startsWith('/auth/register')
 
     // 1. Redirect to login if accessing protected route without token
     if (isProtectedRoute && !token) {
@@ -27,16 +21,16 @@ export async function middleware(request: NextRequest) {
     }
 
     // 2. Protect Admin Routes (Role Based)
-    if (isAdminRoute && role !== 'ADMIN') {
-        // If logged in but not admin, redirect to home
+    if (isAdminRoute && token && role !== 'ADMIN') {
         return NextResponse.redirect(new URL('/', request.url))
     }
 
+    // 3. Redirect logged-in users away from auth pages
     if (isAuthRoute && token) {
         return NextResponse.redirect(new URL('/', request.url))
     }
 
-    return response
+    return NextResponse.next()
 }
 
 export const config = {
