@@ -41,60 +41,20 @@ export default function ProductsClient({ initialProducts, initialCategories, err
     const [selectedCategory, setSelectedCategory] = useState("جميع المنتجات");
     const [priceRange, setPriceRange] = useState(MAX_PRICE);
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-    const [displayLimit, setDisplayLimit] = useState(10); 
+    const [displayLimit, setDisplayLimit] = useState(10);
     const [sortBy, setSortBy] = useState<"newest" | "price-low" | "price-high">("newest");
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
-
-    // Full-page skeleton loader shown before hydration
-    if (!isMounted) {
-        return (
-            <main className="min-h-screen bg-rich-black pt-32 pb-24">
-                <div className="container mx-auto px-6 max-w-[1600px]">
-                    {/* Header skeleton */}
-                    <div className="flex flex-col items-center mb-16 space-y-4">
-                        <div className="h-3 w-28 bg-ivory/[0.04] rounded-full animate-pulse" />
-                        <div className="h-10 w-72 bg-ivory/[0.06] rounded-2xl animate-pulse" />
-                        <div className="h-px w-20 bg-gold-500/20 animate-pulse" />
-                    </div>
-                    <div className="flex gap-12">
-                        {/* Sidebar skeleton */}
-                        <div className="hidden lg:flex flex-col gap-6 w-64 shrink-0">
-                            {[1,2,3,4,5].map(i => (
-                                <div key={i} className="h-10 bg-ivory/[0.03] rounded-2xl animate-pulse" />
-                            ))}
-                        </div>
-                        {/* Grid skeleton */}
-                        <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                            {Array.from({ length: 10 }).map((_, i) => (
-                                <ProductSkeleton key={i} />
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </main>
-        );
-    }
-
+    // ✅ ALL hooks declared before any conditional logic
     const categories = useMemo(() => {
         const base = ["جميع المنتجات", "تيشرتات", "هوديز", "بناطيل", "سويت شيرتات"];
-        const fromDb = dbCategories.map(c => c.name);
-        const fromProducts = products.map(p => p.category);
+        const fromDb = dbCategories.map((c: any) => c.name);
+        const fromProducts = products.map((p: any) => p.category);
         return Array.from(new Set([...base, ...fromDb, ...fromProducts]));
     }, [products, dbCategories]);
 
-    useEffect(() => {
-        const categoryParam = searchParams.get("category");
-        if (categoryParam && categories.includes(categoryParam)) {
-            setSelectedCategory(categoryParam);
-        }
-    }, [searchParams, categories]);
-
     const filteredProducts = useMemo(() => {
-        let result = products.filter((product) => {
+        let result = products.filter((product: any) => {
             const categoryMatch = selectedCategory === "جميع المنتجات" || product.category === selectedCategory;
             const currentPrice = product.discount
                 ? product.price * (1 - product.discount / 100)
@@ -106,17 +66,26 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                 ));
             return categoryMatch && priceMatch && sizeMatch;
         });
-
         if (sortBy === "price-low") {
-            result.sort((a, b) => a.price - b.price);
+            result.sort((a: any, b: any) => a.price - b.price);
         } else if (sortBy === "price-high") {
-            result.sort((a, b) => b.price - a.price);
+            result.sort((a: any, b: any) => b.price - a.price);
         } else {
-            result.sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
+            result.sort((a: any, b: any) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
         }
-
         return result;
     }, [products, selectedCategory, priceRange, selectedSizes, sortBy]);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    useEffect(() => {
+        const categoryParam = searchParams.get("category");
+        if (categoryParam && categories.includes(categoryParam)) {
+            setSelectedCategory(categoryParam);
+        }
+    }, [searchParams, categories]);
 
     const toggleSize = (size: string) => {
         setSelectedSizes(prev =>
@@ -125,6 +94,33 @@ export default function ProductsClient({ initialProducts, initialCategories, err
     };
 
     const activeFilterCount = (selectedCategory !== "جميع المنتجات" ? 1 : 0) + (priceRange < MAX_PRICE ? 1 : 0) + selectedSizes.length;
+
+    // ✅ Skeleton shown conditionally INSIDE return, not as early return before hooks
+    if (!isMounted) {
+        return (
+            <main className="min-h-screen bg-rich-black pt-32 pb-24">
+                <div className="container mx-auto px-6 max-w-[1600px]">
+                    <div className="flex flex-col items-center mb-16 space-y-4">
+                        <div className="h-3 w-28 bg-ivory/[0.04] rounded-full animate-pulse" />
+                        <div className="h-10 w-72 bg-ivory/[0.06] rounded-2xl animate-pulse" />
+                        <div className="h-px w-20 bg-gold-500/20 animate-pulse" />
+                    </div>
+                    <div className="flex gap-12">
+                        <div className="hidden lg:flex flex-col gap-6 w-64 shrink-0">
+                            {[1,2,3,4,5].map(i => (
+                                <div key={i} className="h-10 bg-ivory/[0.03] rounded-2xl animate-pulse" />
+                            ))}
+                        </div>
+                        <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {Array.from({ length: 10 }).map((_, i) => (
+                                <ProductSkeleton key={i} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className="min-h-screen bg-rich-black pt-32 pb-24">
