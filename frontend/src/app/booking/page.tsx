@@ -128,24 +128,24 @@ export default function BookingPage() {
                 
                 <div className="relative z-10 text-center space-y-6 px-4">
                     <motion.span
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="text-gold-500 font-bold uppercase text-sm block"
                     >
                         Exclusive Reservation
                     </motion.span>
                     <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
+                        transition={{ delay: 0.03 }}
                         className="text-4xl md:text-5xl font-extrabold text-white font-almarai uppercase leading-tight"
                     >
                         احجز منتجك <span className="text-metallic-gradient">المفضل</span>
                     </motion.h1>
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.05 }}
                         className="text-gray-400 max-w-2xl mx-auto text-lg font-amiri pb-8"
                     >
                         احجز قطعتك الفريدة الآن وسنقوم بتوصيلها إليك أينما كنت.
@@ -176,9 +176,9 @@ export default function BookingPage() {
                                 ].map((item, i) => (
                                     <motion.div
                                         key={i}
-                                        initial={{ opacity: 0, x: -20 }}
+                                        initial={{ opacity: 0, x: -8 }}
                                         whileInView={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: i * 0.1 }}
+                                        transition={{ delay: i * 0.02 }}
                                         className="flex gap-4"
                                     >
                                         <div className="w-12 h-12 rounded-full bg-gold-500/10 flex items-center justify-center shrink-0 border border-gold-500/20">
@@ -208,9 +208,9 @@ export default function BookingPage() {
                                 {!isSuccess ? (
                                     <motion.div
                                         key="form"
-                                        initial={{ opacity: 0, y: 20 }}
+                                        initial={{ opacity: 0, y: 6 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
+                                        exit={{ opacity: 0, y: -6 }}
                                         className="glass-card-premium p-10 md:p-14 rounded-[3rem] shadow-2xl relative overflow-hidden"
                                     >
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 blur-3xl -mr-16 -mt-16" />
@@ -345,7 +345,7 @@ export default function BookingPage() {
                                 ) : (
                                     <motion.div
                                         key="success"
-                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        initial={{ opacity: 0, scale: 0.98 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         className="bg-surface-dark border border-gold-500/20 p-12 rounded-3xl text-center space-y-6 shadow-2xl"
                                     >

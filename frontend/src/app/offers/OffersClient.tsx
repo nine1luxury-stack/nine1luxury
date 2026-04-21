@@ -20,7 +20,7 @@ export default function OffersClient({ initialOffers }: { initialOffers: any[] }
                     
                     <div className="flex flex-col items-center text-center space-y-4">
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
+                            initial={{ opacity: 0, scale: 0.97 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold-500/10 border border-gold-500/20 text-gold-500 text-xs font-black uppercase tracking-widest"
                         >
@@ -54,9 +54,9 @@ export default function OffersClient({ initialOffers }: { initialOffers: any[] }
                         {offers.map((offer, index) => (
                             <motion.div
                                 key={offer.id || index}
-                                initial={{ opacity: 0, y: 8 }}
+                                initial={{ opacity: 0, y: 4 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.15, delay: index * 0.03 }}
+                                transition={{ duration: 0.06, delay: index * 0.02 }}
                                 className="group relative bg-surface-dark border border-white/5 rounded-3xl overflow-hidden hover:border-gold-500/30 transition-all duration-500 shadow-2xl shadow-black/40"
                             >
                                 {/* Content */}

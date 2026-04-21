@@ -103,16 +103,16 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                 {/* Section Header */}
                 <div className="flex flex-col items-center justify-center text-center mb-16 space-y-4">
                     <motion.div
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="section-label"
                     >
                         مجموعتنا المختارة
                     </motion.div>
                     <motion.h1 
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
+                        transition={{ delay: 0.02 }}
                         className="section-title text-3xl md:text-5xl font-almarai font-extrabold tracking-tight"
                     >
                         المتجر الرئيسي
@@ -120,7 +120,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                     <motion.div
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.04 }}
                         className="h-px w-20 bg-gradient-to-r from-transparent via-gold-500/30 to-transparent"
                     />
                 </div>
@@ -315,10 +315,10 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                                                 <motion.div
                                                     key={product.id}
                                                     layout
-                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                    initial={{ opacity: 0, scale: 0.98 }}
                                                     animate={{ opacity: 1, scale: 1 }}
-                                                    exit={{ opacity: 0, scale: 0.95 }}
-                                                    transition={{ duration: 0.15 }}
+                                                    exit={{ opacity: 0, scale: 0.98 }}
+                                                    transition={{ duration: 0.06 }}
                                                 >
                                                     <ProductCard {...product} />
                                                 </motion.div>
