@@ -39,7 +39,11 @@ export const metadata: Metadata = {
   description: "متجر ملابس شبابي فاخر - تسوق الآن أرقى الموديلات",
   keywords: ["luxury", "clothing", "nine1luxury", "ملابس شباب", "فاشن", "موضة"],
   icons: {
-    icon: "/app-icon.png",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/app-icon.png", type: "image/png" }, // fallback for older browsers
+    ],
+    shortcut: "/favicon.svg",
     apple: "/app-icon.png",
   },
   manifest: "/manifest.json",
