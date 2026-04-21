@@ -66,7 +66,7 @@ export default function Home() {
 
   useEffect(() => {
     Promise.all([
-      productsApi.getAll({ featured: true, limit: 12 }),
+      productsApi.getAll({ limit: 12 }),
       fetch('/api/offers').then(res => res.json())
     ])
     .then(([productsData, offersData]) => {
