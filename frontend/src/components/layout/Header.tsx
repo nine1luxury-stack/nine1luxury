@@ -60,7 +60,7 @@ export function Header() {
 
                 {/* Logo */}
                 <Link href="/" className="relative flex items-center gap-3 group">
-                    <div className="relative w-36 h-16 transition-all duration-500 group-hover:scale-105">
+                    <div className="relative w-44 h-18 transition-all duration-500 group-hover:scale-105">
                         <Image
                             src="/logo-main.png"
                             alt="nine1luxury"
@@ -140,7 +140,7 @@ export function Header() {
                         >
                             <div className="flex items-center justify-between mb-10">
                                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="relative flex items-center gap-3 group">
-                                    <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-gold-500/20 bg-rich-black p-1 shadow-[0_0_20px_hsla(37,48%,48%,0.1)]">
+                                    <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gold-500/20 bg-rich-black p-1 shadow-[0_0_20px_hsla(37,48%,48%,0.1)]">
                                         <Image src="/logo-main.png" alt="nine1luxury" fill className="object-contain" />
                                     </div>
                                 </Link>
