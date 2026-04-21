@@ -172,7 +172,7 @@ export function Footer() {
                     
                     <div className="flex flex-wrap items-center justify-center gap-1.5 text-xs text-ivory/50" dir="ltr">
                         <span className="font-medium" dir="rtl">
-                            Nine1Luxury جميع الحقوق محفوظة © 2026
+                            جميع الحقوق محفوظة © Nine1Luxury 2026
                         </span>
                         <span className="opacity-70">|</span>
                         <a 
