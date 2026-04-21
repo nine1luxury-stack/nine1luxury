@@ -49,6 +49,36 @@ export default function ProductsClient({ initialProducts, initialCategories, err
         setIsMounted(true);
     }, []);
 
+    // Full-page skeleton loader shown before hydration
+    if (!isMounted) {
+        return (
+            <main className="min-h-screen bg-rich-black pt-32 pb-24">
+                <div className="container mx-auto px-6 max-w-[1600px]">
+                    {/* Header skeleton */}
+                    <div className="flex flex-col items-center mb-16 space-y-4">
+                        <div className="h-3 w-28 bg-ivory/[0.04] rounded-full animate-pulse" />
+                        <div className="h-10 w-72 bg-ivory/[0.06] rounded-2xl animate-pulse" />
+                        <div className="h-px w-20 bg-gold-500/20 animate-pulse" />
+                    </div>
+                    <div className="flex gap-12">
+                        {/* Sidebar skeleton */}
+                        <div className="hidden lg:flex flex-col gap-6 w-64 shrink-0">
+                            {[1,2,3,4,5].map(i => (
+                                <div key={i} className="h-10 bg-ivory/[0.03] rounded-2xl animate-pulse" />
+                            ))}
+                        </div>
+                        {/* Grid skeleton */}
+                        <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {Array.from({ length: 10 }).map((_, i) => (
+                                <ProductSkeleton key={i} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </main>
+        );
+    }
+
     const categories = useMemo(() => {
         const base = ["جميع المنتجات", "تيشرتات", "هوديز", "بناطيل", "سويت شيرتات"];
         const fromDb = dbCategories.map(c => c.name);
