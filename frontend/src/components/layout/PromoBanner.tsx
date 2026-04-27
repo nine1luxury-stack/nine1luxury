@@ -34,7 +34,7 @@ export function PromoBanner({ settingKey = "promoBanner" }: { settingKey?: strin
                 <div 
                     className="flex items-center shrink-0"
                     style={{
-                        animation: 'marquee-fast 12s linear infinite',
+                        animation: 'marquee-slow 35s linear infinite',
                         willChange: 'transform',
                     }}
                 >
@@ -55,7 +55,7 @@ export function PromoBanner({ settingKey = "promoBanner" }: { settingKey?: strin
                 <div 
                     className="flex items-center shrink-0"
                     style={{
-                        animation: 'marquee-fast 12s linear infinite',
+                        animation: 'marquee-slow 35s linear infinite',
                         willChange: 'transform',
                     }}
                 >
@@ -78,7 +78,7 @@ export function PromoBanner({ settingKey = "promoBanner" }: { settingKey?: strin
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-ivory/5 to-transparent -translate-x-full group-hover:animate-[gold-shimmer_3s_infinite]" />
 
             <style jsx>{`
-                @keyframes marquee-fast {
+                @keyframes marquee-slow {
                     0% { transform: translateX(0) translateZ(0); }
                     100% { transform: translateX(-100%) translateZ(0); }
                 }
