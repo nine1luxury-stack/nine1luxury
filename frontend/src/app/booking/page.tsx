@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { User, Phone, MessageSquare, CheckCircle, Loader2, Package, Maximize2, MapPin, Banknote } from "lucide-react";
 import Image from "next/image";
 import { PromoBanner } from "@/components/layout/PromoBanner";
@@ -126,30 +125,16 @@ export default function BookingPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-rich-black/80 via-transparent to-rich-black" />
                 
-                <div className="relative z-10 text-center space-y-6 px-4">
-                    <motion.span
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-gold-500 font-bold uppercase text-sm block"
-                    >
+                <div className="relative z-10 text-center space-y-6 px-4 animate-fade-in-up">
+                    <span className="text-gold-500 font-bold uppercase text-sm block">
                         Exclusive Reservation
-                    </motion.span>
-                    <motion.h1
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.03 }}
-                        className="text-4xl md:text-5xl font-extrabold text-white font-almarai uppercase leading-tight"
-                    >
+                    </span>
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-white font-almarai uppercase leading-tight">
                         احجز منتجك <span className="text-metallic-gradient">المفضل</span>
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.05 }}
-                        className="text-gray-400 max-w-2xl mx-auto text-lg font-almarai pb-8"
-                    >
+                    </h1>
+                    <p className="text-gray-400 max-w-2xl mx-auto text-lg font-almarai pb-8">
                         احجز قطعتك الفريدة الآن وسنقوم بتوصيلها إليك أينما كنت.
-                    </motion.p>
+                    </p>
                 </div>
                 
                 <div className="absolute bottom-0 left-0 w-full z-20">
@@ -174,12 +159,10 @@ export default function BookingPage() {
                                     { title: "توصيل سريع", desc: "نصلك في أسرع وقت ممكن لجميع محافظات مصر." },
                                     { title: "خدمة متميزة", desc: "فريقنا معك دائماً للتأكد من رضاك التام." }
                                 ].map((item, i) => (
-                                    <motion.div
+                                    <div
                                         key={i}
-                                        initial={{ opacity: 0, x: -8 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: i * 0.02 }}
-                                        className="flex gap-4"
+                                        className="flex gap-4 animate-fade-in-up"
+                                        style={{ animationDelay: `${i * 100}ms` }}
                                     >
                                         <div className="w-12 h-12 rounded-full bg-gold-500/10 flex items-center justify-center shrink-0 border border-gold-500/20">
                                             <span className="text-gold-500 font-bold">0{i + 1}</span>
@@ -188,7 +171,7 @@ export default function BookingPage() {
                                             <h3 className="text-white font-bold mb-1">{item.title}</h3>
                                             <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
                                         </div>
-                                    </motion.div>
+                                    </div>
                                 ))}
                             </div>
 
@@ -202,16 +185,10 @@ export default function BookingPage() {
                             </div>
                         </div>
 
-                        {/* Form Side */}
                         <div className="lg:col-span-3">
-                            <AnimatePresence mode="wait">
                                 {!isSuccess ? (
-                                    <motion.div
-                                        key="form"
-                                        initial={{ opacity: 0, y: 6 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -6 }}
-                                        className="glass-card-premium p-10 md:p-14 rounded-[3rem] shadow-2xl relative overflow-hidden"
+                                    <div
+                                        className="glass-card-premium p-10 md:p-14 rounded-[3rem] shadow-2xl relative overflow-hidden animate-fade-in-up"
                                     >
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 blur-3xl -mr-16 -mt-16" />
                                         
@@ -331,23 +308,15 @@ export default function BookingPage() {
                                                 ) : (
                                                     <>
                                                         تأكيد الحجز الآن
-                                                        <motion.span
-                                                            animate={{ x: [0, 5, 0] }}
-                                                            transition={{ repeat: Infinity, duration: 1.5 }}
-                                                        >
-                                                            ←
-                                                        </motion.span>
+                                                        <span className="animate-pulse">←</span>
                                                     </>
                                                 )}
                                             </button>
                                         </form>
-                                    </motion.div>
+                                    </div>
                                 ) : (
-                                    <motion.div
-                                        key="success"
-                                        initial={{ opacity: 0, scale: 0.98 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        className="bg-surface-dark border border-gold-500/20 p-12 rounded-3xl text-center space-y-6 shadow-2xl"
+                                    <div
+                                        className="bg-surface-dark border border-gold-500/20 p-12 rounded-3xl text-center space-y-6 shadow-2xl animate-fade-in-up"
                                     >
                                         <div className="w-20 h-20 bg-gold-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-gold-500/30">
                                             <CheckCircle className="w-10 h-10 text-gold-500" />
@@ -362,9 +331,8 @@ export default function BookingPage() {
                                         >
                                             حجز منتج آخر
                                         </button>
-                                    </motion.div>
+                                    </div>
                                 )}
-                            </AnimatePresence>
                         </div>
                     </div>
                 </div>

@@ -91,7 +91,6 @@ export default function Home() {
   const categories = [
     { name: "تيشيرتات", slug: "تيشرتات" },
     { name: "بناطيل", slug: "بنطلون" },
-    { name: "أحذية", slug: "أحذية" },
     { name: "إكسسوارات", slug: "اكسسوار" },
   ];
 
