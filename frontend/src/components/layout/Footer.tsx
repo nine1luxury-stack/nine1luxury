@@ -40,7 +40,6 @@ export function Footer() {
         { href: "/about", label: "عن المتجر" },
         { href: "/contact", label: "تواصل معنا" },
         { href: "/shipping", label: "سياسة الشحن" },
-        { href: "/policy", label: "سياسة الاستبدال" },
     ];
 
     return (
@@ -49,7 +48,7 @@ export function Footer() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] rounded-full blur-[180px] pointer-events-none" style={{ background: 'hsla(37, 48%, 48%, 0.03)' }} />
 
             <div className="container mx-auto px-6 relative z-10 w-full max-w-[1400px]">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 text-center md:text-right" dir="rtl">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-8 text-center md:text-right" dir="rtl">
 
                     {/* Brand Section */}
                     <div className="flex flex-col items-center md:items-start space-y-6 lg:col-span-1">
@@ -140,33 +139,13 @@ export function Footer() {
                         </div>
                     </div>
 
-                    {/* Newsletter */}
-                    <div className="flex flex-col items-center md:items-start">
-                        <h3 className="text-champagne font-bold mb-8 text-base relative inline-block">
-                            ابقَ على اطلاع
-                            <span className="absolute -bottom-2 right-0 w-7 h-0.5 bg-gold-500/40 rounded-full" />
-                        </h3>
-                        <p className="text-ivory/70 text-sm mb-5 leading-relaxed">
-                            اشترك ليصلك كل جديد وعروض حصرية
-                        </p>
-                        <div className="w-full max-w-[280px] space-y-2.5">
-                            <input
-                                type="email"
-                                placeholder="بريدك الإلكتروني"
-                                className="luxury-input text-sm py-3 text-white"
-                            />
-                            <button className="w-full bg-gold-500 hover:bg-gold-400 text-rich-black font-bold py-3 rounded-xl text-sm transition-all duration-400 hover:shadow-[0_8px_24px_hsla(37,48%,48%,0.2)]">
-                                اشتراك
-                            </button>
-                        </div>
-                    </div>
+
 
                 </div>
 
                 {/* Footer Bottom */}
                 <div className="mt-16 pt-8 border-t border-ivory/[0.04] flex flex-col items-center justify-center gap-6" dir="rtl">
                     <div className="flex items-center gap-8 text-[11px] text-ivory/40 uppercase tracking-wider font-bold">
-                        <Link href="/policy" className="hover:text-gold-300 transition-colors">سياسة الاستبدال</Link>
                         <Link href="/shipping" className="hover:text-gold-300 transition-colors">سياسة الشحن</Link>
                     </div>
                     

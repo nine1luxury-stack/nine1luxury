@@ -40,8 +40,8 @@ export function Testimonials() {
                 const res = await fetch('/api/testimonials');
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.length > 0) {
-                        setReviews(data);
+                    if (data && data.length >= 0) {
+                        setReviews([...data, ...INITIAL_REVIEWS]);
                     }
                 }
             } catch (err) {

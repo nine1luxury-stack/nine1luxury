@@ -218,14 +218,23 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-[10px] text-ivory/25 uppercase font-bold tracking-wider">رقم الهاتف</label>
+                                    <label className="text-[10px] text-ivory/25 uppercase font-bold tracking-wider">رقم الهاتف *</label>
                                     <input
                                         type="tel"
                                         name="phone"
+                                        required
+                                        pattern="^01[0125][0-9]{8}$"
+                                        title="يجب إدخال رقم هاتف مصري صحيح مكون من 11 رقماً"
                                         value={formData.phone}
-                                        onChange={handleInputChange}
+                                        onChange={(e) => {
+                                            const val = e.target.value.replace(/[^0-9]/g, '');
+                                            if (val.length <= 11) {
+                                                setFormData({ ...formData, phone: val });
+                                            }
+                                        }}
                                         className="luxury-input"
-                                        placeholder="رقم الموبايل (واتساب)"
+                                        dir="ltr"
+                                        placeholder="01xxxxxxxxx"
                                     />
                                 </div>
 
