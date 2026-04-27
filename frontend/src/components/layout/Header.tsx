@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingBag, Menu, Phone, X, ChevronLeft, Instagram, Facebook, Music2, MessageCircle } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/context/CartContext";
 import { useState, useEffect } from "react";
 import { CartDrawer } from "./CartDrawer";
@@ -23,6 +22,12 @@ export function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Lock body scroll when mobile menu is open
+    useEffect(() => {
+        document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+        return () => { document.body.style.overflow = ""; };
+    }, [isMobileMenuOpen]);
+
     const navLinks = [
         { href: "/", label: "الرئيسية" },
         { href: "/products", label: "المنتجات" },
@@ -38,11 +43,8 @@ export function Header() {
     };
 
     return (
-        <motion.header
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 30 }}
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        <header
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 animate-fade-in-up ${
                 isScrolled
                     ? "glass-effect shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
                     : "bg-transparent"
@@ -88,11 +90,7 @@ export function Header() {
                         >
                             {link.label}
                             {isActive(link.href) && (
-                                <motion.div
-                                    layoutId="activeNav"
-                                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent"
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                />
+                                <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
                             )}
                         </Link>
                     ))}
@@ -101,18 +99,11 @@ export function Header() {
                 <div className="flex items-center gap-3 text-ivory">
                     <Link href="/checkout" aria-label="سلة المشتريات" className="relative hover:text-gold-300 transition-colors p-2 hover:bg-white/5 rounded-xl">
                         <ShoppingBag className="w-5 h-5" />
-                        <AnimatePresence>
-                            {totalItems > 0 && (
-                                <motion.span
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    exit={{ scale: 0 }}
-                                    className="absolute -top-0.5 -right-0.5 bg-gold-500 text-rich-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-[0_0_12px_hsla(37,48%,48%,0.4)]"
-                                >
-                                    {totalItems}
-                                </motion.span>
-                            )}
-                        </AnimatePresence>
+                        {totalItems > 0 && (
+                            <span className="absolute -top-0.5 -right-0.5 bg-gold-500 text-rich-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-[0_0_12px_hsla(37,48%,48%,0.4)] animate-pulse">
+                                {totalItems}
+                            </span>
+                        )}
                     </Link>
                     <div className="w-px h-5 bg-ivory/10 mx-1 hidden sm:block" />
                     <a href="tel:01094372339" className="hidden sm:flex items-center gap-2 bg-white/[0.04] hover:bg-gold-500 border border-ivory/10 hover:border-gold-500 px-5 py-2.5 rounded-full text-ivory/70 hover:text-rich-black transition-all duration-400 text-sm font-bold group">
@@ -123,102 +114,88 @@ export function Header() {
             </div>
 
             {/* Mobile Menu Overlay */}
-            <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <>
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="fixed inset-0 z-50 bg-rich-black/85 backdrop-blur-xl lg:hidden"
-                        />
-                        <motion.div
-                            initial={{ x: "100%" }}
-                            animate={{ x: 0 }}
-                            exit={{ x: "100%" }}
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            className="fixed inset-y-0 right-0 z-50 w-[82%] max-w-sm bg-surface-dark/98 backdrop-blur-2xl border-l border-ivory/[0.06] p-6 lg:hidden flex flex-col shadow-[-25px_0_70px_rgba(0,0,0,0.8)]"
-                        >
-                            <div className="flex items-center justify-between mb-10">
-                                <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="relative flex items-center gap-3 group">
-                                    <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gold-500/20 bg-rich-black p-1 shadow-[0_0_20px_hsla(37,48%,48%,0.1)]">
-                                        <Image src="/logo-main.png" alt="nine1luxury" fill className="object-contain" sizes="64px" />
-                                    </div>
-                                </Link>
-                                <button
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="w-10 h-10 flex items-center justify-center text-ivory/40 hover:text-ivory hover:bg-white/5 rounded-xl transition-all"
-                                >
-                                    <X className="w-5 h-5" />
-                                </button>
-                            </div>
-
-                            <nav className="flex-1 flex flex-col gap-1.5">
-                                {navLinks.map((link, idx) => (
-                                    <motion.div
-                                        key={link.href}
-                                        initial={{ opacity: 0, x: 30 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: idx * 0.04 }}
-                                    >
-                                        <Link
-                                            href={link.href}
-                                            onClick={() => setIsMobileMenuOpen(false)}
-                                            className={`text-base font-bold uppercase flex items-center justify-between group px-4 py-3.5 rounded-xl transition-all duration-300 ${
-                                                isActive(link.href)
-                                                    ? "text-gold-300 bg-gold-500/[0.07] border border-gold-500/15"
-                                                    : "text-ivory/70 hover:text-ivory hover:bg-white/[0.03]"
-                                            }`}
-                                        >
-                                            {link.label}
-                                            <ChevronLeft className={`w-4 h-4 transition-all ${isActive(link.href) ? 'text-gold-500' : 'text-ivory/15 group-hover:text-ivory/40'}`} />
-                                        </Link>
-                                    </motion.div>
-                                ))}
-                            </nav>
-
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
-                                className="mt-auto pt-6 border-t border-ivory/[0.06] space-y-4"
-                            >
-                                <p className="text-[10px] text-ivory/25 font-bold uppercase mb-3 tracking-widest">تابعنا على</p>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {[
-                                        { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61566609135055", name: "فيسبوك" },
-                                        { icon: Instagram, href: "https://www.instagram.com/nine1luxury", name: "انستجرام" },
-                                        { icon: Music2, href: "https://www.tiktok.com/@nine1luxury", name: "تيك توك" },
-                                        { icon: MessageCircle, href: "https://wa.me/201094372339", name: "واتساب" },
-                                    ].map((social) => (
-                                        <a
-                                            key={social.name}
-                                            href={social.href}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center justify-center gap-2 text-ivory/35 hover:text-gold-300 transition-all bg-white/[0.02] rounded-xl p-2.5 hover:bg-gold-500/[0.06] border border-transparent hover:border-gold-500/15"
-                                        >
-                                            <social.icon className="w-4 h-4" />
-                                            <span className="text-xs font-bold">{social.name}</span>
-                                        </a>
-                                    ))}
+            {isMobileMenuOpen && (
+                <>
+                    <div
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="fixed inset-0 z-50 bg-rich-black/85 backdrop-blur-xl lg:hidden"
+                        style={{ animation: 'fadeIn 0.2s ease' }}
+                    />
+                    <div
+                        className="fixed inset-y-0 right-0 z-50 w-[82%] max-w-sm bg-surface-dark/98 backdrop-blur-2xl border-l border-ivory/[0.06] p-6 lg:hidden flex flex-col shadow-[-25px_0_70px_rgba(0,0,0,0.8)]"
+                        style={{ animation: 'slideInRight 0.25s ease' }}
+                    >
+                        <style>{`
+                            @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+                            @keyframes slideInRight { from { transform: translateX(100%) } to { transform: translateX(0) } }
+                        `}</style>
+                        <div className="flex items-center justify-between mb-10">
+                            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="relative flex items-center gap-3 group">
+                                <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gold-500/20 bg-rich-black p-1 shadow-[0_0_20px_hsla(37,48%,48%,0.1)]">
+                                    <Image src="/logo-main.png" alt="nine1luxury" fill className="object-contain" sizes="64px" />
                                 </div>
-                                <a
-                                    href="tel:01094372339"
-                                    className="flex items-center justify-center gap-2 text-rich-black bg-gold-500 hover:bg-gold-400 transition-all rounded-xl p-3.5 mt-3 font-bold text-sm shadow-[0_8px_24px_hsla(37,48%,48%,0.2)]"
+                            </Link>
+                            <button
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="w-10 h-10 flex items-center justify-center text-ivory/40 hover:text-ivory hover:bg-white/5 rounded-xl transition-all"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <nav className="flex-1 flex flex-col gap-1.5">
+                            {navLinks.map((link) => (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className={`text-base font-bold uppercase flex items-center justify-between group px-4 py-3.5 rounded-xl transition-all duration-300 ${
+                                        isActive(link.href)
+                                            ? "text-gold-300 bg-gold-500/[0.07] border border-gold-500/15"
+                                            : "text-ivory/70 hover:text-ivory hover:bg-white/[0.03]"
+                                    }`}
                                 >
-                                    <Phone className="w-4 h-4" />
-                                    <span>اتصل الآن:</span>
-                                    <span dir="ltr" className="font-mono">010 9437 2339</span>
-                                </a>
-                            </motion.div>
-                        </motion.div>
-                    </>
-                )}
-            </AnimatePresence>
+                                    {link.label}
+                                    <ChevronLeft className={`w-4 h-4 transition-all ${isActive(link.href) ? 'text-gold-500' : 'text-ivory/15 group-hover:text-ivory/40'}`} />
+                                </Link>
+                            ))}
+                        </nav>
+
+                        <div className="mt-auto pt-6 border-t border-ivory/[0.06] space-y-4">
+                            <p className="text-[10px] text-ivory/25 font-bold uppercase mb-3 tracking-widest">تابعنا على</p>
+                            <div className="grid grid-cols-2 gap-2">
+                                {[
+                                    { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61566609135055", name: "فيسبوك" },
+                                    { icon: Instagram, href: "https://www.instagram.com/nine1luxury", name: "انستجرام" },
+                                    { icon: Music2, href: "https://www.tiktok.com/@nine1luxury", name: "تيك توك" },
+                                    { icon: MessageCircle, href: "https://wa.me/201094372339", name: "واتساب" },
+                                ].map((social) => (
+                                    <a
+                                        key={social.name}
+                                        href={social.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center justify-center gap-2 text-ivory/35 hover:text-gold-300 transition-all bg-white/[0.02] rounded-xl p-2.5 hover:bg-gold-500/[0.06] border border-transparent hover:border-gold-500/15"
+                                    >
+                                        <social.icon className="w-4 h-4" />
+                                        <span className="text-xs font-bold">{social.name}</span>
+                                    </a>
+                                ))}
+                            </div>
+                            <a
+                                href="tel:01094372339"
+                                className="flex items-center justify-center gap-2 text-rich-black bg-gold-500 hover:bg-gold-400 transition-all rounded-xl p-3.5 mt-3 font-bold text-sm shadow-[0_8px_24px_hsla(37,48%,48%,0.2)]"
+                            >
+                                <Phone className="w-4 h-4" />
+                                <span>اتصل الآن:</span>
+                                <span dir="ltr" className="font-mono">010 9437 2339</span>
+                            </a>
+                        </div>
+                    </div>
+                </>
+            )}
             {/* Cart Drawer */}
             <CartDrawer />
-        </motion.header>
+        </header>
     );
 }

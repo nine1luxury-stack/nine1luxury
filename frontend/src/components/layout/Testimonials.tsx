@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import { Star, Quote, MessageSquarePlus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Modal } from "@/components/ui/Modal";
@@ -84,64 +84,41 @@ export function Testimonials() {
         <section id="reviews" className="py-24 bg-rich-black relative overflow-hidden border-y border-ivory/[0.04]">
             {/* Background */}
             <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full blur-[180px]" style={{ background: 'hsla(37, 48%, 48%, 0.04)' }} />
-                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-[180px]" style={{ background: 'hsla(39, 52%, 68%, 0.03)' }} />
+                <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full" style={{ background: 'radial-gradient(circle, hsla(37, 48%, 48%, 0.08) 0%, transparent 70%)' }} />
+                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full" style={{ background: 'radial-gradient(circle, hsla(39, 52%, 68%, 0.06) 0%, transparent 70%)' }} />
             </div>
 
             <div className="container mx-auto px-4 relative z-10">
                 {/* Section Header */}
                 <div className="flex flex-col items-center mb-14 text-center">
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="section-label"
-                    >
+                    <p className="section-label animate-fade-in-up">
                         آراء عملائنا
-                    </motion.p>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.12 }}
-                        className="section-title-editorial text-3xl md:text-5xl mb-4 font-almarai-extra-bold"
-                    >
+                    </p>
+                    <h2 className="section-title-editorial text-3xl md:text-5xl mb-4 font-almarai-extra-bold animate-fade-in-up" style={{ animationDelay: '100ms' }}>
                         تجارب{" "}
                         <span className="text-metallic-gradient">حقيقية</span>
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.12 }}
-                        className="section-subtitle"
-                    >
+                    </h2>
+                    <p className="section-subtitle animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                         ثقة عملائنا هي أغلى ما نملك
-                    </motion.p>
-                    <motion.div
-                        initial={{ scaleX: 0 }}
-                        whileInView={{ scaleX: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.2 }}
-                        className="h-px w-20 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mt-5"
-                    />
+                    </p>
+                    <div className="h-px w-20 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mt-5" />
                 </div>
 
-                {/* Reviews Carousel */}
+                {/* Reviews Carousel — CSS marquee, zero JS cost */}
                 <div className="relative overflow-hidden -mx-4">
-                    <motion.div 
-                        className="flex gap-6 px-4 w-fit h-full"
-                        animate={{ x: ["-50%", "0%"] }}
-                        whileHover={{ animationPlayState: "paused" }}
-                        transition={{
-                            x: {
-                                repeat: Infinity,
-                                repeatType: "loop",
-                                duration: 18,
-                                ease: "linear",
-                            },
-                        }}
-                    >
+                    <style>{`
+                        @keyframes scroll-testimonials {
+                            0% { transform: translateX(0); }
+                            100% { transform: translateX(-50%); }
+                        }
+                        .testimonials-track {
+                            animation: scroll-testimonials 22s linear infinite;
+                        }
+                        .testimonials-track:hover {
+                            animation-play-state: paused;
+                        }
+                    `}</style>
+                    <div className="flex gap-6 px-4 w-fit testimonials-track">
                         {[...reviews, ...reviews].map((review, idx) => (
                             <div
                                 key={idx}
@@ -178,7 +155,7 @@ export function Testimonials() {
                                 </div>
                             </div>
                         ))}
-                    </motion.div>
+                    </div>
                     
                     {/* Edge fade masks */}
                     <div className="absolute top-0 left-0 w-28 h-full bg-gradient-to-r from-rich-black to-transparent z-20 pointer-events-none" />
@@ -186,12 +163,7 @@ export function Testimonials() {
                 </div>
 
                 {/* Add Review Button */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    className="mt-10 text-center"
-                >
+                <div className="mt-10 text-center animate-fade-in-up">
                     <button
                         onClick={() => setIsModalOpen(true)}
                         className="btn-ghost text-sm py-3 px-8"
@@ -199,7 +171,7 @@ export function Testimonials() {
                         <MessageSquarePlus className="w-4 h-4" />
                         شاركنا تجربتك
                     </button>
-                </motion.div>
+                </div>
             </div>
 
             <Modal

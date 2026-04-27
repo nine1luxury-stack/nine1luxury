@@ -47,7 +47,6 @@ export function ProductCard({ id, name, price, discount, images: propImages, cat
     const isNew = propIsNew ?? (createdAt ? (new Date(new Date().toDateString()).getTime() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000) : false);
 
     return (
-    return (
         <div
             className="group relative bg-surface-card rounded-2xl overflow-hidden flex flex-col h-full border border-ivory/[0.04] transition-all duration-600 hover:translate-y-[-4px] hover:border-gold-500/25 hover:shadow-[0_28px_56px_rgba(0,0,0,0.3),0_0_24px_hsla(37,48%,48%,0.08)] animate-fade-in-up"
         >
