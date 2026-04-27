@@ -46,8 +46,8 @@ export default function AboutPage() {
             {/* Hero Section */}
             <section className="relative h-[50vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, hsla(37, 48%, 48%, 0.05), transparent)' }} />
-                <div className="absolute top-[20%] left-[10%] w-64 h-64 rounded-full blur-[140px]" style={{ background: 'hsla(37, 48%, 48%, 0.04)' }} />
-                <div className="absolute bottom-[20%] right-[10%] w-64 h-64 rounded-full blur-[140px]" style={{ background: 'hsla(39, 52%, 68%, 0.03)' }} />
+                <div className="absolute top-[20%] left-[10%] w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, hsla(37, 48%, 48%, 0.15) 0%, transparent 70%)' }} />
+                <div className="absolute bottom-[20%] right-[10%] w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, hsla(39, 52%, 68%, 0.1) 0%, transparent 70%)' }} />
 
                 <div className="container mx-auto px-4 text-center relative z-10 pt-20 animate-fade-in-up">
                     <h1 className="section-title text-4xl md:text-5xl font-almarai font-extrabold mb-8 tracking-tighter leading-none">

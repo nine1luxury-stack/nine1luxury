@@ -38,7 +38,7 @@ export function PromoBanner({ settingKey = "promoBanner" }: { settingKey?: strin
                         willChange: 'transform',
                     }}
                 >
-                    {Array.from({ length: 8 }).map((_, i) => (
+                    {Array.from({ length: 20 }).map((_, i) => (
                         <div key={i} className="inline-flex items-center gap-8 px-6">
                             <p className="text-champagne font-almarai font-black text-base md:text-lg uppercase tracking-[0.4em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                                 {promoBanner}
@@ -59,7 +59,7 @@ export function PromoBanner({ settingKey = "promoBanner" }: { settingKey?: strin
                         willChange: 'transform',
                     }}
                 >
-                    {Array.from({ length: 8 }).map((_, i) => (
+                    {Array.from({ length: 20 }).map((_, i) => (
                         <div key={`dup-${i}`} className="inline-flex items-center gap-8 px-6">
                             <p className="text-champagne font-almarai font-black text-base md:text-lg uppercase tracking-[0.4em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                                 {promoBanner}

@@ -190,7 +190,7 @@ export default function BookingPage() {
                                     <div
                                         className="glass-card-premium p-10 md:p-14 rounded-[3rem] shadow-2xl relative overflow-hidden animate-fade-in-up"
                                     >
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 blur-3xl -mr-16 -mt-16" />
+                                        <div className="absolute top-0 right-0 w-32 h-32 rounded-full -mr-16 -mt-16" style={{ background: 'radial-gradient(circle, hsla(37, 48%, 48%, 0.1) 0%, transparent 70%)' }} />
                                         
                                         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

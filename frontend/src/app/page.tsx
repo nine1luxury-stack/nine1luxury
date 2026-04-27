@@ -129,7 +129,7 @@ export default function Home() {
 
       {/* ═══ Offers Section ═══ */}
       <section className="py-20 md:py-28 bg-transparent overflow-hidden relative" dir="rtl">
-        <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[180px] -z-10" style={{ background: 'hsla(37, 48%, 48%, 0.04)' }} />
+        <div className="absolute top-0 right-0 w-80 h-80 rounded-full -z-10" style={{ background: 'radial-gradient(circle, hsla(37, 48%, 48%, 0.15) 0%, transparent 70%)' }} />
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col items-center justify-center text-center mb-14 gap-6">
             <div className="flex flex-col items-center">
@@ -196,7 +196,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-br from-gold-500/[0.03] via-transparent to-rose-500/[0.02] opacity-40 group-hover:opacity-100 transition-opacity duration-700" />
                   
                   {/* Subtle Top-Right Ambient Glow */}
-                  <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-[80px] bg-gold-500/[0.08] group-hover:bg-gold-500/[0.15] transition-all duration-1000 animate-pulse" />
+                  <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-[radial-gradient(circle,hsla(37,48%,48%,0.3)_0%,transparent_70%)] group-hover:bg-[radial-gradient(circle,hsla(37,48%,48%,0.5)_0%,transparent_70%)] transition-all duration-1000 animate-pulse" />
 
                   <div className="relative h-full p-8 flex flex-col justify-center items-center text-center">
                     {/* Title with Metallic Gradient and Editorial Font */}
@@ -328,7 +328,7 @@ export default function Home() {
 
       {/* ═══ Why Choose Us — Premium 3D Cards ═══ */}
       <section className="py-20 md:py-28 bg-transparent relative overflow-hidden" dir="rtl">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[220px]" style={{ background: 'hsla(37, 48%, 48%, 0.03)' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full" style={{ background: 'radial-gradient(circle, hsla(37, 48%, 48%, 0.1) 0%, transparent 70%)' }} />
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
@@ -395,7 +395,7 @@ export default function Home() {
       {/* ═══ CTA Section — Cinematic ═══ */}
       <section className="py-28 md:py-36 relative overflow-hidden">
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, hsla(37, 48%, 48%, 0.04), hsla(37, 48%, 48%, 0.02), transparent)' }} />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full blur-[180px]" style={{ background: 'hsla(37, 48%, 48%, 0.04)' }} />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full" style={{ background: 'radial-gradient(ellipse, hsla(37, 48%, 48%, 0.15) 0%, transparent 70%)' }} />
         {/* Decorative lines */}
         <motion.div
           className="absolute top-1/4 left-0 w-full h-px"
