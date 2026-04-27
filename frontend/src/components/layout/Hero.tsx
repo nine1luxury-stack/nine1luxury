@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ChevronDown } from "lucide-react";
@@ -55,28 +55,7 @@ function GoldParticles() {
     );
 }
 
-// Interactive cursor light beam
-function CursorLightBeam() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const mouseX = useMotionValue(0.5);
-    const mouseY = useMotionValue(0.5);
-    const springX = useSpring(mouseX, { stiffness: 50, damping: 30 });
-    const springY = useSpring(mouseY, { stiffness: 50, damping: 30 });
 
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (containerRef.current) {
-                const rect = containerRef.current.getBoundingClientRect();
-                mouseX.set((e.clientX - rect.left) / rect.width);
-                mouseY.set((e.clientY - rect.top) / rect.height);
-            }
-        };
-        window.addEventListener("mousemove", handleMouseMove);
-        return () => window.removeEventListener("mousemove", handleMouseMove);
-    }, [mouseX, mouseY]);
-
-    return null; // Disabled for performance optimization
-}
 
 export function Hero() {
     return (
@@ -84,81 +63,55 @@ export function Hero() {
             {/* Layered Background — Creates depth */}
             <div className="absolute inset-0 overflow-hidden">
                 {/* Primary ambient glow */}
-                <motion.div 
-                    className="absolute top-[15%] left-[8%] w-[500px] h-[500px] rounded-full blur-[180px]"
-                    style={{ background: 'hsla(37, 48%, 48%, 0.06)' }}
-                    animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.05, 1] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                <div 
+                    className="absolute top-[15%] left-[8%] w-[500px] h-[500px] rounded-full animate-pulse"
+                    style={{ background: 'radial-gradient(circle, hsla(37, 48%, 48%, 0.15) 0%, transparent 70%)', animationDuration: '8s' }}
                 />
                 {/* Secondary ambient glow */}
-                <motion.div 
-                    className="absolute bottom-[15%] right-[8%] w-[400px] h-[400px] rounded-full blur-[160px]"
-                    style={{ background: 'hsla(39, 52%, 68%, 0.05)' }}
-                    animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.08, 1] }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                <div 
+                    className="absolute bottom-[15%] right-[8%] w-[400px] h-[400px] rounded-full animate-pulse"
+                    style={{ background: 'radial-gradient(circle, hsla(39, 52%, 68%, 0.12) 0%, transparent 70%)', animationDuration: '10s', animationDelay: '2s' }}
                 />
                 {/* Central diffuse light */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full blur-[250px]" 
-                     style={{ background: 'hsla(37, 48%, 48%, 0.03)' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full" 
+                     style={{ background: 'radial-gradient(circle, hsla(37, 48%, 48%, 0.08) 0%, transparent 70%)' }} />
                 {/* Subtle radial vignette */}
                 <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, hsla(225, 12%, 3%, 0.6) 100%)' }} />
             </div>
 
             {/* Decorative horizon lines */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <motion.div
+            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+                <div
                     className="absolute top-[25%] left-0 w-full h-px"
                     style={{ background: 'linear-gradient(to right, transparent, hsla(37, 48%, 48%, 0.07), transparent)' }}
-                    animate={{ opacity: [0.3, 0.6, 0.3] }}
-                    transition={{ duration: 5, repeat: Infinity }}
                 />
-                <motion.div
+                <div
                     className="absolute bottom-[30%] left-0 w-full h-px"
                     style={{ background: 'linear-gradient(to right, transparent, hsla(37, 48%, 48%, 0.05), transparent)' }}
-                    animate={{ opacity: [0.2, 0.5, 0.2] }}
-                    transition={{ duration: 6, repeat: Infinity, delay: 1.5 }}
                 />
                 {/* Vertical accent lines */}
-                <motion.div
+                <div
                     className="absolute top-0 left-[15%] w-px h-full"
                     style={{ background: 'linear-gradient(to bottom, transparent, hsla(37, 48%, 48%, 0.04), transparent)' }}
-                    animate={{ opacity: [0.2, 0.4, 0.2] }}
-                    transition={{ duration: 7, repeat: Infinity, delay: 1 }}
                 />
-                <motion.div
+                <div
                     className="absolute top-0 right-[15%] w-px h-full"
                     style={{ background: 'linear-gradient(to bottom, transparent, hsla(37, 48%, 48%, 0.04), transparent)' }}
-                    animate={{ opacity: [0.2, 0.4, 0.2] }}
-                    transition={{ duration: 7, repeat: Infinity, delay: 3 }}
                 />
             </div>
-
-            {/* Cursor Light Beam */}
-            <CursorLightBeam />
 
             {/* Gold Dust Particles */}
             <GoldParticles />
 
             {/* Content */}
             <div className="container mx-auto px-4 relative z-10 text-center">
-                <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="space-y-6"
+                <div
+                    className="space-y-6 animate-fade-in-up"
                 >
                     {/* Logo */}
-                    <motion.div className="flex flex-col items-center mb-8">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.85 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 100,
-                                damping: 15,
-                                duration: 0.3
-                            }}
-                            className="relative w-full max-w-[300px] h-36 md:max-w-[550px] md:h-56"
+                    <div className="flex flex-col items-center mb-8">
+                        <div
+                            className="relative w-full max-w-[200px] h-32 md:max-w-[400px] md:h-48"
                         >
                             <Image
                                 src="/logo-main.png"
@@ -166,11 +119,12 @@ export function Hero() {
                                 fill
                                 className="object-contain"
                                 style={{ filter: 'drop-shadow(0 0 50px hsla(37, 48%, 48%, 0.25))' }}
-                                sizes="(max-width: 768px) 300px, 550px"
+                                sizes="(max-width: 768px) 200px, 400px"
+                                quality={75}
                                 priority
                                 fetchPriority="high"
                             />
-                        </motion.div>
+                        </div>
 
                         {/* Slogan */}
                         <div
@@ -184,37 +138,25 @@ export function Hero() {
                         </div>
 
                         {/* Decorative line with shimmer */}
-                        <motion.div
-                            initial={{ scaleX: 0 }}
-                            animate={{ scaleX: 1 }}
-                            transition={{ delay: 0.3, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                            className="mt-7 h-px w-48 relative overflow-hidden"
+                        <div
+                            className="mt-7 h-px w-48 relative overflow-hidden mx-auto"
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
-                            <motion.div
-                                className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-300/40 to-transparent"
-                                animate={{ x: ["-100%", "100%"] }}
-                                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                            />
-                        </motion.div>
+                        </div>
 
                         {/* Short tagline */}
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.4, duration: 0.3 }}
-                            className="mt-6 text-ivory/70 text-sm md:text-base tracking-wide max-w-md leading-relaxed"
+                        <p
+                            className="mt-6 text-ivory/70 text-sm md:text-base tracking-wide max-w-md leading-relaxed mx-auto animate-fade-in-up"
+                            style={{ animationDelay: '200ms' }}
                         >
                             وجهتك الأولى للملابس الفاخرة — أناقة لا تُضاهى وجودة تتحدث عن نفسها
-                        </motion.p>
-                    </motion.div>
+                        </p>
+                    </div>
 
                     {/* CTA Buttons */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4, duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
+                    <div
+                        className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 animate-fade-in-up"
+                        style={{ animationDelay: '300ms' }}
                     >
                         <Link
                             href="/products"
@@ -232,25 +174,20 @@ export function Hero() {
                         >
                             تواصل معنا
                         </Link>
-                    </motion.div>
-                </motion.div>
+                    </div>
+                </div>
             </div>
 
             {/* Scroll Indicator */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+            <div
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in-up"
+                style={{ animationDelay: '500ms' }}
             >
                 <span className="text-gold-500/35 text-[9px] uppercase tracking-[0.35em] font-bold">اكتشف المزيد</span>
-                <motion.div
-                    animate={{ y: [0, 7, 0] }}
-                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-                >
+                <div className="animate-bounce mt-1">
                     <ChevronDown className="w-4 h-4 text-gold-500/30" />
-                </motion.div>
-            </motion.div>
+                </div>
+            </div>
         </section>
     );
 }
