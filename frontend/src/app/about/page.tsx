@@ -1,5 +1,7 @@
 "use client";
 
+import { Award, Target, Heart, Sparkles, Shield, Truck, Users, Package, Star, TrendingUp } from "lucide-react";
+
 // Static counter for maximum performance
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
     return (
