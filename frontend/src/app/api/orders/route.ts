@@ -37,6 +37,32 @@ export async function POST(request: Request) {
     try {
         const data = await request.json();
         
+        // ═══ Stock Validation — Prevent overselling ═══
+        const stockErrors: string[] = [];
+        for (const item of data.items as OrderItemInput[]) {
+            if (!item.variantId) continue;
+            const variant = await prisma.productvariant.findUnique({
+                where: { id: item.variantId },
+                include: { product: { select: { name: true } } }
+            });
+            if (!variant) {
+                stockErrors.push(`المنتج غير موجود (${item.name || item.productId})`);
+                continue;
+            }
+            if (variant.stock < item.quantity) {
+                stockErrors.push(
+                    `الكمية المطلوبة من "${variant.product.name}" (${item.size || ''} / ${item.color || ''}) = ${item.quantity}، والمتاح فقط ${variant.stock}`
+                );
+            }
+        }
+        if (stockErrors.length > 0) {
+            return NextResponse.json(
+                { error: 'الكمية المطلوبة تتجاوز المخزون المتاح', details: stockErrors },
+                { status: 400 }
+            );
+        }
+
+        // ═══ Create order ═══
         const order = await prisma.order.create({
             data: {
                 userId: data.userId || undefined,
@@ -58,6 +84,15 @@ export async function POST(request: Request) {
             },
             include: { items: true }
         });
+
+        // ═══ Decrement stock for each variant ═══
+        for (const item of data.items as OrderItemInput[]) {
+            if (!item.variantId) continue;
+            await prisma.productvariant.update({
+                where: { id: item.variantId },
+                data: { stock: { decrement: item.quantity } }
+            });
+        }
 
         // 📨 Email Notification Logic - Simplified through lib
         try {

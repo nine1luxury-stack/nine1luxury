@@ -183,12 +183,54 @@ export default function ProductDetailsPage() {
         return variant ? variant.stock <= 0 : true;
     }, [product, selectedColor, selectedSize]);
 
+    // Get available stock for selected variant
+    const availableStock = useMemo(() => {
+        if (!product || !selectedColor || !selectedSize) return 0;
+        const variant = product.variants?.find(v => v.color === selectedColor && v.size === selectedSize);
+        return variant ? variant.stock : 0;
+    }, [product, selectedColor, selectedSize]);
+
+    // Reset quantity when variant changes or cap it to available stock
+    useEffect(() => {
+        if (availableStock > 0 && quantity > availableStock) {
+            setQuantity(availableStock);
+        }
+    }, [availableStock, quantity]);
+
     if (loading) {
         return (
-            <main className="min-h-screen bg-rich-black flex items-center justify-center">
+            <main className="min-h-screen bg-rich-black">
                 <Header />
-                <div className="text-gold-500 animate-pulse text-xl font-bold uppercase tracking-widest">
-                    جاري التحميل...
+                <div className="pt-32 pb-32 container mx-auto px-6 max-w-[1400px]">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+                        {/* Image skeleton */}
+                        <div className="lg:col-span-7 space-y-6">
+                            <div className="aspect-[4/5] bg-ivory/[0.03] rounded-[2.5rem] animate-pulse border border-ivory/[0.04]" />
+                            <div className="aspect-[4/5] bg-ivory/[0.02] rounded-[2.5rem] animate-pulse border border-ivory/[0.03]" />
+                        </div>
+                        {/* Info skeleton */}
+                        <div className="lg:col-span-5 space-y-8">
+                            <div className="h-3 w-20 bg-ivory/[0.04] rounded-full animate-pulse" />
+                            <div className="h-12 w-3/4 bg-ivory/[0.06] rounded-2xl animate-pulse" />
+                            <div className="h-10 w-1/3 bg-ivory/[0.05] rounded-xl animate-pulse" />
+                            <div className="space-y-3 pt-4">
+                                <div className="h-3 w-full bg-ivory/[0.03] rounded-full animate-pulse" />
+                                <div className="h-3 w-5/6 bg-ivory/[0.03] rounded-full animate-pulse" />
+                                <div className="h-3 w-2/3 bg-ivory/[0.03] rounded-full animate-pulse" />
+                            </div>
+                            <div className="flex gap-4 pt-6">
+                                {[1,2,3].map(i => (
+                                    <div key={i} className="w-12 h-12 rounded-full bg-ivory/[0.04] animate-pulse" />
+                                ))}
+                            </div>
+                            <div className="flex gap-4 pt-4">
+                                {[1,2,3,4].map(i => (
+                                    <div key={i} className="w-16 h-16 rounded-2xl bg-ivory/[0.04] animate-pulse" />
+                                ))}
+                            </div>
+                            <div className="h-16 w-full bg-ivory/[0.05] rounded-2xl animate-pulse mt-6" />
+                        </div>
+                    </div>
                 </div>
             </main>
         );
@@ -398,19 +440,28 @@ export default function ProductDetailsPage() {
 
                             {/* Quantity & Add to Cart */}
                             <div className="flex flex-col gap-6 pt-6">
+                                {/* Stock indicator */}
+                                {selectedSize && selectedColor && !isSoldOut && (
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-2 h-2 rounded-full ${availableStock <= 3 ? 'bg-orange-500 animate-pulse' : 'bg-green-500'}`} />
+                                        <span className={`text-[10px] uppercase tracking-[0.2em] font-bold ${availableStock <= 3 ? 'text-orange-400' : 'text-ivory/30'}`}>
+                                            {availableStock <= 3 ? `آخر ${availableStock} قطع متاحة` : `${availableStock} قطعة متاحة`}
+                                        </span>
+                                    </div>
+                                )}
                                 <div className="flex items-center gap-6">
                                     <div className="flex items-center bg-white/5 border border-white/5 h-16 rounded-2xl overflow-hidden shrink-0">
                                         <button
                                             onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                                            disabled={isSoldOut}
+                                            disabled={isSoldOut || quantity <= 1}
                                             className="w-14 h-full flex items-center justify-center text-ivory/40 hover:text-ivory transition-colors disabled:opacity-30 text-xl font-bold"
                                         >
                                             -
                                         </button>
                                         <span className="w-12 text-center text-ivory font-black text-lg">{quantity}</span>
                                         <button
-                                            onClick={() => setQuantity(prev => prev + 1)}
-                                            disabled={isSoldOut}
+                                            onClick={() => setQuantity(prev => Math.min(prev + 1, availableStock))}
+                                            disabled={isSoldOut || quantity >= availableStock}
                                             className="w-14 h-full flex items-center justify-center text-ivory/40 hover:text-ivory transition-colors disabled:opacity-30 text-xl font-bold"
                                         >
                                             +

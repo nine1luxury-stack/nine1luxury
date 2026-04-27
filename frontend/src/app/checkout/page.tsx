@@ -150,7 +150,13 @@ export default function CheckoutPage() {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to place order');
+                const errorData = await response.json().catch(() => ({}));
+                if (errorData.details && Array.isArray(errorData.details)) {
+                    alert(`⚠️ ${errorData.error}\n\n${errorData.details.join('\n')}`);
+                } else {
+                    alert(errorData.error || 'حدث خطأ أثناء تنفيذ الطلب. يرجى المحاولة مرة أخرى.');
+                }
+                return;
             }
 
             clearCart();

@@ -18,7 +18,7 @@ function Starfield() {
   const [stars, setStars] = useState<Array<{ id: number; x: number; y: number; size: number; delay: number; duration: number }>>([]);
 
   useEffect(() => {
-    const arr = Array.from({ length: 150 }, (_, i) => ({
+    const arr = Array.from({ length: 50 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -280,23 +280,35 @@ export default function Home() {
             <PromoBanner />
           </div>
 
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            variants={{
-              show: {
-                transition: {
-                  staggerChildren: 0.02
+          {loading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-[3/5] bg-ivory/[0.03] rounded-2xl mb-4 border border-ivory/[0.04]" />
+                  <div className="h-4 bg-ivory/[0.03] rounded-full mb-2 w-3/4" />
+                  <div className="h-4 bg-ivory/[0.03] rounded-full w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <motion.div
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              variants={{
+                show: {
+                  transition: {
+                    staggerChildren: 0.02
+                  }
                 }
-              }
-            }}
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5"
-          >
-            {displayProducts.map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
-          </motion.div>
+              }}
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-5"
+            >
+              {displayProducts.map((product) => (
+                <ProductCard key={product.id} {...product} />
+              ))}
+            </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
