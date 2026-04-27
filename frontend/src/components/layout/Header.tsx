@@ -69,6 +69,7 @@ export function Header() {
                             style={{ filter: 'drop-shadow(0 0 8px hsla(37, 48%, 48%, 0.15))' }}
                             sizes="(max-width: 768px) 160px, 200px"
                             priority
+                            fetchPriority="high"
                         />
                     </div>
                 </Link>

@@ -168,6 +168,7 @@ export function Hero() {
                                 style={{ filter: 'drop-shadow(0 0 50px hsla(37, 48%, 48%, 0.25))' }}
                                 sizes="(max-width: 768px) 300px, 550px"
                                 priority
+                                fetchPriority="high"
                             />
                         </motion.div>
 
