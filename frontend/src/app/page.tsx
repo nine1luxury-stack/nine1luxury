@@ -200,9 +200,9 @@ export default function Home() {
 
                   <div className="relative h-full p-8 flex flex-col justify-center items-center text-center">
                     {/* Title with Metallic Gradient and Editorial Font */}
-                    <h4 className="text-2xl md:text-3xl font-almarai-extra-bold-straight text-metallic-gradient mb-8 transition-transform duration-500 group-hover:scale-110">
+                    <h3 className="text-2xl md:text-3xl font-almarai-extra-bold-straight text-metallic-gradient mb-8 transition-transform duration-500 group-hover:scale-110">
                       {offer.title}
-                    </h4>
+                    </h3>
 
                     {/* Glass Capsule Button */}
                     <Link
@@ -379,7 +379,7 @@ export default function Home() {
                     <item.icon className="w-7 h-7 md:w-8 md:h-8 text-gold-500 group-hover:text-rich-black transition-colors duration-300" />
                   </div>
                 </div>
-                <h4 className="text-lg md:text-xl font-bold text-ivory group-hover:text-gold-300 transition-colors font-almarai">{item.title}</h4>
+                <h3 className="text-lg md:text-xl font-bold text-ivory group-hover:text-gold-300 transition-colors font-almarai">{item.title}</h3>
                 <p className="text-ivory/70 text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}

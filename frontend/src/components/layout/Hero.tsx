@@ -11,7 +11,7 @@ function GoldParticles() {
     const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; size: number; delay: number; duration: number; drift: number }>>([]);
 
     useEffect(() => {
-        const arr = Array.from({ length: 30 }, (_, i) => ({
+        const arr = Array.from({ length: 10 }, (_, i) => ({
             id: i,
             x: Math.random() * 100,
             y: Math.random() * 100,
@@ -74,33 +74,7 @@ function CursorLightBeam() {
         return () => window.removeEventListener("mousemove", handleMouseMove);
     }, [mouseX, mouseY]);
 
-    const x = useTransform(springX, [0, 1], ["-20%", "120%"]);
-    const y = useTransform(springY, [0, 1], ["-20%", "120%"]);
-
-    return (
-        <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none">
-            <motion.div
-                className="absolute w-[600px] h-[600px] rounded-full blur-[200px]"
-                style={{
-                    left: x,
-                    top: y,
-                    background: 'radial-gradient(circle, hsla(37, 48%, 48%, 0.08) 0%, transparent 70%)',
-                    translateX: '-50%',
-                    translateY: '-50%',
-                }}
-            />
-            <motion.div
-                className="absolute w-[300px] h-[300px] rounded-full blur-[120px]"
-                style={{
-                    left: x,
-                    top: y,
-                    background: 'radial-gradient(circle, hsla(40, 55%, 72%, 0.06) 0%, transparent 70%)',
-                    translateX: '-50%',
-                    translateY: '-50%',
-                }}
-            />
-        </div>
-    );
+    return null; // Disabled for performance optimization
 }
 
 export function Hero() {
@@ -191,6 +165,7 @@ export function Hero() {
                                 fill
                                 className="object-contain"
                                 style={{ filter: 'drop-shadow(0 0 50px hsla(37, 48%, 48%, 0.25))' }}
+                                sizes="(max-width: 768px) 300px, 550px"
                                 priority
                             />
                         </motion.div>

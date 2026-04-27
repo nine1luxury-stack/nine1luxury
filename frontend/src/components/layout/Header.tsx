@@ -67,6 +67,7 @@ export function Header() {
                             fill
                             className="object-contain"
                             style={{ filter: 'drop-shadow(0 0 8px hsla(37, 48%, 48%, 0.15))' }}
+                            sizes="(max-width: 768px) 160px, 200px"
                             priority
                         />
                     </div>
@@ -141,7 +142,7 @@ export function Header() {
                             <div className="flex items-center justify-between mb-10">
                                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="relative flex items-center gap-3 group">
                                     <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gold-500/20 bg-rich-black p-1 shadow-[0_0_20px_hsla(37,48%,48%,0.1)]">
-                                        <Image src="/logo-main.png" alt="nine1luxury" fill className="object-contain" />
+                                        <Image src="/logo-main.png" alt="nine1luxury" fill className="object-contain" sizes="64px" />
                                     </div>
                                 </Link>
                                 <button

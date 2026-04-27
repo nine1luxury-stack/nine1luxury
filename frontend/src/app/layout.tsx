@@ -89,6 +89,8 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-startup-image" href="/splash-logo.png" />
+        <link rel="preconnect" href="https://www.transparenttextures.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://res.cloudinary.com" />
         <style>{`
           body { background-color: #000000 !important; }
         `}</style>

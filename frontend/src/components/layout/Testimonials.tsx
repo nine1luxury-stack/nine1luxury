@@ -170,7 +170,7 @@ export function Testimonials() {
                                         {review.name[0]}
                                     </div>
                                     <div>
-                                        <h4 className="text-ivory/90 font-bold text-sm">{review.name}</h4>
+                                        <h3 className="text-ivory/90 font-bold text-sm">{review.name}</h3>
                                         <p className="text-[10px] text-gold-500/90 uppercase tracking-wider">
                                             {review.role}
                                         </p>
