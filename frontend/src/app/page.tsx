@@ -18,7 +18,7 @@ function Starfield() {
   const [stars, setStars] = useState<Array<{ id: number; x: number; y: number; size: number; delay: number; duration: number }>>([]);
 
   useEffect(() => {
-    const arr = Array.from({ length: 50 }, (_, i) => ({
+    const arr = Array.from({ length: 30 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -32,26 +32,27 @@ function Starfield() {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-rich-black via-[#050B14] to-rich-black opacity-80" />
+      <style>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.1; transform: scale(0.8); }
+          50% { opacity: 0.8; transform: scale(1.2); }
+        }
+        .star-particle {
+          animation: twinkle ease-in-out infinite;
+        }
+      `}</style>
       {stars.map((s) => (
-        <motion.div
+        <div
           key={s.id}
-          className="absolute bg-white rounded-full"
+          className="absolute bg-white rounded-full star-particle"
           style={{
             left: `${s.x}%`,
             top: `${s.y}%`,
             width: s.size,
             height: s.size,
             boxShadow: `0 0 ${s.size * 2}px hsla(0, 0%, 100%, 0.8)`,
-          }}
-          animate={{
-            opacity: [0.1, 0.8, 0.1],
-            scale: [0.8, 1.2, 0.8],
-          }}
-          transition={{
-            duration: s.duration,
-            delay: s.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
+            animationDuration: `${s.duration}s`,
+            animationDelay: `${s.delay}s`,
           }}
         />
       ))}

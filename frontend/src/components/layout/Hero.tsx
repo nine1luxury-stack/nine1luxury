@@ -25,28 +25,29 @@ function GoldParticles() {
 
     return (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <style>{`
+                @keyframes float-particle {
+                    0%, 100% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+                    25% { opacity: 0.8; transform: translateY(-20px) translateX(10px) scale(1); }
+                    50% { opacity: 0.4; transform: translateY(-40px) translateX(20px) scale(0.8); }
+                    75% { opacity: 0.9; transform: translateY(-60px) translateX(10px) scale(1.2); }
+                }
+                .gold-particle {
+                    animation: float-particle ease-in-out infinite;
+                }
+            `}</style>
             {particles.map((p) => (
-                <motion.div
+                <div
                     key={p.id}
-                    className="absolute rounded-full"
+                    className="absolute rounded-full gold-particle"
                     style={{
                         left: `${p.x}%`,
                         top: `${p.y}%`,
                         width: p.size,
                         height: p.size,
                         background: `radial-gradient(circle, hsla(40, 55%, 75%, 0.7) 0%, hsla(37, 48%, 48%, 0) 70%)`,
-                    }}
-                    animate={{
-                        y: [0, -50, -20, -60, 0],
-                        x: [0, p.drift * 0.5, p.drift, p.drift * 0.3, 0],
-                        opacity: [0, 0.8, 0.4, 0.9, 0],
-                        scale: [0.5, 1, 0.8, 1.2, 0.5],
-                    }}
-                    transition={{
-                        duration: p.duration,
-                        delay: p.delay,
-                        repeat: Infinity,
-                        ease: "easeInOut",
+                        animationDuration: `${p.duration}s`,
+                        animationDelay: `${p.delay}s`,
                     }}
                 />
             ))}
@@ -170,32 +171,15 @@ export function Hero() {
                             />
                         </motion.div>
 
-                        {/* Slogan — Letter by letter reveal with metallic shimmer */}
+                        {/* Slogan */}
                         <div
                             className="mt-8 flex flex-row flex-wrap justify-center gap-x-5"
                             style={{ direction: 'ltr' }}
                             suppressHydrationWarning
                         >
-                            {"MAKE U FEEL LUXURY".split(" ").map((word, wordIndex) => (
-                                <div key={wordIndex} className="flex flex-row gap-[0.02em]">
-                                    {word.split("").map((char, charIndex) => (
-                                        <motion.span
-                                            key={charIndex}
-                                            initial={{ opacity: 0, y: 12 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{
-                                                duration: 0.05,
-                                                delay: 0.1 + (wordIndex * 0.05) + (charIndex * 0.01),
-                                                ease: "easeOut"
-                                            }}
-                                            className="text-champagne/80 text-lg sm:text-xl md:text-3xl font-bold uppercase tracking-[0.18em]"
-                                            style={{ textShadow: '0 0 40px hsla(37, 48%, 48%, 0.25)' }}
-                                        >
-                                            {char}
-                                        </motion.span>
-                                    ))}
-                                </div>
-                            ))}
+                            <h1 className="text-champagne/80 text-lg sm:text-xl md:text-3xl font-bold uppercase tracking-[0.18em]" style={{ textShadow: '0 0 40px hsla(37, 48%, 48%, 0.25)' }}>
+                                MAKE U FEEL LUXURY
+                            </h1>
                         </div>
 
                         {/* Decorative line with shimmer */}
