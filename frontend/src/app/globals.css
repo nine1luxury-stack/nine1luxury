@@ -29,8 +29,8 @@
   --color-champagne: hsl(38, 40%, 72%);
   --color-bronze: hsl(30, 35%, 40%);
 
-  --font-cairo: var(--font-cairo);
-  --font-almarai: var(--font-almarai);
+  --font-cairo: var(--font-amiri);
+  --font-almarai: var(--font-amiri);
   --font-amiri: var(--font-amiri);
 
   /* ═══ Cinematic Keyframes ═══ */
@@ -164,17 +164,16 @@ img {
 
 /* ═══ Specialized Typography ═══ */
 .font-almarai-extra-bold {
-  font-family: var(--font-almarai), var(--font-cairo), sans-serif !important;
+  font-family: var(--font-amiri), sans-serif !important;
   font-weight: 800 !important;
   line-height: 1.15;
   letter-spacing: -0.01em;
-  display: inline-block; /* Required for transform */
-  transform: skewX(-10deg); /* Manual slant for Arabic */
+  display: inline-block;
 }
 
 .font-almarai-extra-bold-straight {
-  font-family: var(--font-almarai), var(--font-cairo), sans-serif !important;
-  font-weight: 800 !important;
+  font-family: var(--font-amiri), sans-serif !important;
+  font-weight: 700 !important;
   line-height: 1.15;
   letter-spacing: -0.01em;
 }
@@ -440,7 +439,7 @@ img {
 }
 
 .section-title {
-  font-family: var(--font-almarai), var(--font-cairo), sans-serif;
+  font-family: var(--font-amiri), sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -450,8 +449,8 @@ img {
 
 /* Editorial Section Heading — Oversized & Striking */
 .section-title-editorial {
-  font-family: var(--font-almarai), var(--font-cairo), sans-serif;
-  font-weight: 800;
+  font-family: var(--font-amiri), sans-serif;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   color: white;
