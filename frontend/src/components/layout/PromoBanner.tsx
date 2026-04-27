@@ -30,7 +30,7 @@ export function PromoBanner({ settingKey = "promoBanner" }: { settingKey?: strin
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
             
             {/* CSS-only infinite marquee — hardware accelerated, zero lag */}
-            <div className="flex whitespace-nowrap" style={{ willChange: 'transform' }}>
+            <div className="flex whitespace-nowrap" style={{ willChange: 'transform' }} dir="ltr">
                 <div 
                     className="flex items-center shrink-0"
                     style={{
