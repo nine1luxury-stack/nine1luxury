@@ -98,7 +98,7 @@ export async function sendOrderNotification(orderData: OrderData) {
     try {
         const info = await transporter.sendMail({
             from: `"Nine1Luxury Store" <${process.env.SMTP_USER}>`,
-            to: process.env.SMTP_USER,
+            to: "nine1luxury@gmail.com",
             subject: `🔥 طلب جديد: ${guestName} - ${totalAmount} ج.م`,
             html: html
         });
@@ -141,7 +141,7 @@ export async function sendReservationNotification(reservationData: ReservationDa
     try {
         const info = await transporter.sendMail({
             from: `"Nine1Luxury Booking" <${process.env.SMTP_USER}>`,
-            to: process.env.SMTP_USER,
+            to: "nine1luxury@gmail.com",
             subject: `✨ حجز جديد: ${name} - ${productModel}`,
             html: html
         });
