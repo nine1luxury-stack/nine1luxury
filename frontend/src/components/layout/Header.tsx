@@ -98,7 +98,7 @@ export function Header() {
                 </nav>
 
                 <div className="flex items-center gap-3 text-ivory">
-                    <Link href="/checkout" className="relative hover:text-gold-300 transition-colors p-2 hover:bg-white/5 rounded-xl">
+                    <Link href="/checkout" aria-label="سلة المشتريات" className="relative hover:text-gold-300 transition-colors p-2 hover:bg-white/5 rounded-xl">
                         <ShoppingBag className="w-5 h-5" />
                         <AnimatePresence>
                             {totalItems > 0 && (

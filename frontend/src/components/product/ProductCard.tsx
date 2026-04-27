@@ -85,6 +85,7 @@ export function ProductCard({ id, name, price, discount, images: propImages, cat
                         src={displayImage}
                         alt={name}
                         fill
+                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                         className={cn(
                             "object-cover transition-all duration-700 ease-out group-hover:scale-110",
                             isSoldOut && "grayscale opacity-60",
@@ -146,6 +147,7 @@ export function ProductCard({ id, name, price, discount, images: propImages, cat
 
                     <Link
                         href={`/products/${id}`}
+                        aria-label="عرض تفاصيل المنتج"
                         className="w-10 h-10 rounded-xl bg-white/[0.03] border border-ivory/[0.08] flex items-center justify-center hover:bg-gold-500 hover:border-gold-500 hover:text-rich-black text-ivory/80 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_hsla(37,48%,48%,0.3)] hover:rotate-[-5deg]"
                     >
                         <ShoppingBag className="w-3.5 h-3.5" />

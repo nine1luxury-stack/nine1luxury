@@ -145,11 +145,11 @@ export function Footer() {
 
                 {/* Footer Bottom */}
                 <div className="mt-16 pt-8 border-t border-ivory/[0.04] flex flex-col items-center justify-center gap-6" dir="rtl">
-                    <div className="flex items-center gap-8 text-[11px] text-ivory/40 uppercase tracking-wider font-bold">
+                    <div className="flex items-center gap-8 text-[11px] text-ivory/80 uppercase tracking-wider font-bold">
                         <Link href="/shipping" className="hover:text-gold-300 transition-colors">سياسة الشحن</Link>
                     </div>
                     
-                    <div className="flex flex-wrap items-center justify-center gap-1.5 text-xs text-ivory/50" dir="ltr">
+                    <div className="flex flex-wrap items-center justify-center gap-1.5 text-xs text-ivory/80" dir="ltr">
                         <span className="font-medium" dir="rtl">
                             جميع الحقوق محفوظة © Nine1Luxury 2026
                         </span>
@@ -158,7 +158,7 @@ export function Footer() {
                             href="https://www.instagram.com/_bebo9__?igsh=N3JhankyYTZmNTBy&utm_source=qr" 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-ivory/40 hover:text-gold-500 transition-all duration-300 font-bold"
+                            className="text-ivory/80 hover:text-gold-500 transition-all duration-300 font-bold"
                         >
                             by IbrahimElseginy || SW
                         </a>
