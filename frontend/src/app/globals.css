@@ -31,6 +31,7 @@
 
   --font-cairo: var(--font-cairo);
   --font-almarai: var(--font-almarai);
+  --font-amiri: var(--font-amiri);
 
   /* ═══ Cinematic Keyframes ═══ */
   --animate-gold-shimmer: gold-shimmer 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -141,7 +142,7 @@ html {
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-almarai);
+  font-family: var(--font-amiri), var(--font-almarai), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
