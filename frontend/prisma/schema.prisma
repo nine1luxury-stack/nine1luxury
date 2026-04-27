@@ -36,15 +36,18 @@ model order {
 }
 
 model orderitem {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  orderId   String  @db.ObjectId
-  productId String  @db.ObjectId
-  variantId String? @db.ObjectId
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String          @db.ObjectId
+  productId String          @db.ObjectId
+  variantId String?         @db.ObjectId
   quantity  Int
   price     Float
-  order     order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order     order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   product         @relation(fields: [productId], references: [id])
+  variant   productvariant? @relation(fields: [variantId], references: [id])
 
   @@index([orderId])
+  @@index([productId])
 }
 
 model product {
@@ -63,6 +66,7 @@ model product {
   updatedAt      DateTime         @updatedAt
   images         productimage[]
   variants       productvariant[]
+  orderItems     orderitem[]
 
   @@index([category])
   @@index([featured])
@@ -92,6 +96,7 @@ model productvariant {
   repackageStock Int     @default(0)
   sku            String?
   product        product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderItems     orderitem[]
 
   @@index([productId])
 }
