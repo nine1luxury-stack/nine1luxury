@@ -238,7 +238,7 @@ export default function Home() {
       <section className="pt-16 pb-28 bg-transparent relative">
         {/* Watermark */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-[0.012] flex items-center justify-center">
-          <span className="text-[20vw] font-playfair font-bold whitespace-nowrap">NINE 1 LUXURY</span>
+          <span className="text-[20vw] font-almarai font-bold whitespace-nowrap">NINE 1 LUXURY</span>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -367,7 +367,7 @@ export default function Home() {
                     <item.icon className="w-7 h-7 md:w-8 md:h-8 text-gold-500 group-hover:text-rich-black transition-colors duration-300" />
                   </div>
                 </div>
-                <h4 className="text-lg md:text-xl font-bold text-ivory group-hover:text-gold-300 transition-colors font-playfair">{item.title}</h4>
+                <h4 className="text-lg md:text-xl font-bold text-ivory group-hover:text-gold-300 transition-colors font-almarai">{item.title}</h4>
                 <p className="text-ivory/70 text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}

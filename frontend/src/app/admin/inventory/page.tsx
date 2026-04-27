@@ -192,7 +192,7 @@ export default function InventoryPage() {
         <div className="space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider">المخزن & المرتجعات</h1>
+                    <h1 className="text-3xl font-almarai font-bold text-white uppercase tracking-wider">المخزن & المرتجعات</h1>
                     <p className="text-gray-400 text-sm mt-1">إدارة المخزون والمنتجات المرتجعة في مكان واحد.</p>
                 </div>
 

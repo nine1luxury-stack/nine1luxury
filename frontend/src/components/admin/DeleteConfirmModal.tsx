@@ -60,7 +60,7 @@ export function DeleteConfirmModal({
                             </div>
 
                             <div className="space-y-2">
-                                <h2 className="text-2xl font-playfair font-bold text-white tracking-wide">
+                                <h2 className="text-2xl font-almarai font-bold text-white tracking-wide">
                                     {title}
                                 </h2>
                                 <p className="text-gray-400 text-sm leading-relaxed">

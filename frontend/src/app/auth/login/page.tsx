@@ -63,7 +63,7 @@ function LoginForm() {
         >
             <div className="bg-surface-dark/50 backdrop-blur-md border border-white/10 p-8 rounded-2xl shadow-2xl">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-playfair font-bold text-white mb-2">تسجيل دخول المسؤول</h1>
+                    <h1 className="text-3xl font-almarai font-bold text-white mb-2">تسجيل دخول المسؤول</h1>
                     <p className="text-gray-400 text-sm">يرجى إدخال كلمة المرور للمتابعة.</p>
                 </div>
 

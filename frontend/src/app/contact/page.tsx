@@ -119,7 +119,7 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
                         {/* Contact Info */}
                         <div className="space-y-8">
                             <div>
-                                <h2 className="text-xl font-playfair font-bold text-champagne mb-7">معلومات الاتصال</h2>
+                                <h2 className="text-xl font-almarai font-bold text-champagne mb-7">معلومات الاتصال</h2>
                                 <div className="space-y-3">
                                     {contactInfo.map((info, idx) => (
                                         <motion.a
@@ -144,7 +144,7 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
                             {/* Social Media */}
                             <div>
-                                <h2 className="text-xl font-playfair font-bold text-champagne mb-5">تابعنا</h2>
+                                <h2 className="text-xl font-almarai font-bold text-champagne mb-5">تابعنا</h2>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                                     {socialMedia.map((social, idx) => (
                                         <motion.a
@@ -203,7 +203,7 @@ const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
                             transition={{ duration: 0.06, delay: 0.02 }}
                             className="glass-card rounded-2xl p-7 md:p-8"
                         >
-                            <h2 className="text-xl font-playfair font-bold text-champagne mb-6">أرسل رسالة</h2>
+                            <h2 className="text-xl font-almarai font-bold text-champagne mb-6">أرسل رسالة</h2>
                             <form onSubmit={handleSubmit} className="space-y-5">
                                 <div className="space-y-2">
                                     <label className="text-[10px] text-ivory/25 uppercase font-bold tracking-wider">الاسم *</label>

@@ -138,7 +138,7 @@ export default function AdminCouponsPage() {
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider">كوبونات الخصم</h1>
+                    <h1 className="text-3xl font-almarai font-bold text-white uppercase tracking-wider">كوبونات الخصم</h1>
                     <p className="text-gray-400 text-sm mt-1">إدارة أكواد الخصم والخصومات على المتجر.</p>
                 </div>
                 {!showForm && (

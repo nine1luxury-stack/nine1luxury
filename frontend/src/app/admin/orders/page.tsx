@@ -192,7 +192,7 @@ export default function AdminOrdersPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider">الطلبات</h1>
+                    <h1 className="text-3xl font-almarai font-bold text-white uppercase tracking-wider">الطلبات</h1>
                     <p className="text-gray-400 text-sm mt-1">إحصائيات ومتابعة جميع طلبات العملاء وحالات الشحن.</p>
                 </div>
                 {/* Actions (Printer/Download) - Keeping for visual consistency but they are placeholders */}
@@ -315,7 +315,7 @@ export default function AdminOrdersPage() {
                                                 {order.id.slice(-8)}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-6 font-playfair transition-all">
+                                        <td className="px-6 py-6 font-almarai transition-all">
                                             <div className="flex flex-col">
                                                 <span className="text-base text-white font-bold group-hover:text-gold-300 transition-colors">
                                                     {order.guestName || order.user?.name || 'عميل مجهول'}

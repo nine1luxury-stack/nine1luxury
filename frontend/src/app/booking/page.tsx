@@ -146,7 +146,7 @@ export default function BookingPage() {
                         initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.05 }}
-                        className="text-gray-400 max-w-2xl mx-auto text-lg font-amiri pb-8"
+                        className="text-gray-400 max-w-2xl mx-auto text-lg font-almarai pb-8"
                     >
                         احجز قطعتك الفريدة الآن وسنقوم بتوصيلها إليك أينما كنت.
                     </motion.p>
@@ -353,7 +353,7 @@ export default function BookingPage() {
                                             <CheckCircle className="w-10 h-10 text-gold-500" />
                                         </div>
                                         <div className="space-y-2">
-                                            <h3 className="text-3xl font-playfair font-bold text-white">تم استلام طلب الحجز</h3>
+                                            <h3 className="text-3xl font-almarai font-bold text-white">تم استلام طلب الحجز</h3>
                                             <p className="text-gray-400">سوف نقوم بالتواصل معك خلال أقرب وقت لتأكيد حجز الموديل {formData.productModel}.</p>
                                         </div>
                                         <button

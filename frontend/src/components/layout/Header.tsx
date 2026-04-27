@@ -78,7 +78,7 @@ export function Header() {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className={`relative py-2 transition-all duration-300 font-amiri font-bold ${
+                            className={`relative py-2 transition-all duration-300 font-almarai font-bold ${
                                 isActive(link.href)
                                     ? "text-gold-300"
                                     : "text-ivory/60 hover:text-ivory"

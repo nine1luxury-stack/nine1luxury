@@ -256,7 +256,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-[10px] text-ivory/20 font-bold uppercase">بحد أقصى</span>
-                                    <span className="text-sm text-gold-500 font-playfair font-bold">
+                                    <span className="text-sm text-gold-500 font-almarai font-bold">
                                         {priceRange >= MAX_PRICE ? `${MAX_PRICE}+ ج.م` : `${priceRange} ج.م`}
                                     </span>
                                 </div>
@@ -363,7 +363,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                                                 <SlidersHorizontal className="w-8 h-8" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-playfair font-bold text-ivory mb-2">لا توجد منتجات مطابقة</h3>
+                                                <h3 className="text-xl font-almarai font-bold text-ivory mb-2">لا توجد منتجات مطابقة</h3>
                                                 <p className="text-ivory/20 text-sm">جرب استخدام فلاتر مختلفة أو تصفح قسم آخر</p>
                                             </div>
                                             <button
@@ -418,7 +418,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                             className="fixed inset-y-0 right-0 z-[110] w-[90%] max-w-sm bg-surface-dark p-10 flex flex-col shadow-[-40px_0_80px_rgba(0,0,0,0.8)] border-l border-ivory/5"
                         >
                             <div className="flex justify-between items-center mb-14">
-                                <h2 className="text-2xl font-playfair font-black text-ivory tracking-widest">الفلاتر</h2>
+                                <h2 className="text-2xl font-almarai font-black text-ivory tracking-widest">الفلاتر</h2>
                                 <button onClick={() => setIsMobileFiltersOpen(false)} className="p-3 bg-white/5 rounded-full text-ivory/40">
                                     <X className="w-5 h-5" />
                                 </button>

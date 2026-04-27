@@ -149,7 +149,7 @@ export default function AdminOffersPage() {
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider">إدارة العروض</h1>
+                    <h1 className="text-3xl font-almarai font-bold text-white uppercase tracking-wider">إدارة العروض</h1>
                     <p className="text-gray-400 text-sm mt-1">إضافة وتعديل العروض التي تظهر في صفحة "العروض".</p>
                 </div>
                 {!showForm && (
@@ -173,7 +173,7 @@ export default function AdminOffersPage() {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-gray-400 font-playfair uppercase">عنوان العرض</label>
+                                <label className="text-sm font-bold text-gray-400 font-almarai uppercase">عنوان العرض</label>
                                 <input
                                     required
                                     type="text"
@@ -266,7 +266,7 @@ export default function AdminOffersPage() {
 
                                 <div className="relative z-10">
                                     <div className="flex justify-between items-start mb-4">
-                                        <h3 className="text-xl font-bold text-white font-playfair">{offer.title}</h3>
+                                        <h3 className="text-xl font-bold text-white font-almarai">{offer.title}</h3>
                                         <button 
                                             onClick={() => toggleStatus(offer.id, offer.isActive)}
                                             className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${offer.isActive ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}

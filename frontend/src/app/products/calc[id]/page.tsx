@@ -121,7 +121,7 @@ export default function ProductDetailsPage() {
             <main className="min-h-screen bg-rich-black">
                 <Header />
                 <div className="flex flex-col items-center justify-center min-h-screen text-center space-y-8">
-                    <h2 className="text-4xl font-playfair font-bold text-ivory">المنتج غائب عن المجموعة</h2>
+                    <h2 className="text-4xl font-almarai font-bold text-ivory">المنتج غائب عن المجموعة</h2>
                     <button onClick={() => router.push("/products")} className="btn-ghost text-sm">العودة للمتجر</button>
                 </div>
                 <Footer />
@@ -211,13 +211,13 @@ export default function ProductDetailsPage() {
                                 <span className="text-gold-500/60 font-black uppercase tracking-[0.4em] text-[10px]">
                                     {product.category}
                                 </span>
-                                <h1 className="text-4xl md:text-6xl font-playfair font-bold text-ivory leading-tight">
+                                <h1 className="text-4xl md:text-6xl font-almarai font-bold text-ivory leading-tight">
                                     {product.name}
                                 </h1>
                             </div>
 
                             <div className="flex items-baseline gap-4">
-                                <span className="text-3xl font-playfair font-bold text-champagne">
+                                <span className="text-3xl font-almarai font-bold text-champagne">
                                     {formatPrice(discountedPrice)}
                                 </span>
                                 {product.discount && (

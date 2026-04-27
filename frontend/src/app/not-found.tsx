@@ -12,7 +12,7 @@ export default function NotFound() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[220px]" style={{ background: 'hsla(37, 48%, 48%, 0.04)' }} />
       </div>
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-[0.02] flex items-center justify-center">
-        <span className="text-[30vw] font-playfair font-bold whitespace-nowrap">
+        <span className="text-[30vw] font-almarai font-bold whitespace-nowrap">
           404
         </span>
       </div>
@@ -27,7 +27,7 @@ export default function NotFound() {
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1, type: "spring", stiffness: 100 }}
-          className="text-8xl md:text-9xl font-playfair font-bold mb-2"
+          className="text-8xl md:text-9xl font-almarai font-bold mb-2"
         >
           <span className="text-gold-gradient">404</span>
         </motion.h1>
@@ -36,7 +36,7 @@ export default function NotFound() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="text-2xl md:text-4xl font-amiri font-bold text-ivory mb-6"
+          className="text-2xl md:text-4xl font-almarai font-bold text-ivory mb-6"
         >
           الصفحة غير موجودة
         </motion.h2>
@@ -45,7 +45,7 @@ export default function NotFound() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="text-ivory/30 text-base md:text-lg mb-12 max-w-lg font-amiri leading-relaxed"
+          className="text-ivory/30 text-base md:text-lg mb-12 max-w-lg font-almarai leading-relaxed"
         >
           عذراً، يبدو أن الصفحة التي تبحث عنها قد تم نقلها أو حذفها أو أنها لم
           تكن موجودة أصلاً.
@@ -60,7 +60,7 @@ export default function NotFound() {
             href="/"
             className="btn-primary text-lg group"
           >
-            <span className="font-amiri">العودة للرئيسية</span>
+            <span className="font-almarai">العودة للرئيسية</span>
             <MoveLeft className="w-5 h-5 transition-transform group-hover:-translate-x-2" />
           </Link>
         </motion.div>

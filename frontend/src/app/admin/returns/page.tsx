@@ -143,7 +143,7 @@ export default function ReturnsPage() {
         <div className="space-y-8 relative">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider">المرتجعات</h1>
+                    <h1 className="text-3xl font-almarai font-bold text-white uppercase tracking-wider">المرتجعات</h1>
                     <p className="text-gray-400 text-sm mt-1">إدارة طلبات الاسترجاع وتصنيف حالة المنتجات.</p>
                 </div>
                 <button
@@ -251,7 +251,7 @@ export default function ReturnsPage() {
                             className="bg-surface-dark border border-white/10 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
                         >
                             <div className="p-6 border-b border-white/5 flex justify-between items-center bg-rich-black/50">
-                                <h2 className="text-xl font-bold text-white font-playfair">إضافة مرتجع جديد</h2>
+                                <h2 className="text-xl font-bold text-white font-almarai">إضافة مرتجع جديد</h2>
                                 <button onClick={() => setIsAddModalOpen(false)} className="text-gray-400 hover:text-white">
                                     <X className="w-5 h-5" />
                                 </button>

@@ -296,7 +296,7 @@ export default function ProductDetailsPage() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.1 }}
-                                className="text-5xl md:text-7xl font-playfair font-black text-ivory leading-[1.1]"
+                                className="text-5xl md:text-7xl font-almarai font-black text-ivory leading-[1.1]"
                             >
                                 {product.name}
                             </motion.h1>
@@ -310,11 +310,11 @@ export default function ProductDetailsPage() {
                         </div>
 
                         <div className="flex items-baseline gap-6 border-b border-ivory/5 pb-10">
-                            <span className="text-5xl font-playfair font-black text-gold-300 drop-shadow-2xl">
+                            <span className="text-5xl font-almarai font-black text-gold-300 drop-shadow-2xl">
                                 {formatPrice(discountedPrice)}
                             </span>
                             {product.discount && product.discount > 0 && (
-                                <span className="text-2xl text-ivory/20 line-through font-playfair">
+                                <span className="text-2xl text-ivory/20 line-through font-almarai">
                                     {formatPrice(product.price)}
                                 </span>
                             )}

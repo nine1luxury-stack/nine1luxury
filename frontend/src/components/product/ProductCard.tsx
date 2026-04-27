@@ -126,7 +126,7 @@ export function ProductCard({ id, name, price, discount, images: propImages, cat
                         {category}
                     </span>
                     <Link href={`/products/${id}`}>
-                        <h3 className="text-base md:text-lg font-bold text-ivory/90 group-hover:text-gold-300 transition-colors duration-300 line-clamp-1 font-playfair tracking-wide leading-tight">
+                        <h3 className="text-base md:text-lg font-bold text-ivory/90 group-hover:text-gold-300 transition-colors duration-300 line-clamp-1 font-almarai tracking-wide leading-tight">
                             {name}
                         </h3>
                     </Link>

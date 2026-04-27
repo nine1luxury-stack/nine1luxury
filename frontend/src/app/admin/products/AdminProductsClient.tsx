@@ -288,7 +288,7 @@ export default function AdminProductsClient({ initialProducts, initialCategories
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider">إدارة المنتجات</h1>
+                    <h1 className="text-3xl font-almarai font-bold text-white uppercase tracking-wider">إدارة المنتجات</h1>
                     <p className="text-gray-400 text-sm mt-1">عرض وتعديل وإضافة منتجات جديدة للمتجر.</p>
                 </div>
                 <button
@@ -524,7 +524,7 @@ export default function AdminProductsClient({ initialProducts, initialCategories
                             className="bg-surface-dark border border-white/10 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
                         >
                             <div className="p-6 border-b border-white/5 flex justify-between items-center bg-rich-black/50">
-                                <h2 className="text-xl font-bold text-white font-playfair">{editingProduct ? 'تعديل المنتج' : 'إضافة منتج جديد'}</h2>
+                                <h2 className="text-xl font-bold text-white font-almarai">{editingProduct ? 'تعديل المنتج' : 'إضافة منتج جديد'}</h2>
                                 <button onClick={() => setIsAddModalOpen(false)} className="text-gray-400 hover:text-white">
                                     <X className="w-5 h-5" />
                                 </button>
@@ -850,7 +850,7 @@ export default function AdminProductsClient({ initialProducts, initialCategories
                             className="bg-surface-dark border border-white/10 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
                         >
                             <div className="p-6 border-b border-white/5 flex justify-between items-center bg-rich-black/50">
-                                <h2 className="text-xl font-bold text-white font-playfair">تفاصيل المنتج</h2>
+                                <h2 className="text-xl font-bold text-white font-almarai">تفاصيل المنتج</h2>
                                 <button onClick={() => setIsViewModalOpen(false)} className="text-gray-400 hover:text-white">
                                     <X className="w-5 h-5" />
                                 </button>
@@ -933,7 +933,7 @@ export default function AdminProductsClient({ initialProducts, initialCategories
 
                             <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/2">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-white font-playfair tracking-tight">إدارة الأقسام</h2>
+                                    <h2 className="text-2xl font-bold text-white font-almarai tracking-tight">إدارة الأقسام</h2>
                                     <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-1">تنسيق وهيكلة متجرك الخاص</p>
                                 </div>
                                 <button onClick={() => {

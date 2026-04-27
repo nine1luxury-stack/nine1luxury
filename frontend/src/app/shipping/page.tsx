@@ -40,7 +40,7 @@ export default function ShippingPage() {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
                     >
-                        <h1 className="text-4xl md:text-5xl font-playfair font-bold text-white mb-6 uppercase tracking-wider">
+                        <h1 className="text-4xl md:text-5xl font-almarai font-bold text-white mb-6 uppercase tracking-wider">
                             الشحن والتوصيل
                         </h1>
                         <p className="text-xl text-gray-400">

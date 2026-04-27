@@ -171,7 +171,7 @@ export default function CheckoutPage() {
                         <div className="w-20 h-20 bg-gold-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                              <Send className="w-10 h-10 text-gold-500" />
                         </div>
-                        <h2 className="text-3xl font-playfair font-bold text-white mb-4">تم استلام طلبك بنجاح!</h2>
+                        <h2 className="text-3xl font-almarai font-bold text-white mb-4">تم استلام طلبك بنجاح!</h2>
                         <p className="text-gray-400 mb-8">
                             سيتم مراجعة طلبك وإرسال تفاصيله إلى الإدارة. سنتواصل معك هاتفياً للتأكيد قريباً.
                         </p>
@@ -376,7 +376,7 @@ export default function CheckoutPage() {
                                         <span>تكلفة الشحن ({formData.city})</span>
                                         <span className="text-gold-300 font-bold">{formatPrice(shippingCost)}</span>
                                     </div>
-                                    <div className="flex justify-between text-2xl font-playfair font-bold text-white pt-4">
+                                    <div className="flex justify-between text-2xl font-almarai font-bold text-white pt-4">
                                         <span>الإجمالي</span>
                                         <span className="text-gold-300">{formatPrice(finalTotal)}</span>
                                     </div>

@@ -142,7 +142,7 @@ export default function ExpensesPage() {
         <div className="space-y-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-playfair font-bold text-white uppercase tracking-wider text-right">المصروفات</h1>
+                    <h1 className="text-3xl font-almarai font-bold text-white uppercase tracking-wider text-right">المصروفات</h1>
                     <p className="text-gray-400 text-sm mt-1">تتبع وإدارة نفقات المتجر التشغيلية.</p>
                 </div>
                 <button

@@ -218,7 +218,7 @@ export default function AdminTestimonialsPage() {
                             className="bg-surface-dark border border-white/10 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
                         >
                             <div className="p-6 border-b border-white/5 flex justify-between items-center bg-rich-black/50">
-                                <h2 className="text-xl font-bold text-white font-playfair">إضافة تجربة جديدة</h2>
+                                <h2 className="text-xl font-bold text-white font-almarai">إضافة تجربة جديدة</h2>
                                 <button onClick={() => setIsAddModalOpen(false)} className="text-gray-400 hover:text-white">
                                     <X className="w-5 h-5" />
                                 </button>
