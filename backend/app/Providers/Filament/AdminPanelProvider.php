@@ -91,16 +91,29 @@ class AdminPanelProvider extends PanelProvider
                         }
                         /* Dashboard Luxury Styling */
                         .fi-topbar {
-                            background: rgba(15, 17, 26, 0.8) !important;
+                            background: rgba(15, 17, 26, 0.85) !important;
                             backdrop-filter: blur(20px);
                             border-bottom: 1px solid rgba(181, 134, 63, 0.15) !important;
                         }
                         
                         .fi-sidebar {
                             background: transparent !important;
-                            border-inline-end: none !important;
+                            border: none !important;
+                        }
+                        
+                        /* Apply background only to sidebar content to avoid empty space when collapsed */
+                        .fi-sidebar-nav, .fi-sidebar-header {
+                            background: rgba(15, 17, 26, 0.85) !important;
+                            backdrop-filter: blur(20px);
+                            border-inline-end: 1px solid rgba(181, 134, 63, 0.1) !important;
                         }
 
+                        .fi-sidebar.fi-is-collapsed .fi-sidebar-nav {
+                            background: transparent !important;
+                            backdrop-filter: none !important;
+                            border-inline-end: none !important;
+                        }
+                        
                         .fi-main {
                             background: radial-gradient(circle at 10% 20%, rgba(181,134,63,0.05) 0%, #0F111A 80%) !important;
                         }
