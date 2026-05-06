@@ -90,7 +90,7 @@ export function Header() {
                             key={link.href}
                             href={link.href}
                             onClick={link.href === "/" ? handleHomeClick : undefined}
-                            className={`relative py-2 transition-all duration-300 font-cairo font-bold ${
+                            className={`relative py-2 transition-all duration-300 font-amiri font-bold ${
                                 isActive(link.href)
                                     ? "text-gold-300"
                                     : "text-ivory/60 hover:text-ivory"

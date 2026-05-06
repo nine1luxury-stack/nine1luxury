@@ -94,7 +94,7 @@ export function Testimonials() {
                     <p className="section-label animate-fade-in-up">
                         آراء عملائنا
                     </p>
-                    <h2 className="section-title-editorial text-3xl md:text-5xl mb-4 font-cairo font-black animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+                    <h2 className="section-title-editorial text-3xl md:text-5xl mb-4 font-amiri font-bold animate-fade-in-up" style={{ animationDelay: '100ms' }}>
                         تجارب{" "}
                         <span className="text-metallic-gradient">حقيقية</span>
                     </h2>
