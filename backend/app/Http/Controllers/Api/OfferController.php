@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class OfferController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = \App\Models\Product::with(['images', 'variants', 'category'])->where('isActive', true)->get();
-        return response()->json($products);
+        $offers = \App\Models\Offer::where('isActive', true)->orderBy('createdAt', 'desc')->get();
+        return response()->json($offers);
     }
 
     /**

@@ -1,4 +1,3 @@
-import { prisma, withDbTimeout } from "@/lib/db";
 import ProductsClient from "./ProductsClient";
 import { Suspense } from "react";
 
@@ -44,33 +43,32 @@ export default async function ProductsPage() {
 
 async function ProductsDataWrapper() {
     try {
-        const [products, categories] = await withDbTimeout(() => Promise.all([
-            prisma.product.findMany({
-                where: { isActive: true },
-                select: {
-                    id: true, name: true, price: true, discount: true,
-                    category: true, isActive: true, createdAt: true,
-                    // Include images but limited to 1 for initial load efficiency
-                    images: { take: 1, select: { url: true } },
-                    variants: { select: { id: true, size: true, color: true, stock: true } }
-                },
-                // Removed take: 8 to show all products
-                orderBy: { createdAt: 'desc' }
-            }),
-            prisma.category.findMany({ orderBy: { name: 'asc' } })
-        ]));
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002';
+        
+        console.log(`[ProductsPage] Fetching data from ${apiUrl}...`);
 
-        console.log(`[ProductsPage] Successfully fetched ${products.length} active products from database.`);
+        const [productsRes, categoriesRes] = await Promise.all([
+            fetch(`${apiUrl}/api/products`, { next: { revalidate: 60 } }),
+            fetch(`${apiUrl}/api/categories`, { next: { revalidate: 3600 } })
+        ]);
+
+        if (!productsRes.ok || !categoriesRes.ok) {
+            throw new Error(`API responded with status: ${productsRes.status} / ${categoriesRes.status}`);
+        }
+
+        const products = await productsRes.json();
+        const categories = await categoriesRes.json();
+
+        console.log(`[ProductsPage] Successfully fetched ${products.length} products and ${categories.length} categories.`);
 
         return (
             <ProductsClient 
-                initialProducts={JSON.parse(JSON.stringify(products))} 
-                initialCategories={JSON.parse(JSON.stringify(categories))} 
+                initialProducts={products} 
+                initialCategories={categories} 
             />
         );
     } catch (error) {
         console.error("[ProductsPage] Error fetching data:", error);
-        // Fallback to empty lists if DB is down, rather than crashing
         return (
             <ProductsClient 
                 initialProducts={[]} 

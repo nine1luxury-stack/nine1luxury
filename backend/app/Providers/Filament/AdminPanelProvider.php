@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->profile()
             ->sidebarCollapsibleOnDesktop()
             ->defaultThemeMode(\Filament\Enums\ThemeMode::Dark)
             ->brandName('Nine 1 Luxury')
@@ -96,26 +97,30 @@ class AdminPanelProvider extends PanelProvider
                             border-bottom: 1px solid rgba(181, 134, 63, 0.15) !important;
                         }
                         
-                        /* The Fix: Remove background from the main sidebar containers */
+                        /* The Ultimate Fix: Force all sidebar containers to be transparent */
                         .fi-sidebar, 
-                        .fi-sidebar > div, 
-                        .fi-sidebar-content {
+                        .fi-sidebar-content,
+                        .fi-sidebar-nav-container,
+                        .fi-sidebar-nav {
                             background: transparent !important;
+                            background-color: transparent !important;
                             border: none !important;
                             box-shadow: none !important;
                         }
                         
-                        /* Apply background only to the actual navigation area when NOT collapsed */
+                        /* Only apply the luxury background to the navigation items when NOT collapsed */
                         .fi-sidebar:not(.fi-is-collapsed) .fi-sidebar-nav {
                             background: rgba(15, 17, 26, 0.85) !important;
                             backdrop-filter: blur(20px);
                             border-inline-end: 1px solid rgba(181, 134, 63, 0.1) !important;
-                            border-radius: 0 1.5rem 1.5rem 0; /* Luxury rounded edge */
+                            border-radius: 1.5rem;
+                            margin: 1rem;
                         }
 
-                        /* Ensure no background appears when collapsed */
-                        .fi-sidebar.fi-is-collapsed .fi-sidebar-nav {
+                        /* Ensure absolute transparency when collapsed */
+                        .fi-sidebar.fi-is-collapsed * {
                             background: transparent !important;
+                            background-color: transparent !important;
                             backdrop-filter: none !important;
                         }
                         
@@ -178,6 +183,14 @@ class AdminPanelProvider extends PanelProvider
                             border-color: #B5863F !important;
                         }
                     </style>
+                ')
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::FOOTER,
+                fn (): string => \Illuminate\Support\Facades\Blade::render('
+                    <div class="text-center pb-8" style="color: #B5863F; font-weight: 800; font-family: Cairo; letter-spacing: 1px;">
+                        by IbrahimElseginy || SWE
+                    </div>
                 ')
             )
             ->plugins([
