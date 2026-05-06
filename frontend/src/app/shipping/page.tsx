@@ -43,7 +43,7 @@ export default function ShippingPage() {
                         <h1 className="text-4xl md:text-5xl font-amiri font-bold text-white mb-6 uppercase tracking-wider">
                             الشحن والتوصيل
                         </h1>
-                        <p className="text-xl text-gray-400 font-amiri">
+                        <p className="text-xl text-gray-400">
                             نحرص على وصول طلبك في أسرع وقت وبأفضل حالة.
                         </p>
                     </motion.div>
@@ -58,8 +58,8 @@ export default function ShippingPage() {
                                 className="bg-surface-dark border border-white/5 p-8 rounded-2xl hover:border-gold-500/30 transition-colors group"
                             >
                                 <feature.icon className="w-10 h-10 text-gold-500 mb-6 group-hover:scale-110 transition-transform" />
-                                <h3 className="text-xl font-bold text-white mb-3 font-amiri">{feature.title}</h3>
-                                <p className="text-gray-400 leading-relaxed font-amiri">
+                                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
+                                <p className="text-gray-400 leading-relaxed">
                                     {feature.description}
                                 </p>
                             </motion.div>
@@ -72,14 +72,14 @@ export default function ShippingPage() {
                         transition={{ delay: 0.4 }}
                         className="bg-gold-500/5 border border-gold-500/20 p-8 rounded-2xl text-center"
                     >
-                        <h3 className="text-xl font-bold text-gold-500 mb-4 font-amiri">هل لديك استفسار آخر؟</h3>
-                        <p className="text-gray-400 mb-6 font-amiri">
+                        <h3 className="text-xl font-bold text-gold-500 mb-4">هل لديك استفسار آخر؟</h3>
+                        <p className="text-gray-400 mb-6">
                             فريق خدمة العملاء جاهز لمساعدتك في تتبع شحنتك أو الرد على أي استفسار بخصوص التوصيل.
                         </p>
                         <a
                             href="https://wa.me/201094372339"
                             target="_blank"
-                            className="inline-flex items-center justify-center px-8 py-3 bg-gold-500 text-rich-black font-bold rounded-xl hover:bg-gold-300 transition-colors font-amiri"
+                            className="inline-flex items-center justify-center px-8 py-3 bg-gold-500 text-rich-black font-bold rounded-xl hover:bg-gold-300 transition-colors"
                         >
                             تواصل معنا
                         </a>

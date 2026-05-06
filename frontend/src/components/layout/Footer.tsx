@@ -158,9 +158,9 @@ export function Footer() {
                             href="https://www.instagram.com/_bebo9__?igsh=N3JhankyYTZmNTBy&utm_source=qr" 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-ivory/80 hover:text-gold-500 transition-all duration-300 font-bold"
+                            className="text-gold-500 hover:text-gold-300 transition-all duration-300 font-bold"
                         >
-                            by IbrahimElseginy || SW
+                            by IbrahimElseginy || SWE
                         </a>
                     </div>
                 </div>

@@ -12,7 +12,7 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = \App\Models\Offer::where('isActive', true)->orderBy('created_at', 'desc')->get();
+        $offers = \App\Models\Offer::where('isActive', true)->orderBy('createdAt', 'desc')->get();
         return response()->json($offers);
     }
 

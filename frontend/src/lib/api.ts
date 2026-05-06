@@ -152,9 +152,7 @@ export interface ReturnRequest {
     };
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002';
-
-// Real Products API connecting to our Laravel Backend
+// Real Products API connecting to our Next.js API Routes
 export const productsApi = {
     async getAll(params?: { category?: string; featured?: boolean, limit?: number, all?: boolean }): Promise<Product[]> {
         const query = new URLSearchParams();
@@ -163,7 +161,7 @@ export const productsApi = {
         if (params?.limit !== undefined) query.append('limit', String(params.limit));
         if (params?.all) query.append('all', 'true');
 
-        const res = await fetch(`${API_BASE_URL}/api/products?${query.toString()}`, { cache: 'no-store' });
+        const res = await fetch(`/api/products?${query.toString()}`, { cache: 'no-store' });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
             throw new Error(err.details || err.error || 'Failed to fetch products');
@@ -172,7 +170,7 @@ export const productsApi = {
     },
 
     async getById(id: string): Promise<Product> {
-        const res = await fetch(`${API_BASE_URL}/api/products/${id}`, { cache: 'no-store' });
+        const res = await fetch(`/api/products/${id}`, { cache: 'no-store' });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
             throw new Error(err.details || err.error || 'Failed to fetch product');
@@ -181,7 +179,7 @@ export const productsApi = {
     },
 
     async create(data: Partial<Product>): Promise<Product> {
-        const res = await fetch(`${API_BASE_URL}/api/products`, {
+        const res = await fetch('/api/products', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -194,7 +192,7 @@ export const productsApi = {
     },
 
     async update(id: string, data: Partial<Product>): Promise<Product> {
-        const res = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+        const res = await fetch(`/api/products/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -207,7 +205,7 @@ export const productsApi = {
     },
 
     async delete(id: string): Promise<void> {
-        const res = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+        const res = await fetch(`/api/products/${id}`, {
             method: 'DELETE',
         });
         if (!res.ok) {
@@ -220,25 +218,25 @@ export const productsApi = {
 // Real Orders API
 export const ordersApi = {
     async getAll(): Promise<Order[]> {
-        const res = await fetch(`${API_BASE_URL}/api/orders`, { cache: 'no-store' });
+        const res = await fetch('/api/orders', { cache: 'no-store' });
         if (!res.ok) return []; // Fail gracefully for now
         return res.json();
     },
 
     async getCustomers(): Promise<Customer[]> {
-        const res = await fetch(`${API_BASE_URL}/api/users/customers`, { cache: 'no-store' });
+        const res = await fetch('/api/users/customers', { cache: 'no-store' });
         if (!res.ok) return [];
         return res.json();
     },
 
     async getById(id: string): Promise<Order> {
-        const res = await fetch(`${API_BASE_URL}/api/orders/${id}`, { cache: 'no-store' });
+        const res = await fetch(`/api/orders/${id}`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch order');
         return res.json();
     },
 
     async create(data: CreateOrderDto): Promise<Order> {
-        const res = await fetch(`${API_BASE_URL}/api/orders`, {
+        const res = await fetch('/api/orders', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -251,7 +249,7 @@ export const ordersApi = {
     },
 
     async updateStatus(id: string, status: Order['status']): Promise<Order> {
-        const res = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
+        const res = await fetch(`/api/orders/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status }),
@@ -261,14 +259,14 @@ export const ordersApi = {
     },
 
     async delete(id: string): Promise<void> {
-        const res = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
+        const res = await fetch(`/api/orders/${id}`, {
             method: 'DELETE',
         });
         if (!res.ok) throw new Error('Failed to delete order');
     },
 };
 
-// Mock Auth API
+// Mock Auth API (Keep as mock for now unless User wants Auth implementation)
 export const authApi = {
     async login(): Promise<{ access_token: string }> {
         return { access_token: "mock-token" };
@@ -281,19 +279,19 @@ export const authApi = {
 
 export const suppliersApi = {
     async getAll(): Promise<Supplier[]> {
-        const res = await fetch(`${API_BASE_URL}/api/suppliers`, { cache: 'no-store' });
+        const res = await fetch('/api/suppliers', { cache: 'no-store' });
         if (!res.ok) return [];
         return res.json();
     },
 
     async getStats(): Promise<SupplierStat[]> {
-        const res = await fetch(`${API_BASE_URL}/api/suppliers/stats`, { cache: 'no-store' });
+        const res = await fetch('/api/suppliers/stats', { cache: 'no-store' });
         if (!res.ok) return [];
         return res.json();
     },
 
     async create(data: Partial<Supplier>): Promise<Supplier> {
-        const res = await fetch(`${API_BASE_URL}/api/suppliers`, {
+        const res = await fetch('/api/suppliers', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -303,7 +301,7 @@ export const suppliersApi = {
     },
 
     async update(id: string, data: Partial<Supplier>): Promise<Supplier> {
-        const res = await fetch(`${API_BASE_URL}/api/suppliers/${id}`, {
+        const res = await fetch(`/api/suppliers/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -313,7 +311,7 @@ export const suppliersApi = {
     },
 
     async delete(id: string): Promise<void> {
-        const res = await fetch(`${API_BASE_URL}/api/suppliers/${id}`, {
+        const res = await fetch(`/api/suppliers/${id}`, {
             method: 'DELETE',
         });
         if (!res.ok) throw new Error('Failed to delete supplier');
@@ -322,19 +320,19 @@ export const suppliersApi = {
 
 export const expensesApi = {
     async getAll(): Promise<Expense[]> {
-        const res = await fetch(`${API_BASE_URL}/api/expenses`, { cache: 'no-store' });
+        const res = await fetch('/api/expenses', { cache: 'no-store' });
         if (!res.ok) return [];
         return res.json();
     },
 
     async getStats(): Promise<ExpenseStats> {
-        const res = await fetch(`${API_BASE_URL}/api/expenses/stats`, { cache: 'no-store' });
+        const res = await fetch('/api/expenses/stats', { cache: 'no-store' });
         if (!res.ok) return { total: 0, byCategory: {} };
         return res.json();
     },
 
     async create(data: Partial<Expense>): Promise<Expense> {
-        const res = await fetch(`${API_BASE_URL}/api/expenses`, {
+        const res = await fetch('/api/expenses', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -344,7 +342,7 @@ export const expensesApi = {
     },
 
     async update(id: string, data: Partial<Expense>): Promise<Expense> {
-        const res = await fetch(`${API_BASE_URL}/api/expenses/${id}`, {
+        const res = await fetch(`/api/expenses/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -354,7 +352,7 @@ export const expensesApi = {
     },
 
     async delete(id: string): Promise<void> {
-        const res = await fetch(`${API_BASE_URL}/api/expenses/${id}`, {
+        const res = await fetch(`/api/expenses/${id}`, {
             method: 'DELETE',
         });
         if (!res.ok) throw new Error('Failed to delete expense');
@@ -363,12 +361,12 @@ export const expensesApi = {
 
 export const categoriesApi = {
     async getAll(): Promise<Category[]> {
-        const res = await fetch(`${API_BASE_URL}/api/categories`, { cache: 'no-store' });
+        const res = await fetch('/api/categories', { cache: 'no-store' });
         if (!res.ok) return [];
         return res.json();
     },
     async create(name: string): Promise<Category> {
-        const res = await fetch(`${API_BASE_URL}/api/categories`, {
+        const res = await fetch('/api/categories', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name }),
@@ -380,7 +378,7 @@ export const categoriesApi = {
         return res.json();
     },
     async update(id: string, name: string): Promise<Category> {
-        const res = await fetch(`${API_BASE_URL}/api/categories/${id}`, {
+        const res = await fetch(`/api/categories/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name }),
@@ -392,7 +390,7 @@ export const categoriesApi = {
         return res.json();
     },
     async delete(id: string): Promise<void> {
-        const res = await fetch(`${API_BASE_URL}/api/categories/${id}`, {
+        const res = await fetch(`/api/categories/${id}`, {
             method: 'DELETE',
         });
         if (!res.ok) {

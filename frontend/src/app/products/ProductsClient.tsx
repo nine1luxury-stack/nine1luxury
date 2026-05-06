@@ -139,7 +139,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                         initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.02 }}
-                        className="section-title text-3xl md:text-5xl font-amiri font-extrabold tracking-tight"
+                        className="section-title text-3xl md:text-5xl font-cairo font-extrabold tracking-tight"
                     >
                         المتجر الرئيسي
                     </motion.h1>
@@ -194,7 +194,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                     <aside className="hidden lg:block w-80 shrink-0 space-y-12 glass-card-premium p-10 rounded-[3rem] sticky top-16 h-fit">
                         {/* Categories */}
                         <div className="space-y-8">
-                            <h3 className="text-gold-500 font-bold uppercase tracking-[0.4em] text-[10px] px-2 flex items-center justify-between font-amiri">
+                            <h3 className="text-gold-500 font-bold uppercase tracking-[0.4em] text-[10px] px-2 flex items-center justify-between font-cairo">
                                 التصنيفات
                                 <div className="h-[1px] flex-1 bg-gold-500/20 mr-4" />
                             </h3>
@@ -213,7 +213,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                                                     : "text-ivory/30 hover:text-ivory/80 hover:bg-white/[0.03]"
                                             )}
                                         >
-                                            <span className="text-[12px] uppercase tracking-[0.1em] z-10 font-amiri">{cat}</span>
+                                            <span className="text-[12px] uppercase tracking-[0.1em] z-10 font-cairo">{cat}</span>
                                             <span className={cn(
                                                 "text-[10px] font-bold min-w-[24px] h-[24px] rounded-full flex items-center justify-center transition-colors z-10",
                                                 isActive ? "bg-rich-black/20 text-rich-black" : "bg-white/[0.04] text-ivory/30 group-hover:bg-gold-500/10 group-hover:text-gold-500"
@@ -256,7 +256,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-[10px] text-ivory/20 font-bold uppercase">بحد أقصى</span>
-                                    <span className="text-sm text-gold-500 font-amiri font-bold">
+                                    <span className="text-sm text-gold-500 font-cairo font-bold">
                                         {priceRange >= MAX_PRICE ? `${MAX_PRICE}+ ج.م` : `${priceRange} ج.م`}
                                     </span>
                                 </div>
@@ -363,7 +363,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                                                 <SlidersHorizontal className="w-8 h-8" />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-amiri font-bold text-ivory mb-2">لا توجد منتجات مطابقة</h3>
+                                                <h3 className="text-xl font-cairo font-bold text-ivory mb-2">لا توجد منتجات مطابقة</h3>
                                                 <p className="text-ivory/20 text-sm">جرب استخدام فلاتر مختلفة أو تصفح قسم آخر</p>
                                             </div>
                                             <button
@@ -418,7 +418,7 @@ export default function ProductsClient({ initialProducts, initialCategories, err
                             className="fixed inset-y-0 right-0 z-[110] w-[90%] max-w-sm bg-surface-dark p-10 flex flex-col shadow-[-40px_0_80px_rgba(0,0,0,0.8)] border-l border-ivory/5"
                         >
                             <div className="flex justify-between items-center mb-14">
-                                <h2 className="text-2xl font-amiri font-black text-ivory tracking-widest">الفلاتر</h2>
+                                <h2 className="text-2xl font-cairo font-black text-ivory tracking-widest">الفلاتر</h2>
                                 <button onClick={() => setIsMobileFiltersOpen(false)} className="p-3 bg-white/5 rounded-full text-ivory/40">
                                     <X className="w-5 h-5" />
                                 </button>

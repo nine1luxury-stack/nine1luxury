@@ -10,13 +10,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MotionProvider } from "@/components/common/MotionProvider";
 
-const amiri = Amiri({
-  subsets: ["arabic"],
-  weight: ["400", "700"],
-  variable: "--font-amiri",
-  display: "swap",
-});
-
 const cairo = Cairo({
   subsets: ["arabic"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
@@ -27,6 +20,13 @@ const cairo = Cairo({
 const almarai = Almarai({
   subsets: ["arabic"],
   weight: ["300", "400", "700", "800"],
+  variable: "--font-almarai",
+  display: "swap",
+});
+
+const amiri = Amiri({
+  subsets: ["arabic"],
+  weight: ["400", "700"],
   variable: "--font-amiri",
   display: "swap",
 });

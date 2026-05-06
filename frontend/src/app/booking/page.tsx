@@ -87,8 +87,7 @@ export default function BookingPage() {
 
         setIsSubmitting(true);
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002';
-            const res = await fetch(`${apiUrl}/api/bookings`, {
+            const res = await fetch("/api/bookings", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -130,10 +129,10 @@ export default function BookingPage() {
                     <span className="text-gold-500 font-bold uppercase text-sm block">
                         Exclusive Reservation
                     </span>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-white font-amiri uppercase leading-tight">
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-white font-cairo uppercase leading-tight">
                         احجز منتجك <span className="text-metallic-gradient">المفضل</span>
                     </h1>
-                    <p className="text-gray-400 max-w-2xl mx-auto text-lg font-amiri pb-8">
+                    <p className="text-gray-400 max-w-2xl mx-auto text-lg font-cairo pb-8">
                         احجز قطعتك الفريدة الآن وسنقوم بتوصيلها إليك أينما كنت.
                     </p>
                 </div>
@@ -150,7 +149,7 @@ export default function BookingPage() {
                         {/* Info Side */}
                         <div className="lg:col-span-2 space-y-8">
                             <div className="space-y-4">
-                                <h2 className="text-4xl font-amiri font-extrabold text-white uppercase leading-tight">لماذا تسوق معنا؟</h2>
+                                <h2 className="text-4xl font-cairo font-extrabold text-white uppercase leading-tight">لماذا تسوق معنا؟</h2>
                                 <div className="h-1.5 w-24 luxury-gradient rounded-full" />
                             </div>
                             
@@ -196,7 +195,7 @@ export default function BookingPage() {
                                         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
-                                                    <label className="text-[10px] font-bold text-gold-500/60 uppercase flex items-center gap-3 tracking-[0.2em] font-amiri">
+                                                    <label className="text-[10px] font-bold text-gold-500/60 uppercase flex items-center gap-3 tracking-[0.2em] font-cairo">
                                                         <Phone className="w-3.5 h-3.5" /> رقم الهاتف المحمول
                                                     </label>
                                                     <input
@@ -323,7 +322,7 @@ export default function BookingPage() {
                                             <CheckCircle className="w-10 h-10 text-gold-500" />
                                         </div>
                                         <div className="space-y-2">
-                                            <h3 className="text-3xl font-amiri font-bold text-white">تم استلام طلب الحجز</h3>
+                                            <h3 className="text-3xl font-cairo font-bold text-white">تم استلام طلب الحجز</h3>
                                             <p className="text-gray-400">سوف نقوم بالتواصل معك خلال أقرب وقت لتأكيد حجز الموديل {formData.productModel}.</p>
                                         </div>
                                         <button
