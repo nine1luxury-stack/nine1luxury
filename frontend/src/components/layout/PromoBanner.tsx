@@ -40,7 +40,7 @@ export function PromoBanner({ settingKey = "promoBanner" }: { settingKey?: strin
                 >
                     {Array.from({ length: 20 }).map((_, i) => (
                         <div key={i} className="inline-flex items-center gap-8 px-6">
-                            <p className="text-champagne font-almarai font-black text-base md:text-lg uppercase tracking-[0.4em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                            <p className="text-champagne font-amiri font-black text-base md:text-lg uppercase tracking-[0.4em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                                 {promoBanner}
                             </p>
                             <div className="flex items-center gap-1">
@@ -61,7 +61,7 @@ export function PromoBanner({ settingKey = "promoBanner" }: { settingKey?: strin
                 >
                     {Array.from({ length: 20 }).map((_, i) => (
                         <div key={`dup-${i}`} className="inline-flex items-center gap-8 px-6">
-                            <p className="text-champagne font-almarai font-black text-base md:text-lg uppercase tracking-[0.4em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                            <p className="text-champagne font-amiri font-black text-base md:text-lg uppercase tracking-[0.4em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                                 {promoBanner}
                             </p>
                             <div className="flex items-center gap-1">

@@ -25,7 +25,7 @@ export default function GlobalError({
                     <AlertTriangle className="w-10 h-10 text-red-500" />
                 </div>
                 
-                <h2 className="text-2xl font-bold font-almarai-extra-bold text-white mb-4">
+                <h2 className="text-2xl font-bold font-amiri-extra-bold text-white mb-4">
                     عذراً، حدث خطأ في الخادم (Server Error)
                 </h2>
                 

@@ -87,7 +87,8 @@ export default function BookingPage() {
 
         setIsSubmitting(true);
         try {
-            const res = await fetch("/api/bookings", {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002';
+            const res = await fetch(`${apiUrl}/api/bookings`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

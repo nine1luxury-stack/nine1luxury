@@ -5,7 +5,7 @@ import { Award, Target, Heart, Sparkles, Shield, Truck, Users, Package, Star, Tr
 // Static counter for maximum performance
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
     return (
-        <div className="text-3xl md:text-4xl font-almarai font-bold text-gold-300">
+        <div className="text-3xl md:text-4xl font-amiri font-bold text-gold-300">
             {target.toLocaleString()}{suffix}
         </div>
     );
@@ -52,7 +52,7 @@ export default function AboutPage() {
                 <div className="absolute bottom-[20%] right-[10%] w-64 h-64 rounded-full" style={{ background: 'radial-gradient(circle, hsla(39, 52%, 68%, 0.1) 0%, transparent 70%)' }} />
 
                 <div className="container mx-auto px-4 text-center relative z-10 pt-20 animate-fade-in-up">
-                    <h1 className="section-title text-4xl md:text-5xl font-almarai font-extrabold mb-8 tracking-tighter leading-none">
+                    <h1 className="section-title text-4xl md:text-5xl font-amiri font-extrabold mb-8 tracking-tighter leading-none">
                         من نحن
                     </h1>
                     <div className="h-px w-20 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent mx-auto mb-6" />
@@ -88,7 +88,7 @@ export default function AboutPage() {
                 <div className="container mx-auto px-4 relative z-10">
                     <div className="max-w-4xl mx-auto space-y-8">
                         <div className="space-y-6 text-center">
-                            <h2 className="section-title text-4xl md:text-7xl font-almarai font-extrabold tracking-tighter">قصتنا</h2>
+                            <h2 className="section-title text-4xl md:text-7xl font-amiri font-extrabold tracking-tighter">قصتنا</h2>
                             <div className="h-2 w-32 luxury-gradient rounded-full mx-auto" />
                             <p className="text-ivory/35 leading-[2.2] text-lg">
                                 بدأت <span className="text-metallic-gradient font-black">Nine1Luxury</span> من رؤية طموحة لمزج الأناقة الكلاسيكية باللمسات العصرية العالمية.
@@ -110,7 +110,7 @@ export default function AboutPage() {
                         <p className="section-label">
                             مبادئنا
                         </p>
-                        <h2 className="section-title text-4xl md:text-6xl mb-6 font-almarai font-extrabold tracking-tighter">
+                        <h2 className="section-title text-4xl md:text-6xl mb-6 font-amiri font-extrabold tracking-tighter">
                             قيمنا الأساسية
                         </h2>
                         <div className="h-1.5 w-24 luxury-gradient rounded-full mx-auto" />

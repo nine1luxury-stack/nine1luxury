@@ -132,7 +132,7 @@ export default function Home() {
               <p className="section-label animate-fade-in-up">
                 فرص حصرية
               </p>
-              <h2 className="section-title-editorial text-3xl md:text-5xl font-almarai-extra-bold animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+              <h2 className="section-title-editorial text-3xl md:text-5xl font-amiri-extra-bold animate-fade-in-up" style={{ animationDelay: '100ms' }}>
                 أحدث{" "}
                 <span className="text-metallic-gradient">العروض</span>
               </h2>
@@ -177,7 +177,7 @@ export default function Home() {
 
                   <div className="relative h-full p-8 flex flex-col justify-center items-center text-center">
                     {/* Title with Metallic Gradient and Editorial Font */}
-                    <h3 className="text-2xl md:text-3xl font-almarai-extra-bold-straight text-metallic-gradient mb-8 transition-transform duration-500 group-hover:scale-110">
+                    <h3 className="text-2xl md:text-3xl font-amiri-extra-bold-straight text-metallic-gradient mb-8 transition-transform duration-500 group-hover:scale-110">
                       {offer.title}
                     </h3>
 
@@ -215,7 +215,7 @@ export default function Home() {
       <section className="pt-16 pb-28 bg-transparent relative">
         {/* Watermark */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-[0.012] flex items-center justify-center">
-          <span className="text-[20vw] font-almarai font-bold whitespace-nowrap">NINE 1 LUXURY</span>
+          <span className="text-[20vw] font-amiri font-bold whitespace-nowrap">NINE 1 LUXURY</span>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -223,7 +223,7 @@ export default function Home() {
             <p className="section-label animate-fade-in-up">
               إصدارات مختارة
             </p>
-            <h2 className="section-title-editorial text-3xl md:text-6xl mb-4 font-almarai-extra-bold animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            <h2 className="section-title-editorial text-3xl md:text-6xl mb-4 font-amiri-extra-bold animate-fade-in-up" style={{ animationDelay: '100ms' }}>
               المجموعة{" "}
               <span className="text-metallic-gradient">المميزة</span>
             </h2>
@@ -275,7 +275,7 @@ export default function Home() {
             <p className="section-label animate-fade-in-up">
               لماذا نحن
             </p>
-            <h2 className="section-title-editorial text-3xl md:text-5xl mb-4 font-almarai-extra-bold animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            <h2 className="section-title-editorial text-3xl md:text-5xl mb-4 font-amiri-extra-bold animate-fade-in-up" style={{ animationDelay: '100ms' }}>
               ما يميز{" "}
               <span className="text-metallic-gradient">Nine1Luxury</span>
             </h2>
@@ -299,7 +299,7 @@ export default function Home() {
                     <item.icon className="w-7 h-7 md:w-8 md:h-8 text-gold-500 group-hover:text-rich-black transition-colors duration-300" />
                   </div>
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-ivory group-hover:text-gold-300 transition-colors font-almarai">{item.title}</h3>
+                <h3 className="text-lg md:text-xl font-bold text-ivory group-hover:text-gold-300 transition-colors font-amiri">{item.title}</h3>
                 <p className="text-ivory/70 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -331,7 +331,7 @@ export default function Home() {
               </div>
             </div>
 
-            <h2 className="text-3xl md:text-6xl font-bold text-ivory mb-6 leading-tight font-almarai-extra-bold-straight">
+            <h2 className="text-3xl md:text-6xl font-bold text-ivory mb-6 leading-tight font-amiri-extra-bold-straight">
               جاهز لإضافة لمسة من <span className="text-metallic-gradient">الرفاهية</span>
             </h2>
             <p className="text-ivory/80 text-lg mb-10 max-w-xl mx-auto leading-relaxed">

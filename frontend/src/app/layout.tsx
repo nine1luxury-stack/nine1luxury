@@ -27,7 +27,7 @@ const cairo = Cairo({
 const almarai = Almarai({
   subsets: ["arabic"],
   weight: ["300", "400", "700", "800"],
-  variable: "--font-almarai",
+  variable: "--font-amiri",
   display: "swap",
 });
 
