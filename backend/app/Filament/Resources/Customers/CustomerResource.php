@@ -18,14 +18,12 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
-    protected static ?string $modelLabel = 'العميل';
-    protected static ?string $pluralModelLabel = 'العملاء';
-    protected static ?string $navigationLabel = 'العملاء';
-    protected static ?string $navigationGroup = 'العملاء';
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    public static function getModelLabel(): string { return 'العميل'; }
+    public static function getPluralModelLabel(): string { return 'العملاء'; }
+    public static function getNavigationLabel(): string { return 'العملاء'; }
+    public static function getNavigationGroup(): ?string { return 'العملاء'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-users'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

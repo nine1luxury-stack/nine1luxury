@@ -18,14 +18,12 @@ class BookingResource extends Resource
 {
     protected static ?string $model = Booking::class;
 
-    protected static ?string $modelLabel = 'الحجز';
-    protected static ?string $pluralModelLabel = 'الحجوزات';
-    protected static ?string $navigationLabel = 'الحجوزات';
-    protected static ?string $navigationGroup = 'المبيعات';
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    public static function getModelLabel(): string { return 'الحجز'; }
+    public static function getPluralModelLabel(): string { return 'الحجوزات'; }
+    public static function getNavigationLabel(): string { return 'الحجوزات'; }
+    public static function getNavigationGroup(): ?string { return 'المبيعات'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-calendar'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

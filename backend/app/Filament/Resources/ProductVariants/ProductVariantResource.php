@@ -18,14 +18,12 @@ class ProductVariantResource extends Resource
 {
     protected static ?string $model = ProductVariant::class;
 
-    protected static ?string $modelLabel = 'نوع المنتج';
-    protected static ?string $pluralModelLabel = 'أنواع المنتجات';
-    protected static ?string $navigationLabel = 'أنواع المنتجات';
-    protected static ?string $navigationGroup = 'المتجر';
-    protected static ?string $navigationIcon = 'heroicon-o-swatch';
+    public static function getModelLabel(): string { return 'نوع المنتج'; }
+    public static function getPluralModelLabel(): string { return 'أنواع المنتجات'; }
+    public static function getNavigationLabel(): string { return 'أنواع المنتجات'; }
+    public static function getNavigationGroup(): ?string { return 'المتجر'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-swatch'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

@@ -18,14 +18,12 @@ class SupplierResource extends Resource
 {
     protected static ?string $model = Supplier::class;
 
-    protected static ?string $modelLabel = 'المورد';
-    protected static ?string $pluralModelLabel = 'الموردين';
-    protected static ?string $navigationLabel = 'الموردين';
-    protected static ?string $navigationGroup = 'المالية';
-    protected static ?string $navigationIcon = 'heroicon-o-truck';
+    public static function getModelLabel(): string { return 'المورد'; }
+    public static function getPluralModelLabel(): string { return 'الموردين'; }
+    public static function getNavigationLabel(): string { return 'الموردين'; }
+    public static function getNavigationGroup(): ?string { return 'المالية'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-truck'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

@@ -18,14 +18,12 @@ class OfferResource extends Resource
 {
     protected static ?string $model = Offer::class;
 
-    protected static ?string $modelLabel = 'العرض';
-    protected static ?string $pluralModelLabel = 'العروض';
-    protected static ?string $navigationLabel = 'العروض';
-    protected static ?string $navigationGroup = 'التسويق';
-    protected static ?string $navigationIcon = 'heroicon-o-sparkles';
+    public static function getModelLabel(): string { return 'العرض'; }
+    public static function getPluralModelLabel(): string { return 'العروض'; }
+    public static function getNavigationLabel(): string { return 'العروض'; }
+    public static function getNavigationGroup(): ?string { return 'التسويق'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-sparkles'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

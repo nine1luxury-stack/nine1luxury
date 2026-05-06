@@ -18,14 +18,12 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    protected static ?string $modelLabel = 'الطلب';
-    protected static ?string $pluralModelLabel = 'الطلبات';
-    protected static ?string $navigationLabel = 'الطلبات';
-    protected static ?string $navigationGroup = 'المبيعات';
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+    public static function getModelLabel(): string { return 'الطلب'; }
+    public static function getPluralModelLabel(): string { return 'الطلبات'; }
+    public static function getNavigationLabel(): string { return 'الطلبات'; }
+    public static function getNavigationGroup(): ?string { return 'المبيعات'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-shopping-cart'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

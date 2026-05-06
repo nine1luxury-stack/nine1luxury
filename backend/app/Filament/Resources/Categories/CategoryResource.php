@@ -18,14 +18,12 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $modelLabel = 'القسم';
-    protected static ?string $pluralModelLabel = 'الأقسام';
-    protected static ?string $navigationLabel = 'الأقسام';
-    protected static ?string $navigationGroup = 'المتجر';
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    public static function getModelLabel(): string { return 'القسم'; }
+    public static function getPluralModelLabel(): string { return 'الأقسام'; }
+    public static function getNavigationLabel(): string { return 'الأقسام'; }
+    public static function getNavigationGroup(): ?string { return 'المتجر'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-tag'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

@@ -18,14 +18,12 @@ class ExpenseResource extends Resource
 {
     protected static ?string $model = Expense::class;
 
-    protected static ?string $modelLabel = 'المصروف';
-    protected static ?string $pluralModelLabel = 'المصروفات';
-    protected static ?string $navigationLabel = 'المصروفات';
-    protected static ?string $navigationGroup = 'المالية';
-    protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
+    public static function getModelLabel(): string { return 'المصروف'; }
+    public static function getPluralModelLabel(): string { return 'المصروفات'; }
+    public static function getNavigationLabel(): string { return 'المصروفات'; }
+    public static function getNavigationGroup(): ?string { return 'المالية'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-currency-dollar'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

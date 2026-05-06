@@ -18,14 +18,12 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $modelLabel = 'المنتج';
-    protected static ?string $pluralModelLabel = 'المنتجات';
-    protected static ?string $navigationLabel = 'المنتجات';
-    protected static ?string $navigationGroup = 'المتجر';
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
+    public static function getModelLabel(): string { return 'المنتج'; }
+    public static function getPluralModelLabel(): string { return 'المنتجات'; }
+    public static function getNavigationLabel(): string { return 'المنتجات'; }
+    public static function getNavigationGroup(): ?string { return 'المتجر'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-shopping-bag'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

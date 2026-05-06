@@ -18,14 +18,12 @@ class TestimonialResource extends Resource
 {
     protected static ?string $model = Testimonial::class;
 
-    protected static ?string $modelLabel = 'رأي العميل';
-    protected static ?string $pluralModelLabel = 'آراء العملاء';
-    protected static ?string $navigationLabel = 'آراء العملاء';
-    protected static ?string $navigationGroup = 'التسويق';
-    protected static ?string $navigationIcon = 'heroicon-o-star';
+    public static function getModelLabel(): string { return 'رأي العميل'; }
+    public static function getPluralModelLabel(): string { return 'آراء العملاء'; }
+    public static function getNavigationLabel(): string { return 'آراء العملاء'; }
+    public static function getNavigationGroup(): ?string { return 'التسويق'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-star'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

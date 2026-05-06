@@ -18,14 +18,12 @@ class ReturnRequestResource extends Resource
 {
     protected static ?string $model = ReturnRequest::class;
 
-    protected static ?string $modelLabel = 'طلب الاسترجاع';
-    protected static ?string $pluralModelLabel = 'طلبات الاسترجاع';
-    protected static ?string $navigationLabel = 'طلبات الاسترجاع';
-    protected static ?string $navigationGroup = 'المبيعات';
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
+    public static function getModelLabel(): string { return 'طلب الاسترجاع'; }
+    public static function getPluralModelLabel(): string { return 'طلبات الاسترجاع'; }
+    public static function getNavigationLabel(): string { return 'طلبات الاسترجاع'; }
+    public static function getNavigationGroup(): ?string { return 'المبيعات'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-arrow-path'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

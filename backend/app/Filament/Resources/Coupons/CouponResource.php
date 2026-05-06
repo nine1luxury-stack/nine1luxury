@@ -18,14 +18,12 @@ class CouponResource extends Resource
 {
     protected static ?string $model = Coupon::class;
 
-    protected static ?string $modelLabel = 'كوبون الخصم';
-    protected static ?string $pluralModelLabel = 'كوبونات الخصم';
-    protected static ?string $navigationLabel = 'كوبونات الخصم';
-    protected static ?string $navigationGroup = 'التسويق';
-    protected static ?string $navigationIcon = 'heroicon-o-ticket';
+    public static function getModelLabel(): string { return 'كوبون الخصم'; }
+    public static function getPluralModelLabel(): string { return 'كوبونات الخصم'; }
+    public static function getNavigationLabel(): string { return 'كوبونات الخصم'; }
+    public static function getNavigationGroup(): ?string { return 'التسويق'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-ticket'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

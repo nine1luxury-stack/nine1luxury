@@ -18,14 +18,12 @@ class SettingResource extends Resource
 {
     protected static ?string $model = Setting::class;
 
-    protected static ?string $modelLabel = 'الإعداد';
-    protected static ?string $pluralModelLabel = 'الإعدادات';
-    protected static ?string $navigationLabel = 'الإعدادات';
-    protected static ?string $navigationGroup = 'الإدارة';
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    public static function getModelLabel(): string { return 'الإعداد'; }
+    public static function getPluralModelLabel(): string { return 'الإعدادات'; }
+    public static function getNavigationLabel(): string { return 'الإعدادات'; }
+    public static function getNavigationGroup(): ?string { return 'الإدارة'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-cog-6-tooth'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {

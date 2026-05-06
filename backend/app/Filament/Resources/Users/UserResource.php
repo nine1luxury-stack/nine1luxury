@@ -18,14 +18,12 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $modelLabel = 'المستخدم';
-    protected static ?string $pluralModelLabel = 'المستخدمين';
-    protected static ?string $navigationLabel = 'المستخدمين';
-    protected static ?string $navigationGroup = 'الإدارة';
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    public static function getModelLabel(): string { return 'المستخدم'; }
+    public static function getPluralModelLabel(): string { return 'المستخدمين'; }
+    public static function getNavigationLabel(): string { return 'المستخدمين'; }
+    public static function getNavigationGroup(): ?string { return 'الإدارة'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-user'; }
 
-
-    
 
     public static function form(Schema $schema): Schema
     {
