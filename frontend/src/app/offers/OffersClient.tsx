@@ -27,7 +27,7 @@ export default function OffersClient({ initialOffers }: { initialOffers: any[] }
                             <Sparkles className="w-4 h-4" />
                             حملات حصرية
                         </motion.div>
-                        <h1 className="text-4xl md:text-5xl font-extrabold text-white font-almarai uppercase tracking-tight leading-[1.1]">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-white font-amiri uppercase tracking-tight leading-[1.1]">
                             عروض <span className="text-metallic-gradient">استثنائية</span>
                         </h1>
                         <p className="text-gray-400 max-w-2xl text-lg font-medium leading-relaxed">
@@ -61,7 +61,7 @@ export default function OffersClient({ initialOffers }: { initialOffers: any[] }
                             >
                                 {/* Content */}
                                 <div className="p-10">
-                                    <h3 className="text-3xl font-extrabold text-white mb-4 font-almarai group-hover:text-gold-300 transition-colors leading-tight">
+                                    <h3 className="text-3xl font-extrabold text-white mb-4 font-amiri group-hover:text-gold-300 transition-colors leading-tight">
                                         {offer.title}
                                     </h3>
                                     <p className="text-ivory/40 mb-10 line-clamp-3 text-base leading-relaxed min-h-[72px]">
