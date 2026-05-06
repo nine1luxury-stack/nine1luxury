@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->defaultThemeMode(\Filament\Enums\ThemeMode::Dark)
             ->brandName('Nine 1 Luxury')
             ->colors([
                 'primary' => '#B5863F',
