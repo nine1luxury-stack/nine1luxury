@@ -41,6 +41,12 @@ class RoleResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static function getModelLabel(): string { return 'الدور'; }
+    public static function getPluralModelLabel(): string { return 'الأدوار'; }
+    public static function getNavigationLabel(): string { return 'الأدوار والصلاحيات'; }
+    public static function getNavigationGroup(): ?string { return 'الإدارة'; }
+    public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-shield-check'; }
+
     #[Override]
     public static function form(Schema $schema): Schema
     {

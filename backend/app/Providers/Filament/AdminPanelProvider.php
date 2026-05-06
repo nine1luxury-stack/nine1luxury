@@ -90,12 +90,17 @@ class AdminPanelProvider extends PanelProvider
                             border-radius: 1.5rem !important;
                         }
                         /* Dashboard Luxury Styling */
-                        .fi-topbar, .fi-sidebar {
-                            background: rgba(15, 17, 26, 0.85) !important;
+                        .fi-topbar {
+                            background: rgba(15, 17, 26, 0.8) !important;
                             backdrop-filter: blur(20px);
-                            border-color: rgba(181, 134, 63, 0.15) !important;
+                            border-bottom: 1px solid rgba(181, 134, 63, 0.15) !important;
                         }
                         
+                        .fi-sidebar {
+                            background: transparent !important;
+                            border-inline-end: none !important;
+                        }
+
                         .fi-main {
                             background: radial-gradient(circle at 10% 20%, rgba(181,134,63,0.05) 0%, #0F111A 80%) !important;
                         }

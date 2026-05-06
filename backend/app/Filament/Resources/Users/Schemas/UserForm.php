@@ -24,8 +24,14 @@ class UserForm
                     ->dehydrateStateUsing(fn ($state) => \Illuminate\Support\Facades\Hash::make($state))
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create'),
+                \Filament\Forms\Components\Select::make('roles')
+                    ->label('الأدوار والصلاحيات')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable(),
                 \Filament\Forms\Components\Select::make('role')
-                    ->label('الدور (الصلاحية)')
+                    ->label('الدور (نظام قديم)')
                     ->options([
                         'admin' => 'المدير العام (Admin)',
                         'moderator' => 'موظف (Moderator)',
