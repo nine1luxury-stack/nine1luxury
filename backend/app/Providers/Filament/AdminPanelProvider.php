@@ -28,9 +28,11 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Nine 1 Luxury')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#B5863F',
             ])
+            ->font('Cairo')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
