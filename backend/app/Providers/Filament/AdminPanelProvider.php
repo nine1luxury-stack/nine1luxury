@@ -39,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => '#B5863F',
                 'gray' => '#0F111A', // Frontend dark charcoal
             ])
-            ->font('Cairo')
+            ->font('Amiri')
             ->renderHook(
                 \Filament\View\PanelsRenderHook::HEAD_END,
                 fn (): string => \Illuminate\Support\Facades\Blade::render('

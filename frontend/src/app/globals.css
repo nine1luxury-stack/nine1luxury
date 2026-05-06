@@ -142,7 +142,7 @@ html {
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-amiri), var(--font-almarai), sans-serif;
+  font-family: var(--font-amiri), serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -162,9 +162,8 @@ img {
   pointer-events: auto;
 }
 
-/* ═══ Specialized Typography ═══ */
 .font-almarai-extra-bold {
-  font-family: var(--font-amiri), sans-serif !important;
+  font-family: var(--font-amiri), serif !important;
   font-weight: 800 !important;
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -172,7 +171,7 @@ img {
 }
 
 .font-almarai-extra-bold-straight {
-  font-family: var(--font-amiri), sans-serif !important;
+  font-family: var(--font-amiri), serif !important;
   font-weight: 700 !important;
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -439,7 +438,7 @@ img {
 }
 
 .section-title {
-  font-family: var(--font-amiri), sans-serif;
+  font-family: var(--font-amiri), serif !important;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -449,7 +448,7 @@ img {
 
 /* Editorial Section Heading — Oversized & Striking */
 .section-title-editorial {
-  font-family: var(--font-amiri), sans-serif;
+  font-family: var(--font-amiri), serif !important;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;

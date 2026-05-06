@@ -42,6 +42,13 @@ export function Header() {
         return pathname.startsWith(href);
     };
 
+    const handleHomeClick = (e: React.MouseEvent) => {
+        if (pathname === "/") {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    };
+
     return (
         <header
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 animate-fade-in-up ${
@@ -61,7 +68,7 @@ export function Header() {
                 </button>
 
                 {/* Logo */}
-                <Link href="/" className="relative flex items-center gap-3 group">
+                <Link href="/" onClick={handleHomeClick} className="relative flex items-center gap-3 group">
                     <div className="relative w-44 h-18 transition-all duration-500 group-hover:scale-105">
                         <Image
                             src="/logo-main.png"
@@ -82,6 +89,7 @@ export function Header() {
                         <Link
                             key={link.href}
                             href={link.href}
+                            onClick={link.href === "/" ? handleHomeClick : undefined}
                             className={`relative py-2 transition-all duration-300 font-almarai font-bold ${
                                 isActive(link.href)
                                     ? "text-gold-300"
@@ -148,12 +156,15 @@ export function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    onClick={(e) => {
+                                        if (link.href === "/") handleHomeClick(e);
+                                        setIsMobileMenuOpen(false);
+                                    }}
                                     className={`text-base font-bold uppercase flex items-center justify-between group px-4 py-3.5 rounded-xl transition-all duration-300 ${
                                         isActive(link.href)
                                             ? "text-gold-300 bg-gold-500/[0.07] border border-gold-500/15"
-                                            : "text-ivory/70 hover:text-ivory hover:bg-white/[0.03]"
-                                    }`}
+                                             : "text-ivory/70 hover:text-ivory hover:bg-white/[0.03]"
+                                     }`}
                                 >
                                     {link.label}
                                     <ChevronLeft className={`w-4 h-4 transition-all ${isActive(link.href) ? 'text-gold-500' : 'text-ivory/15 group-hover:text-ivory/40'}`} />
