@@ -24,6 +24,11 @@ class SettingResource extends Resource
     public static function getNavigationGroup(): ?string { return 'الإدارة'; }
     public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-cog-6-tooth'; }
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
+
 
     public static function form(Schema $schema): Schema
     {

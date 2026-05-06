@@ -18,11 +18,16 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    public static function getModelLabel(): string { return 'المستخدم'; }
-    public static function getPluralModelLabel(): string { return 'المستخدمين'; }
-    public static function getNavigationLabel(): string { return 'المستخدمين'; }
+    public static function getModelLabel(): string { return 'الموظف'; }
+    public static function getPluralModelLabel(): string { return 'الموظفين'; }
+    public static function getNavigationLabel(): string { return 'الموظفين'; }
     public static function getNavigationGroup(): ?string { return 'الإدارة'; }
     public static function getNavigationIcon(): string|\BackedEnum|null { return 'heroicon-o-user'; }
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
 
 
     public static function form(Schema $schema): Schema

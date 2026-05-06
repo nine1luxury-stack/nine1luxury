@@ -21,10 +21,18 @@ class UserForm
                 DateTimePicker::make('email_verified_at'),
                 TextInput::make('password')
                     ->password()
-                    ->required(),
-                TextInput::make('role')
+                    ->dehydrateStateUsing(fn ($state) => \Illuminate\Support\Facades\Hash::make($state))
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->required(fn (string $context): bool => $context === 'create'),
+                \Filament\Forms\Components\Select::make('role')
+                    ->label('الدور (الصلاحية)')
+                    ->options([
+                        'admin' => 'المدير العام (Admin)',
+                        'moderator' => 'موظف (Moderator)',
+                        'user' => 'مستخدم عادي (User)',
+                    ])
                     ->required()
-                    ->default('user'),
+                    ->default('moderator'),
             ]);
     }
 }
