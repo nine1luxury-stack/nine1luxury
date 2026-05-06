@@ -25,7 +25,7 @@ class SettingResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
 
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    
 
     public static function form(Schema $schema): Schema
     {

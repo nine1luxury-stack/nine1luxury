@@ -25,7 +25,7 @@ class ReturnRequestResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
 
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    
 
     public static function form(Schema $schema): Schema
     {

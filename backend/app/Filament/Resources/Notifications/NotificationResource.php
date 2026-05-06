@@ -25,7 +25,7 @@ class NotificationResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-bell';
 
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    
 
     public static function form(Schema $schema): Schema
     {

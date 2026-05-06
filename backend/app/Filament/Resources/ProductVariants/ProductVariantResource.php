@@ -25,7 +25,7 @@ class ProductVariantResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-swatch';
 
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    
 
     public static function form(Schema $schema): Schema
     {

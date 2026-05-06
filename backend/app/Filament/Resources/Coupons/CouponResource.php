@@ -25,7 +25,7 @@ class CouponResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    
 
     public static function form(Schema $schema): Schema
     {

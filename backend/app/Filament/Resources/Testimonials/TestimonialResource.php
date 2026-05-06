@@ -25,7 +25,7 @@ class TestimonialResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-star';
 
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    
 
     public static function form(Schema $schema): Schema
     {

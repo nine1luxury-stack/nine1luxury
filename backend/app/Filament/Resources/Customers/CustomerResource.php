@@ -25,7 +25,7 @@ class CustomerResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    
 
     public static function form(Schema $schema): Schema
     {

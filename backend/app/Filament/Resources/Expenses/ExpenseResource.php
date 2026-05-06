@@ -25,7 +25,7 @@ class ExpenseResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    
 
     public static function form(Schema $schema): Schema
     {
