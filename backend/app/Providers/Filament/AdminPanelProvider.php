@@ -96,22 +96,27 @@ class AdminPanelProvider extends PanelProvider
                             border-bottom: 1px solid rgba(181, 134, 63, 0.15) !important;
                         }
                         
-                        .fi-sidebar {
+                        /* The Fix: Remove background from the main sidebar containers */
+                        .fi-sidebar, 
+                        .fi-sidebar > div, 
+                        .fi-sidebar-content {
                             background: transparent !important;
                             border: none !important;
+                            box-shadow: none !important;
                         }
                         
-                        /* Apply background only to sidebar content to avoid empty space when collapsed */
-                        .fi-sidebar-nav, .fi-sidebar-header {
+                        /* Apply background only to the actual navigation area when NOT collapsed */
+                        .fi-sidebar:not(.fi-is-collapsed) .fi-sidebar-nav {
                             background: rgba(15, 17, 26, 0.85) !important;
                             backdrop-filter: blur(20px);
                             border-inline-end: 1px solid rgba(181, 134, 63, 0.1) !important;
+                            border-radius: 0 1.5rem 1.5rem 0; /* Luxury rounded edge */
                         }
 
+                        /* Ensure no background appears when collapsed */
                         .fi-sidebar.fi-is-collapsed .fi-sidebar-nav {
                             background: transparent !important;
                             backdrop-filter: none !important;
-                            border-inline-end: none !important;
                         }
                         
                         .fi-main {

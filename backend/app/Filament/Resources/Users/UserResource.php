@@ -17,6 +17,7 @@ use Filament\Tables\Table;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function getModelLabel(): string { return 'الموظف'; }
     public static function getPluralModelLabel(): string { return 'الموظفين'; }
