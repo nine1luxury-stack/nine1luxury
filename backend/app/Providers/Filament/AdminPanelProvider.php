@@ -91,16 +91,65 @@ class AdminPanelProvider extends PanelProvider
                         }
                         /* Dashboard Luxury Styling */
                         .fi-topbar, .fi-sidebar {
-                            background: rgba(15, 17, 26, 0.8) !important;
-                            backdrop-filter: blur(15px);
-                            border-color: rgba(181, 134, 63, 0.1) !important;
+                            background: rgba(15, 17, 26, 0.85) !important;
+                            backdrop-filter: blur(20px);
+                            border-color: rgba(181, 134, 63, 0.15) !important;
                         }
+                        
+                        .fi-main {
+                            background: radial-gradient(circle at 10% 20%, rgba(181,134,63,0.05) 0%, #0F111A 80%) !important;
+                        }
+
                         .fi-logo img {
-                            filter: drop-shadow(0 0 10px rgba(181, 134, 63, 0.6));
+                            filter: drop-shadow(0 0 15px rgba(181, 134, 63, 0.5));
                         }
+
+                        /* Glassmorphism for Containers */
+                        .fi-section, .fi-ta-content, .fi-modal-window {
+                            background: rgba(20, 23, 33, 0.7) !important;
+                            backdrop-filter: blur(12px) !important;
+                            border: 1px solid rgba(181, 134, 63, 0.1) !important;
+                            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+                            border-radius: 1.25rem !important;
+                        }
+
+                        /* Table Enhancements */
+                        .fi-ta-header-cell {
+                            background: rgba(181, 134, 63, 0.05) !important;
+                            color: #B5863F !important;
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                        }
+
+                        .fi-ta-record:hover {
+                            background: rgba(181, 134, 63, 0.03) !important;
+                        }
+
+                        /* Luxury Buttons */
+                        .fi-btn-color-primary {
+                            background: linear-gradient(135deg, #B5863F 0%, #d4a76a 100%) !important;
+                            color: #0F111A !important;
+                            box-shadow: 0 4px 15px rgba(181, 134, 63, 0.3) !important;
+                            transition: all 0.3s ease !important;
+                        }
+
+                        .fi-btn-color-primary:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 6px 20px rgba(181, 134, 63, 0.4) !important;
+                        }
+
+                        /* Stats Widgets */
+                        .fi-wi-stats-overview-stat {
+                            background: rgba(255, 255, 255, 0.03) !important;
+                            border: 1px solid rgba(181, 134, 63, 0.1) !important;
+                        }
+
                         /* Inputs and Buttons */
                         button { border-radius: 9999px !important; }
-                        input, select, textarea { border-radius: 0.75rem !important; }
+                        input, select, textarea { 
+                            border-radius: 0.75rem !important; 
+                            background: rgba(0,0,0,0.2) !important;
+                        }
                         input:focus, select:focus, textarea:focus {
                             box-shadow: 0 0 0 1px #B5863F, 0 0 15px rgba(181,134,63,0.2) !important;
                             border-color: #B5863F !important;
@@ -108,6 +157,9 @@ class AdminPanelProvider extends PanelProvider
                     </style>
                 ')
             )
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
