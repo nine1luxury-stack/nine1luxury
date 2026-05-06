@@ -18,6 +18,13 @@ class OfferResource extends Resource
 {
     protected static ?string $model = Offer::class;
 
+    protected static ?string $modelLabel = 'العرض';
+    protected static ?string $pluralModelLabel = 'العروض';
+    protected static ?string $navigationLabel = 'العروض';
+    protected static ?string $navigationGroup = 'التسويق';
+    protected static ?string $navigationIcon = 'heroicon-o-sparkles';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

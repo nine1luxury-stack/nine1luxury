@@ -18,6 +18,13 @@ class ExpenseResource extends Resource
 {
     protected static ?string $model = Expense::class;
 
+    protected static ?string $modelLabel = 'المصروف';
+    protected static ?string $pluralModelLabel = 'المصروفات';
+    protected static ?string $navigationLabel = 'المصروفات';
+    protected static ?string $navigationGroup = 'المالية';
+    protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

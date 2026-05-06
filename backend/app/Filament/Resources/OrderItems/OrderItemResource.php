@@ -18,6 +18,13 @@ class OrderItemResource extends Resource
 {
     protected static ?string $model = OrderItem::class;
 
+    protected static ?string $modelLabel = 'عنصر الطلب';
+    protected static ?string $pluralModelLabel = 'عناصر الطلبات';
+    protected static ?string $navigationLabel = 'عناصر الطلبات';
+    protected static ?string $navigationGroup = 'المبيعات';
+    protected static ?string $navigationIcon = 'heroicon-o-queue-list';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

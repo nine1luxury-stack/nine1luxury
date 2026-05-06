@@ -18,6 +18,13 @@ class ProductImageResource extends Resource
 {
     protected static ?string $model = ProductImage::class;
 
+    protected static ?string $modelLabel = 'صورة المنتج';
+    protected static ?string $pluralModelLabel = 'صور المنتجات';
+    protected static ?string $navigationLabel = 'صور المنتجات';
+    protected static ?string $navigationGroup = 'المتجر';
+    protected static ?string $navigationIcon = 'heroicon-o-photo';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

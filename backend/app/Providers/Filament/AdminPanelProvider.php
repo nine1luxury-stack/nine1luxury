@@ -31,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Nine 1 Luxury')
             ->colors([
                 'primary' => '#B5863F',
+                'gray' => '#0F111A', // Frontend dark charcoal
             ])
             ->font('Cairo')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')

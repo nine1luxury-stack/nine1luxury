@@ -18,6 +18,13 @@ class BookingResource extends Resource
 {
     protected static ?string $model = Booking::class;
 
+    protected static ?string $modelLabel = 'الحجز';
+    protected static ?string $pluralModelLabel = 'الحجوزات';
+    protected static ?string $navigationLabel = 'الحجوزات';
+    protected static ?string $navigationGroup = 'المبيعات';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

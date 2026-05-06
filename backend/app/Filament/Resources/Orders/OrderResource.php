@@ -18,6 +18,13 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
+    protected static ?string $modelLabel = 'الطلب';
+    protected static ?string $pluralModelLabel = 'الطلبات';
+    protected static ?string $navigationLabel = 'الطلبات';
+    protected static ?string $navigationGroup = 'المبيعات';
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

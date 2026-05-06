@@ -18,6 +18,13 @@ class ProductVariantResource extends Resource
 {
     protected static ?string $model = ProductVariant::class;
 
+    protected static ?string $modelLabel = 'نوع المنتج';
+    protected static ?string $pluralModelLabel = 'أنواع المنتجات';
+    protected static ?string $navigationLabel = 'أنواع المنتجات';
+    protected static ?string $navigationGroup = 'المتجر';
+    protected static ?string $navigationIcon = 'heroicon-o-swatch';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

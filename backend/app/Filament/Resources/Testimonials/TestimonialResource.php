@@ -18,6 +18,13 @@ class TestimonialResource extends Resource
 {
     protected static ?string $model = Testimonial::class;
 
+    protected static ?string $modelLabel = 'رأي العميل';
+    protected static ?string $pluralModelLabel = 'آراء العملاء';
+    protected static ?string $navigationLabel = 'آراء العملاء';
+    protected static ?string $navigationGroup = 'التسويق';
+    protected static ?string $navigationIcon = 'heroicon-o-star';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

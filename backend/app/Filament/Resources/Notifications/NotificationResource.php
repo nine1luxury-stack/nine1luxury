@@ -18,6 +18,13 @@ class NotificationResource extends Resource
 {
     protected static ?string $model = Notification::class;
 
+    protected static ?string $modelLabel = 'الإشعار';
+    protected static ?string $pluralModelLabel = 'الإشعارات';
+    protected static ?string $navigationLabel = 'الإشعارات';
+    protected static ?string $navigationGroup = 'الإدارة';
+    protected static ?string $navigationIcon = 'heroicon-o-bell';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

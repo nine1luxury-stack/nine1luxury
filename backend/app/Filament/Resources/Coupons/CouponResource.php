@@ -18,6 +18,13 @@ class CouponResource extends Resource
 {
     protected static ?string $model = Coupon::class;
 
+    protected static ?string $modelLabel = 'كوبون الخصم';
+    protected static ?string $pluralModelLabel = 'كوبونات الخصم';
+    protected static ?string $navigationLabel = 'كوبونات الخصم';
+    protected static ?string $navigationGroup = 'التسويق';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

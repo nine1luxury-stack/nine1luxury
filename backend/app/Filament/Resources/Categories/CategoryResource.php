@@ -18,6 +18,13 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
+    protected static ?string $modelLabel = 'القسم';
+    protected static ?string $pluralModelLabel = 'الأقسام';
+    protected static ?string $navigationLabel = 'الأقسام';
+    protected static ?string $navigationGroup = 'المتجر';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

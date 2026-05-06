@@ -18,6 +18,13 @@ class SupplierResource extends Resource
 {
     protected static ?string $model = Supplier::class;
 
+    protected static ?string $modelLabel = 'المورد';
+    protected static ?string $pluralModelLabel = 'الموردين';
+    protected static ?string $navigationLabel = 'الموردين';
+    protected static ?string $navigationGroup = 'المالية';
+    protected static ?string $navigationIcon = 'heroicon-o-truck';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

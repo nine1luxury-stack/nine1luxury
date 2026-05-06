@@ -18,6 +18,13 @@ class ReturnRequestResource extends Resource
 {
     protected static ?string $model = ReturnRequest::class;
 
+    protected static ?string $modelLabel = 'طلب الاسترجاع';
+    protected static ?string $pluralModelLabel = 'طلبات الاسترجاع';
+    protected static ?string $navigationLabel = 'طلبات الاسترجاع';
+    protected static ?string $navigationGroup = 'المبيعات';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
+
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
